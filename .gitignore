@@ -33,3 +33,4 @@ build/
 .vscode/
 
 invoice-manager-db.mv.db
+invoice-manager-db.trace.db
