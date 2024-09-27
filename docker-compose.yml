@@ -1,0 +1,45 @@
+# Based on: https://medium.com/@disa2aka/docker-deployments-for-keycloak-and-postgresql-e75707b155e5
+
+services:
+    mariadb:
+        image: mariadb:11.5
+        restart: always
+        volumes:
+            - mariadb_data:/var/lib/mysql
+        environment:
+            MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+            MARIADB_DATABASE: ${KEYCLOAK_DB}
+        ports:
+            - "3306:3306"
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - "8082:8080"
+
+    keycloak:
+        image: quay.io/keycloak/keycloak:25.0.6
+        restart: always
+        command: ["start-dev", "--import-realm"]
+        environment:
+            KEYCLOAK_ADMIN: ${KEYCLOAK_USER}
+            KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
+            KC_HOSTNAME: localhost
+            KC_HOSTNAME_PORT: 8081
+            KC_HOSTNAME_STRICT_BACKCHANNEL: false
+            KC_HTTP_ENABLED: true
+            KC_HOSTNAME_STRICT_HTTPS: false
+            KC_HEALTH_ENABLED: true
+            KC_DB: mariadb
+            KC_DB_URL: jdbc:mariadb://mariadb:3306/${KEYCLOAK_DB}
+            KC_DB_USERNAME: root
+            KC_DB_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+        ports:
+            - "8081:8080"
+            - "8443:8443"
+        volumes:
+            - ./invoice-manager-realm.json:/opt/keycloak/data/import/invoice-manager-realm.json:ro
+
+volumes:
+    mariadb_data:
