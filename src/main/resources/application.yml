@@ -1,14 +1,13 @@
 spring:
     application:
         name: "invoice-manager-server"
-# If you want to use PostgreSQL database, uncomment the block below and comment the H2 block
-    datasource:
-        url: jdbc:mariadb://localhost:3306/invoice-manager-db?createDatabaseIfNotExist=true
-        username: root
+    r2dbc:
+# If you want to use MariaDB database, uncomment the block below and comment the H2 block
+        url: "r2dbc:mariadb://localhost:3306/invoice-manager-db"
+        username: "root"
         password: ${MARIADB_ROOT_PASSWORD}
-    # If you want to use H2 database, comment the datasource block above and uncomment the block below
-#    datasource:
-#        url: jdbc:h2:file:./invoice-manager-db
+    # If you want to use H2 database, comment the block above and uncomment the block below
+#        url: r2dbc:h2:file:./invoice-manager-db
 #        username: sa
 #        password:
 #    h2:
@@ -18,8 +17,6 @@ spring:
     jpa:
         hibernate:
             ddl-auto: update
-### Uncomment the next line if you want to use PostgreSQL database
-#        database-platform: org.hibernate.dialect.PostgreSQLDialect
     security:
         oauth2:
             resourceserver:
