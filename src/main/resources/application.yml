@@ -1,13 +1,13 @@
 spring:
     application:
         name: "invoice-manager-server"
-    r2dbc:
+    datasource:
 # If you want to use MariaDB database, uncomment the block below and comment the H2 block
-        url: "r2dbc:mariadb://localhost:3306/invoice-manager-db"
+        url: "jdbc:mariadb://localhost:3306/invoice-manager-db"
         username: "root"
         password: ${MARIADB_ROOT_PASSWORD}
     # If you want to use H2 database, comment the block above and uncomment the block below
-#        url: r2dbc:h2:file:./invoice-manager-db
+#        url: jdbc:h2:file:./invoice-manager-db
 #        username: sa
 #        password:
 #    h2:
@@ -28,3 +28,7 @@ management:
         web:
             exposure:
                 include: "*"
+
+file-storage:
+    local:
+        storage-path: target/files

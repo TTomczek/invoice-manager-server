@@ -13,6 +13,13 @@ public abstract class BaseEntity<PK extends Serializable> {
     @GeneratedValue
     private PK id;
 
+    public BaseEntity() {
+    }
+
+    public BaseEntity(PK id) {
+        this.id = id;
+    }
+
     public PK getId() {
         return id;
     }
@@ -37,4 +44,5 @@ public abstract class BaseEntity<PK extends Serializable> {
         BaseEntity other = (BaseEntity) obj;
         return this.getId() != null && this.getId().equals(other.getId());
     }
+
 }

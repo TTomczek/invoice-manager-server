@@ -24,3 +24,20 @@ Windows:
 Linux:
     1. Run `./mvnw clean install` in the project directory
     2. Run `./mvnw spring-boot:run` to start the server
+
+### Credentials
+    Keycloak admin
+        Username: admin
+        Password: admin
+
+    Manager User
+        Username: manager
+        Password: manager
+
+    Employee User
+        Username: employee
+        Password: employee
+
+## Server profiles
+    develop: Deactivates the security features of the server
+    localfilestorage: Stores files on the local file system
