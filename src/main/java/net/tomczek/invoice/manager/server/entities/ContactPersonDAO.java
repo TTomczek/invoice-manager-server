@@ -7,13 +7,13 @@ import net.tomczek.invoice.manager.server.models.Address;
 @Entity
 public class ContactPersonDAO extends BaseEntity<Integer> {
 
-    public ContactPersonDAO(Integer id, String name, String firstName, String email, Address address, BusinessPartnerDAO businessPartnerDAO, SalutationET salutation) {
+    public ContactPersonDAO(Integer id, String name, String firstName, String email, AddressDAO address, BusinessPartnerDAO businessPartner, SalutationET salutation) {
         super(id);
         this.name = name;
         this.firstName = firstName;
         this.email = email;
         this.address = address;
-        this.businessPartnerDAO = businessPartnerDAO;
+        this.businessPartner = businessPartner;
         this.salutation = salutation;
     }
 
@@ -26,10 +26,11 @@ public class ContactPersonDAO extends BaseEntity<Integer> {
 
     private String email;
 
-    private Address address;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private AddressDAO address;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private BusinessPartnerDAO businessPartnerDAO;
+    private BusinessPartnerDAO businessPartner;
 
     @Enumerated(EnumType.STRING)
     private SalutationET salutation;
@@ -61,21 +62,21 @@ public class ContactPersonDAO extends BaseEntity<Integer> {
         return this;
     }
 
-    public Address getAddress() {
+    public AddressDAO getAddress() {
         return address;
     }
 
-    public ContactPersonDAO setAddress(Address address) {
+    public ContactPersonDAO setAddress(AddressDAO address) {
         this.address = address;
         return this;
     }
 
-    public BusinessPartnerDAO getBusinessPartnerDAO() {
-        return businessPartnerDAO;
+    public BusinessPartnerDAO getBusinessPartner() {
+        return businessPartner;
     }
 
-    public ContactPersonDAO setBusinessPartnerDAO(BusinessPartnerDAO businessPartnerDAO) {
-        this.businessPartnerDAO = businessPartnerDAO;
+    public ContactPersonDAO setBusinessPartner(BusinessPartnerDAO businessPartnerDAO) {
+        this.businessPartner = businessPartnerDAO;
         return this;
     }
 

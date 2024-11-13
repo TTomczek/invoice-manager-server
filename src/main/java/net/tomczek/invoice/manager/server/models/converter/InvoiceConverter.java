@@ -16,19 +16,17 @@ import java.util.stream.Collectors;
 public class InvoiceConverter {
 
     @Autowired
-    public InvoiceConverter(BusinessPartnersRepository businessPartnersRepository, ContactPersonsRepository contactPersonsRepository, SalesTaxRepository salesTaxRepository, InvoiceTemplateRepository invoiceTemplateRepository, BusinessPartnerConverter businessPartnerConverter, ContactPersonConverter contactPersonConverter, SalesTaxConverter salesTaxConverter, InvoiceTemplateConverter invoiceTemplateConverter) {
+    public InvoiceConverter(BusinessPartnersRepository businessPartnersRepository, ContactPersonsRepository contactPersonsRepository, SalesTaxRepository salesTaxRepository, InvoiceTemplateRepository invoiceTemplateRepository, ContactPersonConverter contactPersonConverter, SalesTaxConverter salesTaxConverter, InvoiceTemplateConverter invoiceTemplateConverter) {
         this.businessPartnersRepository = businessPartnersRepository;
         this.contactPersonsRepository = contactPersonsRepository;
         this.salesTaxRepository = salesTaxRepository;
         this.invoiceTemplateRepository = invoiceTemplateRepository;
-        this.businessPartnerConverter = businessPartnerConverter;
         this.contactPersonConverter = contactPersonConverter;
         this.salesTaxConverter = salesTaxConverter;
         this.invoiceTemplateConverter = invoiceTemplateConverter;
     }
 
     private final BusinessPartnersRepository businessPartnersRepository;
-    private final BusinessPartnerConverter businessPartnerConverter;
     private final ContactPersonsRepository contactPersonsRepository;
     private final ContactPersonConverter contactPersonConverter;
     private final SalesTaxRepository salesTaxRepository;
@@ -68,7 +66,7 @@ public class InvoiceConverter {
         invoice.setOrderNumber(invoiceDTO.getOrderNumber());
 
         BusinessPartnerDAO customerDAO = businessPartnersRepository.findById(invoiceDTO.getCustomerNumber()).orElse(null);
-        BusinessPartner customer = businessPartnerConverter.toEntityFromDAO(customerDAO);
+        BusinessPartner customer = BusinessPartnerConverter.toEntityFromDAO(customerDAO);
         invoice.setCustomer(customer);
 
         ContactPersonDAO receiverDAO = contactPersonsRepository.findById(invoiceDTO.getReceiver()).orElse(null);
@@ -99,7 +97,7 @@ public class InvoiceConverter {
         invoice.setOrderNumber(invoiceDAO.getOrderNumber());
 
         BusinessPartnerDAO customerDAO = invoiceDAO.getCustomer();
-        BusinessPartner customer = businessPartnerConverter.toEntityFromDAO(customerDAO);
+        BusinessPartner customer = BusinessPartnerConverter.toEntityFromDAO(customerDAO);
         invoice.setCustomer(customer);
 
         ContactPersonDAO receiverDAO = invoiceDAO.getReceiver();
@@ -129,7 +127,7 @@ public class InvoiceConverter {
         invoiceDAO.setServiceProvidedFrom(invoice.getServiceProvidedFrom());
         invoiceDAO.setServiceProvidedTo(invoice.getServiceProvidedTo());
         invoiceDAO.setOrderNumber(invoice.getOrderNumber());
-        invoiceDAO.setCustomer(businessPartnerConverter.toDAO(invoice.getCustomer()));
+        invoiceDAO.setCustomer(BusinessPartnerConverter.toDAO(invoice.getCustomer()));
         invoiceDAO.setReceiver(contactPersonConverter.toDAO(invoice.getReceiver()));
         invoiceDAO.setSalexTax(salesTaxConverter.toDAO(invoice.getSalexTax()));
 

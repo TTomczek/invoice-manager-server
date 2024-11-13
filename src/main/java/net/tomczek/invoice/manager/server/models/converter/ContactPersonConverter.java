@@ -16,13 +16,11 @@ import java.util.stream.Collectors;
 public class ContactPersonConverter {
 
     @Autowired
-    public ContactPersonConverter(BusinessPartnersRepository businessPartnersRepository, BusinessPartnerConverter businessPartnerConverter) {
+    public ContactPersonConverter(BusinessPartnersRepository businessPartnersRepository) {
         this.businessPartnersRepository = businessPartnersRepository;
-        this.businessPartnerConverter = businessPartnerConverter;
     }
 
     private final BusinessPartnersRepository businessPartnersRepository;
-    private final BusinessPartnerConverter businessPartnerConverter;
 
     public ContactPersonDAO toDAO(ContactPerson contactPerson) {
         ContactPersonDAO contactPersonDAO = new ContactPersonDAO();
@@ -31,8 +29,8 @@ public class ContactPersonConverter {
         contactPersonDAO.setName(contactPerson.getName());
         contactPersonDAO.setEmail(contactPerson.getEmail());
         contactPersonDAO.setSalutation(contactPerson.getSalutation());
-        contactPersonDAO.setBusinessPartnerDAO(businessPartnerConverter.toDAO(contactPerson.getBusinessPartner()));
-        contactPersonDAO.setAddress(contactPerson.getAddress());
+        contactPersonDAO.setBusinessPartner(BusinessPartnerConverter.toDAO(contactPerson.getBusinessPartner()));
+        contactPersonDAO.setAddress(AddressConverter.toDAO(contactPerson.getAddress()));
         return contactPersonDAO;
     }
 
@@ -47,8 +45,8 @@ public class ContactPersonConverter {
         contactPerson.setName(contactPersonDAO.getName());
         contactPerson.setEmail(contactPersonDAO.getEmail());
         contactPerson.setSalutation(contactPersonDAO.getSalutation());
-        contactPerson.setBusinessPartner(businessPartnerConverter.toEntityFromDAO(contactPersonDAO.getBusinessPartnerDAO()));
-        contactPerson.setAddress(contactPersonDAO.getAddress());
+        contactPerson.setBusinessPartner(BusinessPartnerConverter.toEntityFromDAO(contactPersonDAO.getBusinessPartner()));
+        contactPerson.setAddress(AddressConverter.toEntityFromDAO(contactPersonDAO.getAddress()));
         return contactPerson;
     }
 
@@ -65,7 +63,7 @@ public class ContactPersonConverter {
         contactPerson.setSalutation(SalutationConverter.toET(contactPersonDTO.getSalutation()));
 
         BusinessPartnerDAO businessPartnerDAO = businessPartnersRepository.findById(contactPersonDTO.getBusinessPartner()).orElse(null);
-        BusinessPartner businessPartner = businessPartnerConverter.toEntityFromDAO(businessPartnerDAO);
+        BusinessPartner businessPartner = BusinessPartnerConverter.toEntityFromDAO(businessPartnerDAO);
         contactPerson.setBusinessPartner(businessPartner);
         return contactPerson;
     }

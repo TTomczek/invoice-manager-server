@@ -8,13 +8,13 @@ import java.math.BigDecimal;
 @Entity
 public class InvoicePositionDAO extends BaseEntity<Integer> {
 
-    public InvoicePositionDAO(Integer id, String description, float quantity, UnitET unitEt, BigDecimal pricePerUnitInCents, InvoiceDAO invoiceDAO) {
+    public InvoicePositionDAO(Integer id, String description, float quantity, UnitET unitEt, BigDecimal pricePerUnitInCents, InvoiceDAO invoice) {
         super(id);
         this.description = description;
         this.quantity = quantity;
         this.unitEt = unitEt;
         this.pricePerUnitInCents = pricePerUnitInCents;
-        this.invoiceDAO = invoiceDAO;
+        this.invoice = invoice;
     }
 
     public InvoicePositionDAO() {
@@ -30,7 +30,7 @@ public class InvoicePositionDAO extends BaseEntity<Integer> {
     private BigDecimal pricePerUnitInCents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private InvoiceDAO invoiceDAO;
+    private InvoiceDAO invoice;
 
     public String getDescription() {
         return description;
@@ -68,12 +68,12 @@ public class InvoicePositionDAO extends BaseEntity<Integer> {
         return this;
     }
 
-    public InvoiceDAO getInvoiceDAO() {
-        return invoiceDAO;
+    public InvoiceDAO getInvoice() {
+        return invoice;
     }
 
-    public InvoicePositionDAO setInvoiceDAO(InvoiceDAO invoiceDAO) {
-        this.invoiceDAO = invoiceDAO;
+    public InvoicePositionDAO setInvoice(InvoiceDAO invoiceDAO) {
+        this.invoice = invoiceDAO;
         return this;
     }
 }

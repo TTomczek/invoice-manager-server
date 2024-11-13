@@ -1,0 +1,5 @@
+spring:
+    datasource:
+        url: "jdbc:mariadb://localhost:3306/invoice-manager-db"
+        username: "root"
+        password: ${MARIADB_ROOT_PASSWORD}

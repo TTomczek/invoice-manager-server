@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 public class InvoiceDAO extends BaseEntity<Integer> {
 
-    public InvoiceDAO(Integer id, String description, boolean perMail, String preText, String postText, LocalDate serviceProvidedFrom, LocalDate serviceProvidedTo, String orderNumber, Integer generatedInvoiceId, SalesTaxDAO salexTax, List<InvoicePositionDAO> invoicePositionDAOS, ContactPersonDAO receiver, InvoiceTemplateDAO invoiceTemplateDAO, BusinessPartnerDAO customer) {
+    public InvoiceDAO(Integer id, String description, boolean perMail, String preText, String postText, LocalDate serviceProvidedFrom, LocalDate serviceProvidedTo, String orderNumber, Integer generatedInvoiceId, SalesTaxDAO salexTax, List<InvoicePositionDAO> invoicePosition, ContactPersonDAO receiver, InvoiceTemplateDAO invoiceTemplateDAO, BusinessPartnerDAO customer) {
         super(id);
         this.description = description;
         this.perMail = perMail;
@@ -23,7 +23,7 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         this.orderNumber = orderNumber;
         this.generatedInvoiceId = generatedInvoiceId;
         this.salexTax = salexTax;
-        this.invoicePositionDAOS = invoicePositionDAOS;
+        this.invoicePosition = invoicePosition;
         this.receiver = receiver;
         this.invoiceTemplateDAO = invoiceTemplateDAO;
         this.customer = customer;
@@ -52,7 +52,7 @@ public class InvoiceDAO extends BaseEntity<Integer> {
     private SalesTaxDAO salexTax;
 
     @OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY)
-    private List<InvoicePositionDAO> invoicePositionDAOS;
+    private List<InvoicePositionDAO> invoicePosition;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private ContactPersonDAO receiver;
@@ -144,12 +144,12 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         return this;
     }
 
-    public List<InvoicePositionDAO> getInvoicePositionDAOS() {
-        return invoicePositionDAOS;
+    public List<InvoicePositionDAO> getInvoicePosition() {
+        return invoicePosition;
     }
 
-    public InvoiceDAO setInvoicePositionDAOS(List<InvoicePositionDAO> invoicePositionDAOS) {
-        this.invoicePositionDAOS = invoicePositionDAOS;
+    public InvoiceDAO setInvoicePosition(List<InvoicePositionDAO> invoicePositionDAOS) {
+        this.invoicePosition = invoicePositionDAOS;
         return this;
     }
 

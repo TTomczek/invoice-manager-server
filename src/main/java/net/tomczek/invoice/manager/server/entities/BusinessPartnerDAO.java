@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class BusinessPartnerDAO extends BaseEntity<Integer> {
 
-    public BusinessPartnerDAO(Integer id, String name, String description, Address address) {
+    public BusinessPartnerDAO(Integer id, String name, String description, AddressDAO address) {
         super(id);
         this.name = name;
         this.description = description;
@@ -22,12 +22,13 @@ public class BusinessPartnerDAO extends BaseEntity<Integer> {
 
     private String description;
 
-    private Address address;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private AddressDAO address;
 
     @OneToMany(mappedBy = "businessPartner", fetch = FetchType.LAZY)
     private List<ContactPersonDAO> contactPersonDAOS;
 
-    @OneToMany(mappedBy = "businessPartner", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<InvoiceDAO> invoiceDAOS;
 
     public String getName() {
@@ -48,11 +49,11 @@ public class BusinessPartnerDAO extends BaseEntity<Integer> {
         return this;
     }
 
-    public Address getAddress() {
+    public AddressDAO getAddress() {
         return address;
     }
 
-    public BusinessPartnerDAO setAddress(Address address) {
+    public BusinessPartnerDAO setAddress(AddressDAO address) {
         this.address = address;
         return this;
     }
