@@ -4,35 +4,34 @@ import net.tomczek.invoice.manager.api.server.api.InvoicePositionsApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.InvoicePositionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Component
 public class InvoicePositionsApiDelegateImpl implements InvoicePositionsApiDelegate {
 
     @Override
-    public Mono<ResponseEntity<InvoicePositionDTO>> createPosition(Mono<InvoicePositionDTO> invoicePositionDTO, ServerWebExchange exchange) {
-        return InvoicePositionsApiDelegate.super.createPosition(invoicePositionDTO, exchange);
+    public ResponseEntity<InvoicePositionDTO> createPosition(InvoicePositionDTO invoicePositionDTO) {
+        return InvoicePositionsApiDelegate.super.createPosition(invoicePositionDTO);
     }
 
     @Override
-    public Mono<ResponseEntity<Void>> deleteInvoicePositionById(Integer id, ServerWebExchange exchange) {
-        return InvoicePositionsApiDelegate.super.deleteInvoicePositionById(id, exchange);
+    public ResponseEntity<Void> deleteInvoicePositionById(Integer id) {
+        return InvoicePositionsApiDelegate.super.deleteInvoicePositionById(id);
     }
 
     @Override
-    public Mono<ResponseEntity<Flux<InvoicePositionDTO>>> getAllInvoicePositions(ServerWebExchange exchange) {
-        return InvoicePositionsApiDelegate.super.getAllInvoicePositions(exchange);
+    public ResponseEntity<List<InvoicePositionDTO>> getAllInvoicePositions() {
+        return InvoicePositionsApiDelegate.super.getAllInvoicePositions();
     }
 
     @Override
-    public Mono<ResponseEntity<InvoicePositionDTO>> getInvoicePositionById(Integer id, ServerWebExchange exchange) {
-        return InvoicePositionsApiDelegate.super.getInvoicePositionById(id, exchange);
+    public ResponseEntity<InvoicePositionDTO> getInvoicePositionById(Integer id) {
+        return InvoicePositionsApiDelegate.super.getInvoicePositionById(id);
     }
 
     @Override
-    public Mono<ResponseEntity<InvoicePositionDTO>> updateInvoicePositionById(Integer id, Mono<InvoicePositionDTO> invoicePositionDTO, ServerWebExchange exchange) {
-        return InvoicePositionsApiDelegate.super.updateInvoicePositionById(id, invoicePositionDTO, exchange);
+    public ResponseEntity<InvoicePositionDTO> updateInvoicePositionById(Integer id, InvoicePositionDTO invoicePositionDTO) {
+        return InvoicePositionsApiDelegate.super.updateInvoicePositionById(id, invoicePositionDTO);
     }
 }

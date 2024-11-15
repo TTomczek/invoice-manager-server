@@ -4,30 +4,36 @@ import net.tomczek.invoice.manager.api.server.api.FilesApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.FileDTO;
 import net.tomczek.invoice.manager.server.repositories.LocalFileStorageFileRepository;
 import net.tomczek.invoice.manager.server.services.filestorage.IFileStorageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class FilesApiDelegateImpl implements FilesApiDelegate {
 
-    private LocalFileStorageFileRepository localFileStorageFileRepository;
+    @Autowired
+    public FilesApiDelegateImpl(IFileStorageService fileStorageService) {
+        this.fileStorageService = fileStorageService;
+    }
+
     private IFileStorageService fileStorageService;
 
     @Override
-    public Mono<ResponseEntity<Resource>> downloadFileById(Integer id, ServerWebExchange exchange) {
-        return FilesApiDelegate.super.downloadFileById(id, exchange);
+    public ResponseEntity<Resource> downloadFileById(Integer id) {
+        try {
+            // Return FileWithContent from localFileStorageFileRepository
+
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
-    public Mono<ResponseEntity<FileDTO>> uploadFile(Integer id, String fileType, String fileName, Flux<Part> data, ServerWebExchange exchange) {
-
-        return FilesApiDelegate.super.uploadFile(id, fileType, fileName, data, exchange);
+    public ResponseEntity<FileDTO> uploadFile(Integer id, String fileType, String fileName, MultipartFile data) {
+        return FilesApiDelegate.super.uploadFile(id, fileType, fileName, data);
     }
-
-
 }

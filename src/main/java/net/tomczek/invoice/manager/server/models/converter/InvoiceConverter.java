@@ -10,6 +10,7 @@ import net.tomczek.invoice.manager.server.repositories.SalesTaxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,13 +46,17 @@ public class InvoiceConverter {
         invoiceDTO.setServiceTo(invoice.getServiceProvidedTo());
         invoiceDTO.setOrderNumber(invoice.getOrderNumber());
         invoiceDTO.setCustomerNumber(invoice.getCustomer().getId());
-        invoiceDTO.setPositions(invoice.getInvoicePosition().stream().map(InvoicePosition::getId).collect(Collectors.toList()));
+        invoiceDTO.setPositions(invoice.getInvoicePositions().stream().map(InvoicePosition::getId).collect(Collectors.toList()));
         invoiceDTO.setReceiver(invoice.getReceiver().getId());
         invoiceDTO.setSalesTax(invoice.getSalexTax().getId());
         invoiceDTO.setInvoiceTemplate(invoice.getInvoiceTemplate().getId());
         invoiceDTO.setFile(invoice.getGeneratedInvoiceId());
 
         return invoiceDTO;
+    }
+
+    public List<InvoiceDTO> toDTO(List<Invoice> invoices) {
+        return invoices.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     public Invoice toEntityFromDTO(InvoiceDTO invoiceDTO) {
@@ -83,6 +88,10 @@ public class InvoiceConverter {
         invoice.setGeneratedInvoiceId(invoiceDTO.getFile());
 
         return invoice;
+    }
+
+    public List<Invoice> toEntityFromDTO(List<InvoiceDTO> invoiceDTOs) {
+        return invoiceDTOs.stream().map(this::toEntityFromDTO).collect(Collectors.toList());
     }
 
     public Invoice toEntityFromDAO(InvoiceDAO invoiceDAO) {
@@ -117,6 +126,10 @@ public class InvoiceConverter {
         return invoice;
     }
 
+    public List<Invoice> toEntityFromDAO(List<InvoiceDAO> invoiceDAOs) {
+        return invoiceDAOs.stream().map(this::toEntityFromDAO).collect(Collectors.toList());
+    }
+
     public InvoiceDAO toDAO(Invoice invoice) {
         InvoiceDAO invoiceDAO = new InvoiceDAO();
         invoiceDAO.setId(invoice.getId());
@@ -137,5 +150,9 @@ public class InvoiceConverter {
         invoiceDAO.setGeneratedInvoiceId(invoice.getGeneratedInvoiceId());
 
         return invoiceDAO;
+    }
+
+    public List<InvoiceDAO> toDAO(List<Invoice> invoices) {
+        return invoices.stream().map(this::toDAO).collect(Collectors.toList());
     }
 }

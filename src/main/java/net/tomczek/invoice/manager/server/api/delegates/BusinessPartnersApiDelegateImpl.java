@@ -4,35 +4,34 @@ import net.tomczek.invoice.manager.api.server.api.BusinessPartnersApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.BusinessPartnerDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Component
 public class BusinessPartnersApiDelegateImpl implements BusinessPartnersApiDelegate {
 
     @Override
-    public Mono<ResponseEntity<BusinessPartnerDTO>> createBusinessPartner(Mono<BusinessPartnerDTO> businessPartner, ServerWebExchange exchange) {
-        return BusinessPartnersApiDelegate.super.createBusinessPartner(businessPartner, exchange);
+    public ResponseEntity<BusinessPartnerDTO> createBusinessPartner(BusinessPartnerDTO businessPartnerDTO) {
+        return BusinessPartnersApiDelegate.super.createBusinessPartner(businessPartnerDTO);
     }
 
     @Override
-    public Mono<ResponseEntity<Void>> deleteBusinessPartnerById(Integer id, ServerWebExchange exchange) {
-        return BusinessPartnersApiDelegate.super.deleteBusinessPartnerById(id, exchange);
+    public ResponseEntity<Void> deleteBusinessPartnerById(Integer id) {
+        return BusinessPartnersApiDelegate.super.deleteBusinessPartnerById(id);
     }
 
     @Override
-    public Mono<ResponseEntity<Flux<BusinessPartnerDTO>>> getAllBusinessPartners(ServerWebExchange exchange) {
-        return BusinessPartnersApiDelegate.super.getAllBusinessPartners(exchange);
+    public ResponseEntity<List<BusinessPartnerDTO>> getAllBusinessPartners() {
+        return BusinessPartnersApiDelegate.super.getAllBusinessPartners();
     }
 
     @Override
-    public Mono<ResponseEntity<BusinessPartnerDTO>> getBusinessPartnerById(Integer id, ServerWebExchange exchange) {
-        return BusinessPartnersApiDelegate.super.getBusinessPartnerById(id, exchange);
+    public ResponseEntity<BusinessPartnerDTO> getBusinessPartnerById(Integer id) {
+        return BusinessPartnersApiDelegate.super.getBusinessPartnerById(id);
     }
 
     @Override
-    public Mono<ResponseEntity<BusinessPartnerDTO>> updateBusinessPartnerById(Integer id, Mono<BusinessPartnerDTO> businessPartner, ServerWebExchange exchange) {
-        return BusinessPartnersApiDelegate.super.updateBusinessPartnerById(id, businessPartner, exchange);
+    public ResponseEntity<BusinessPartnerDTO> updateBusinessPartnerById(Integer id, BusinessPartnerDTO businessPartnerDTO) {
+        return BusinessPartnersApiDelegate.super.updateBusinessPartnerById(id, businessPartnerDTO);
     }
 }

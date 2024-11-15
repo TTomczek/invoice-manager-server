@@ -4,6 +4,8 @@ import net.tomczek.invoice.manager.api.server.model.InvoicePositionDTO;
 import net.tomczek.invoice.manager.server.entities.InvoicePositionDAO;
 import net.tomczek.invoice.manager.server.models.InvoicePosition;
 
+import java.util.List;
+
 public class InvoicePositionConverter {
 
     public static InvoicePositionDTO toDTO(InvoicePosition invoicePosition) {
@@ -17,6 +19,10 @@ public class InvoicePositionConverter {
         return invoicePositionDTO;
     }
 
+    public static List<InvoicePositionDTO> toDTO(List<InvoicePosition> invoicePositions) {
+        return invoicePositions.stream().map(InvoicePositionConverter::toDTO).toList();
+    }
+
     public static InvoicePosition toEntityFromDTO(InvoicePositionDTO invoicePositionDTO) {
         InvoicePosition invoicePosition = new InvoicePosition();
         invoicePosition.setId(invoicePositionDTO.getId());
@@ -25,6 +31,10 @@ public class InvoicePositionConverter {
         invoicePosition.setUnit(UnitConverter.ToET(invoicePositionDTO.getUnit()));
         invoicePosition.setPricePerUnitInCents(invoicePositionDTO.getPricePerUnitInCents());
         return invoicePosition;
+    }
+
+    public static List<InvoicePosition> toEntityFromDTO(List<InvoicePositionDTO> invoicePositionDTOs) {
+        return invoicePositionDTOs.stream().map(InvoicePositionConverter::toEntityFromDTO).toList();
     }
 
     public static InvoicePosition toEntityFromDAO(InvoicePositionDAO invoicePositionDAO) {
@@ -37,6 +47,10 @@ public class InvoicePositionConverter {
         return invoicePosition;
     }
 
+    public static List<InvoicePosition> toEntityFromDAO(List<InvoicePositionDAO> invoicePositionDAOs) {
+        return invoicePositionDAOs.stream().map(InvoicePositionConverter::toEntityFromDAO).toList();
+    }
+
     public static InvoicePositionDAO toDAO(InvoicePosition invoicePosition) {
         InvoicePositionDAO invoicePositionDAO = new InvoicePositionDAO();
         invoicePositionDAO.setId(invoicePosition.getId());
@@ -45,5 +59,9 @@ public class InvoicePositionConverter {
         invoicePositionDAO.setUnitEt(invoicePosition.getUnit());
         invoicePositionDAO.setPricePerUnitInCents(invoicePosition.getPricePerUnitInCents());
         return invoicePositionDAO;
+    }
+
+    public static List<InvoicePositionDAO> toDAO(List<InvoicePosition> invoicePositions) {
+        return invoicePositions.stream().map(InvoicePositionConverter::toDAO).toList();
     }
 }

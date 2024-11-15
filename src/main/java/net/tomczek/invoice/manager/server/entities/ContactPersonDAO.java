@@ -1,7 +1,6 @@
 package net.tomczek.invoice.manager.server.entities;
 
 import jakarta.persistence.*;
-import net.tomczek.invoice.manager.server.models.Address;
 
 @Table(name = "contact_persons")
 @Entity

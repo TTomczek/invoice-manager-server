@@ -5,6 +5,8 @@ import net.tomczek.invoice.manager.server.entities.InvoiceTemplateDAO;
 import net.tomczek.invoice.manager.server.models.InvoiceTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InvoiceTemplateConverter {
 
@@ -20,6 +22,10 @@ public class InvoiceTemplateConverter {
         return invoiceTemplateDTO;
     }
 
+    public List<InvoiceTemplateDTO> toDTO(List<InvoiceTemplate> invoiceTemplates) {
+        return invoiceTemplates.stream().map(this::toDTO).toList();
+    }
+
     public InvoiceTemplate toEntityFromDTO(InvoiceTemplateDTO invoiceTemplateDTO) {
         InvoiceTemplate invoiceTemplate = new InvoiceTemplate();
         invoiceTemplate.setId(invoiceTemplateDTO.getId());
@@ -30,7 +36,10 @@ public class InvoiceTemplateConverter {
         invoiceTemplate.setMarginBottomOtherPages(invoiceTemplateDTO.getMarginBottomOtherPages());
 
         return invoiceTemplate;
+    }
 
+    public List<InvoiceTemplate> toEntityFromDTO(List<InvoiceTemplateDTO> invoiceTemplateDTOs) {
+        return invoiceTemplateDTOs.stream().map(this::toEntityFromDTO).toList();
     }
 
     public InvoiceTemplate toEntityFromDAO(InvoiceTemplateDAO invoiceTemplateDAO) {
@@ -45,6 +54,10 @@ public class InvoiceTemplateConverter {
         return invoiceTemplate;
     }
 
+    public List<InvoiceTemplate> toEntityFromDAO(List<InvoiceTemplateDAO> invoiceTemplateDAOs) {
+        return invoiceTemplateDAOs.stream().map(this::toEntityFromDAO).toList();
+    }
+
     public InvoiceTemplateDAO toDAO(InvoiceTemplate invoiceTemplate) {
         InvoiceTemplateDAO invoiceTemplateDAO = new InvoiceTemplateDAO();
         invoiceTemplateDAO.setId(invoiceTemplate.getId());
@@ -55,5 +68,9 @@ public class InvoiceTemplateConverter {
         invoiceTemplateDAO.setMarginBottomOtherPages(invoiceTemplate.getMarginBottomOtherPages());
 
         return invoiceTemplateDAO;
+    }
+
+    public List<InvoiceTemplateDAO> toDAO(List<InvoiceTemplate> invoiceTemplates) {
+        return invoiceTemplates.stream().map(this::toDAO).toList();
     }
 }

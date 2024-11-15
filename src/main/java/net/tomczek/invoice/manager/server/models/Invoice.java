@@ -18,12 +18,12 @@ public class Invoice {
     private String orderNumber;
     private Integer generatedInvoiceId;
     private SalesTax salexTax;
-    private List<InvoicePosition> invoicePosition;
+    private List<InvoicePosition> invoicePositions;
     private ContactPerson receiver;
     private InvoiceTemplate invoiceTemplate;
     private BusinessPartner customer;
 
-    public Invoice(Integer id, String description, boolean perMail, String preText, String postText, LocalDate serviceProvidedFrom, LocalDate serviceProvidedTo, String orderNumber, Integer generatedInvoiceId, SalesTax salexTax, List<InvoicePosition> invoicePosition, ContactPerson receiver, InvoiceTemplate invoiceTemplate, BusinessPartner customer) {
+    public Invoice(Integer id, String description, boolean perMail, String preText, String postText, LocalDate serviceProvidedFrom, LocalDate serviceProvidedTo, String orderNumber, Integer generatedInvoiceId, SalesTax salexTax, List<InvoicePosition> invoicePositions, ContactPerson receiver, InvoiceTemplate invoiceTemplate, BusinessPartner customer) {
         this.id = id;
         this.description = description;
         this.perMail = perMail;
@@ -34,7 +34,7 @@ public class Invoice {
         this.orderNumber = orderNumber;
         this.generatedInvoiceId = generatedInvoiceId;
         this.salexTax = salexTax;
-        this.invoicePosition = invoicePosition;
+        this.invoicePositions = invoicePositions;
         this.receiver = receiver;
         this.invoiceTemplate = invoiceTemplate;
         this.customer = customer;
@@ -132,12 +132,12 @@ public class Invoice {
         return this;
     }
 
-    public List<InvoicePosition> getInvoicePosition() {
-        return invoicePosition;
+    public List<InvoicePosition> getInvoicePositions() {
+        return invoicePositions;
     }
 
-    public Invoice setInvoicePosition(List<InvoicePosition> invoicePosition) {
-        this.invoicePosition = invoicePosition;
+    public Invoice setInvoicePositions(List<InvoicePosition> invoicePositions) {
+        this.invoicePositions = invoicePositions;
         return this;
     }
 

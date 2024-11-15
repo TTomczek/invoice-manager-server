@@ -4,35 +4,34 @@ import net.tomczek.invoice.manager.api.server.api.SalesTaxesApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.SalesTaxDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Component
 public class SalesTaxApiDelegateImpl implements SalesTaxesApiDelegate {
 
     @Override
-    public Mono<ResponseEntity<Void>> deleteSalesTaxById(Integer id, ServerWebExchange exchange) {
-        return SalesTaxesApiDelegate.super.deleteSalesTaxById(id, exchange);
+    public ResponseEntity<Void> deleteSalesTaxById(Integer id) {
+        return SalesTaxesApiDelegate.super.deleteSalesTaxById(id);
     }
 
     @Override
-    public Mono<ResponseEntity<Flux<SalesTaxDTO>>> getAllSalesTaxes(ServerWebExchange exchange) {
-        return SalesTaxesApiDelegate.super.getAllSalesTaxes(exchange);
+    public ResponseEntity<List<SalesTaxDTO>> getAllSalesTaxes() {
+        return SalesTaxesApiDelegate.super.getAllSalesTaxes();
     }
 
     @Override
-    public Mono<ResponseEntity<SalesTaxDTO>> getSalesTaxById(Integer id, ServerWebExchange exchange) {
-        return SalesTaxesApiDelegate.super.getSalesTaxById(id, exchange);
+    public ResponseEntity<SalesTaxDTO> getSalesTaxById(Integer id) {
+        return SalesTaxesApiDelegate.super.getSalesTaxById(id);
     }
 
     @Override
-    public Mono<ResponseEntity<SalesTaxDTO>> salesTaxesPost(Mono<SalesTaxDTO> salesTax, ServerWebExchange exchange) {
-        return SalesTaxesApiDelegate.super.salesTaxesPost(salesTax, exchange);
+    public ResponseEntity<SalesTaxDTO> salesTaxesPost(SalesTaxDTO salesTaxDTO) {
+        return SalesTaxesApiDelegate.super.salesTaxesPost(salesTaxDTO);
     }
 
     @Override
-    public Mono<ResponseEntity<SalesTaxDTO>> updateSalesTaxById(Integer id, Mono<SalesTaxDTO> salesTax, ServerWebExchange exchange) {
-        return SalesTaxesApiDelegate.super.updateSalesTaxById(id, salesTax, exchange);
+    public ResponseEntity<SalesTaxDTO> updateSalesTaxById(Integer id, SalesTaxDTO salesTaxDTO) {
+        return SalesTaxesApiDelegate.super.updateSalesTaxById(id, salesTaxDTO);
     }
 }

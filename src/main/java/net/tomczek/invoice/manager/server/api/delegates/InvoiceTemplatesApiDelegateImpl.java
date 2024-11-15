@@ -4,35 +4,34 @@ import net.tomczek.invoice.manager.api.server.api.InvoiceTemplatesApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.InvoiceTemplateDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Component
 public class InvoiceTemplatesApiDelegateImpl implements InvoiceTemplatesApiDelegate {
 
     @Override
-    public Mono<ResponseEntity<Void>> deleteInvoiceTemplateById(Integer id, ServerWebExchange exchange) {
-        return InvoiceTemplatesApiDelegate.super.deleteInvoiceTemplateById(id, exchange);
+    public ResponseEntity<Void> deleteInvoiceTemplateById(Integer id) {
+        return InvoiceTemplatesApiDelegate.super.deleteInvoiceTemplateById(id);
     }
 
     @Override
-    public Mono<ResponseEntity<Flux<InvoiceTemplateDTO>>> getAllInvoiceTemplates(ServerWebExchange exchange) {
-        return InvoiceTemplatesApiDelegate.super.getAllInvoiceTemplates(exchange);
+    public ResponseEntity<List<InvoiceTemplateDTO>> getAllInvoiceTemplates() {
+        return InvoiceTemplatesApiDelegate.super.getAllInvoiceTemplates();
     }
 
     @Override
-    public Mono<ResponseEntity<InvoiceTemplateDTO>> getInvoiceTemplateById(Integer id, ServerWebExchange exchange) {
-        return InvoiceTemplatesApiDelegate.super.getInvoiceTemplateById(id, exchange);
+    public ResponseEntity<InvoiceTemplateDTO> getInvoiceTemplateById(Integer id) {
+        return InvoiceTemplatesApiDelegate.super.getInvoiceTemplateById(id);
     }
 
     @Override
-    public Mono<ResponseEntity<InvoiceTemplateDTO>> invoiceTemplatesPost(Mono<InvoiceTemplateDTO> invoiceTemplateDTO, ServerWebExchange exchange) {
-        return InvoiceTemplatesApiDelegate.super.invoiceTemplatesPost(invoiceTemplateDTO, exchange);
+    public ResponseEntity<InvoiceTemplateDTO> invoiceTemplatesPost(InvoiceTemplateDTO invoiceTemplateDTO) {
+        return InvoiceTemplatesApiDelegate.super.invoiceTemplatesPost(invoiceTemplateDTO);
     }
 
     @Override
-    public Mono<ResponseEntity<InvoiceTemplateDTO>> updateInvoiceTemplateById(Integer id, Mono<InvoiceTemplateDTO> invoiceTemplateDTO, ServerWebExchange exchange) {
-        return InvoiceTemplatesApiDelegate.super.updateInvoiceTemplateById(id, invoiceTemplateDTO, exchange);
+    public ResponseEntity<InvoiceTemplateDTO> updateInvoiceTemplateById(Integer id, InvoiceTemplateDTO invoiceTemplateDTO) {
+        return InvoiceTemplatesApiDelegate.super.updateInvoiceTemplateById(id, invoiceTemplateDTO);
     }
 }
