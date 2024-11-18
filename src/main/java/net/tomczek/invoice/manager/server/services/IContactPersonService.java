@@ -6,13 +6,15 @@ import java.util.List;
 
 public interface IContactPersonService {
 
-    public ContactPerson createContactPerson(ContactPerson contactPerson);
+    ContactPerson createContactPerson(ContactPerson contactPerson);
 
-    public ContactPerson deleteContactPersonById(Integer id);
+    ContactPerson deleteContactPersonById(Integer id);
 
-    public List<ContactPerson> getAllContactPersons();
+    List<ContactPerson> getAllContactPersons();
 
-    public ContactPerson getContactPersonById(Integer id);
+    ContactPerson getContactPersonById(Integer id);
 
-    public ContactPerson updateContactPersonById(Integer id, ContactPerson contactPerson);
+    ContactPerson updateContactPersonById(Integer id, ContactPerson contactPerson);
+
+    boolean exists(Integer id);
 }

@@ -6,13 +6,15 @@ import java.util.List;
 
 public interface IInvoicePositionsService {
 
-    public InvoicePosition createInvoicePosition(InvoicePosition invoicePosition);
+    InvoicePosition createInvoicePosition(InvoicePosition invoicePosition);
 
-    public InvoicePosition deleteInvoicePositionById(Integer id);
+    InvoicePosition deleteInvoicePositionById(Integer id);
 
-    public List<InvoicePosition> getAllInvoicePositions();
+    List<InvoicePosition> getAllInvoicePositions();
 
-    public InvoicePosition getInvoicePositionById(Integer id);
+    InvoicePosition getInvoicePositionById(Integer id);
 
-    public InvoicePosition updateInvoicePositionById(Integer id, InvoicePosition invoicePosition);
+    InvoicePosition updateInvoicePositionById(Integer id, InvoicePosition invoicePosition);
+
+    boolean exists(Integer id);
 }

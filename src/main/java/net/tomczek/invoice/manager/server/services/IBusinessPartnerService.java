@@ -6,13 +6,16 @@ import java.util.List;
 
 public interface IBusinessPartnerService {
 
-    public BusinessPartner createBusinessPartner(BusinessPartner businessPartner);
+    BusinessPartner createBusinessPartner(BusinessPartner businessPartner);
 
-    public BusinessPartner deleteBusinessPartnerById(Integer id);
+    BusinessPartner deleteBusinessPartnerById(Integer id);
 
-    public List<BusinessPartner> getAllBusinessPartners();
+    List<BusinessPartner> getAllBusinessPartners();
 
-    public BusinessPartner getBusinessPartnerById(Integer id);
+    BusinessPartner getBusinessPartnerById(Integer id);
 
-    public BusinessPartner updateBusinessPartnerById(Integer id, BusinessPartner businessPartner);
+    BusinessPartner updateBusinessPartnerById(Integer id, BusinessPartner businessPartner);
+
+    boolean exists(Integer id);
+
 }

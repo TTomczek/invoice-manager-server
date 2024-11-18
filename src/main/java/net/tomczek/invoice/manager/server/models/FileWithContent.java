@@ -15,6 +15,9 @@ public class FileWithContent {
         this.fileContent = fileContent;
     }
 
+    public FileWithContent() {
+    }
+
     public FileWithContent setId(Integer id) {
         this.id = id;
         return this;

@@ -84,4 +84,9 @@ public class BusinessPartnerServiceImpl implements IBusinessPartnerService {
         BusinessPartner updatedBusinessPartner = BusinessPartnerConverter.toEntityFromDAO(updatedBusinessPartnerDAO);
         return updatedBusinessPartner;
     }
+
+    @Override
+    public boolean exists(Integer id) {
+        return businessPartnersRepository.existsById(id);
+    }
 }

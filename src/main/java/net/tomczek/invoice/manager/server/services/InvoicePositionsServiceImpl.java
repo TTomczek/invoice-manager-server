@@ -68,4 +68,9 @@ public class InvoicePositionsServiceImpl implements IInvoicePositionsService {
         InvoicePositionDAO updatedInvoicePositionDAO = invoicePositionsRepository.save(invoicePositionDAO);
         return InvoicePositionConverter.toEntityFromDAO(updatedInvoicePositionDAO);
     }
+
+    @Override
+    public boolean exists(Integer id) {
+        return invoicePositionsRepository.existsById(id);
+    }
 }

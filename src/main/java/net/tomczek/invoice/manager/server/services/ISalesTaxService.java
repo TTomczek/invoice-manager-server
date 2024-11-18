@@ -6,13 +6,15 @@ import java.util.List;
 
 public interface ISalesTaxService {
 
-    public SalesTax createSalesTax(SalesTax salesTax);
+    SalesTax createSalesTax(SalesTax salesTax);
 
-    public SalesTax deleteSalesTaxById(Integer id);
+    SalesTax deleteSalesTaxById(Integer id);
 
-    public List<SalesTax> getAllSalesTaxs();
+    List<SalesTax> getAllSalesTaxs();
 
-    public SalesTax getSalesTaxById(Integer id);
+    SalesTax getSalesTaxById(Integer id);
 
-    public SalesTax updateSalesTaxById(Integer id, SalesTax salesTax);
+    SalesTax updateSalesTaxById(Integer id, SalesTax salesTax);
+
+    boolean exists(Integer id);
 }

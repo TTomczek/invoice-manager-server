@@ -6,13 +6,15 @@ import java.util.List;
 
 public interface IInvoiceTemplateService {
 
-    public InvoiceTemplate createInvoiceTemplate(InvoiceTemplate invoiceTemplate);
+    InvoiceTemplate createInvoiceTemplate(InvoiceTemplate invoiceTemplate);
 
-    public InvoiceTemplate deleteInvoiceTemplateById(Integer id);
+    InvoiceTemplate deleteInvoiceTemplateById(Integer id);
 
-    public List<InvoiceTemplate> getAllInvoiceTemplates();
+    List<InvoiceTemplate> getAllInvoiceTemplates();
 
-    public InvoiceTemplate getInvoiceTemplateById(Integer id);
+    InvoiceTemplate getInvoiceTemplateById(Integer id);
 
-    public InvoiceTemplate updateInvoiceTemplateById(Integer id, InvoiceTemplate invoiceTemplate);
+    InvoiceTemplate updateInvoiceTemplateById(Integer id, InvoiceTemplate invoiceTemplate);
+
+    boolean exists(Integer id);
 }

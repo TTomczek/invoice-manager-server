@@ -61,4 +61,9 @@ public class SalesTaxServiceImpl implements ISalesTaxService {
         SalesTaxDAO updatedSalesTaxDAO = salesTaxRepository.save(salesTaxDAO);
         return SalesTaxConverter.toEntityFromDAO(updatedSalesTaxDAO);
     }
+
+    @Override
+    public boolean exists(Integer id) {
+        return salesTaxRepository.existsById(id);
+    }
 }

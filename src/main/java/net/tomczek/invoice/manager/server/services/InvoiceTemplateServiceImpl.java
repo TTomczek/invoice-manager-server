@@ -67,4 +67,9 @@ public class InvoiceTemplateServiceImpl implements IInvoiceTemplateService {
         InvoiceTemplateDAO updatedInvoiceTemplateDAO = invoiceTemplateRepository.save(invoiceTemplateDAO);
         return invoiceTemplateConverter.toEntityFromDAO(updatedInvoiceTemplateDAO);
     }
+
+    @Override
+    public boolean exists(Integer id) {
+        return invoiceTemplateRepository.existsById(id);
+    }
 }

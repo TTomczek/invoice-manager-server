@@ -87,6 +87,10 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
         InvoiceDAO updatedInvoiceDAO = invoiceRepository.save(invoiceDAO);
         return invoiceConverter.toEntityFromDAO(updatedInvoiceDAO);
+    }
 
+    @Override
+    public boolean exists(Integer id) {
+        return invoiceRepository.existsById(id);
     }
 }

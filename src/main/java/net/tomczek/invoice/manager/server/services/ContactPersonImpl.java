@@ -81,4 +81,9 @@ public class ContactPersonImpl implements IContactPersonService {
         ContactPersonDAO updatedContactPersonDAO = contactPersonsRepository.save(contactPersonDAO);
         return contactPersonConverter.toEntityFromDAO(updatedContactPersonDAO);
     }
+
+    @Override
+    public boolean exists(Integer id) {
+        return contactPersonsRepository.existsById(id);
+    }
 }

@@ -6,13 +6,15 @@ import java.util.List;
 
 public interface IInvoiceService {
 
-    public Invoice createInvoice(Invoice invoice);
+    Invoice createInvoice(Invoice invoice);
 
-    public Invoice deleteInvoiceById(Integer id);
+    Invoice deleteInvoiceById(Integer id);
 
-    public List<Invoice> getAllInvoices();
+    List<Invoice> getAllInvoices();
 
-    public Invoice getInvoiceById(Integer id);
+    Invoice getInvoiceById(Integer id);
 
-    public Invoice updateInvoiceById(Integer id, Invoice invoice);
+    Invoice updateInvoiceById(Integer id, Invoice invoice);
+
+    boolean exists(Integer id);
 }
