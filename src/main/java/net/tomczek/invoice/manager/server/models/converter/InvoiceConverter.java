@@ -17,13 +17,12 @@ import java.util.stream.Collectors;
 public class InvoiceConverter {
 
     @Autowired
-    public InvoiceConverter(BusinessPartnersRepository businessPartnersRepository, ContactPersonsRepository contactPersonsRepository, SalesTaxRepository salesTaxRepository, InvoiceTemplateRepository invoiceTemplateRepository, ContactPersonConverter contactPersonConverter, SalesTaxConverter salesTaxConverter, InvoiceTemplateConverter invoiceTemplateConverter) {
+    public InvoiceConverter(BusinessPartnersRepository businessPartnersRepository, ContactPersonsRepository contactPersonsRepository, SalesTaxRepository salesTaxRepository, InvoiceTemplateRepository invoiceTemplateRepository, ContactPersonConverter contactPersonConverter, InvoiceTemplateConverter invoiceTemplateConverter) {
         this.businessPartnersRepository = businessPartnersRepository;
         this.contactPersonsRepository = contactPersonsRepository;
         this.salesTaxRepository = salesTaxRepository;
         this.invoiceTemplateRepository = invoiceTemplateRepository;
         this.contactPersonConverter = contactPersonConverter;
-        this.salesTaxConverter = salesTaxConverter;
         this.invoiceTemplateConverter = invoiceTemplateConverter;
     }
 
@@ -31,7 +30,6 @@ public class InvoiceConverter {
     private final ContactPersonsRepository contactPersonsRepository;
     private final ContactPersonConverter contactPersonConverter;
     private final SalesTaxRepository salesTaxRepository;
-    private final SalesTaxConverter salesTaxConverter;
     private final InvoiceTemplateRepository invoiceTemplateRepository;
     private final InvoiceTemplateConverter invoiceTemplateConverter;
 
@@ -79,7 +77,7 @@ public class InvoiceConverter {
         invoice.setReceiver(receiver);
 
         SalesTaxDAO salesTaxDAO = salesTaxRepository.findById(invoiceDTO.getSalesTax()).orElse(null);
-        SalesTax salesTax = salesTaxConverter.toEntityFromDAO(salesTaxDAO);
+        SalesTax salesTax = SalesTaxConverter.toEntityFromDAO(salesTaxDAO);
         invoice.setSalexTax(salesTax);
 
         InvoiceTemplateDAO invoiceTemplateDAO = invoiceTemplateRepository.findById(invoiceDTO.getInvoiceTemplate()).orElse(null);
@@ -114,7 +112,7 @@ public class InvoiceConverter {
         invoice.setReceiver(receiver);
 
         SalesTaxDAO salesTaxDAO = invoiceDAO.getSalexTax();
-        SalesTax salesTax = salesTaxConverter.toEntityFromDAO(salesTaxDAO);
+        SalesTax salesTax = SalesTaxConverter.toEntityFromDAO(salesTaxDAO);
         invoice.setSalexTax(salesTax);
 
         InvoiceTemplateDAO invoiceTemplateDAO = invoiceTemplateRepository.findById(invoiceDAO.getInvoiceTemplateDAO().getId()).orElse(null);
@@ -142,7 +140,7 @@ public class InvoiceConverter {
         invoiceDAO.setOrderNumber(invoice.getOrderNumber());
         invoiceDAO.setCustomer(BusinessPartnerConverter.toDAO(invoice.getCustomer()));
         invoiceDAO.setReceiver(contactPersonConverter.toDAO(invoice.getReceiver()));
-        invoiceDAO.setSalexTax(salesTaxConverter.toDAO(invoice.getSalexTax()));
+        invoiceDAO.setSalexTax(SalesTaxConverter.toDAO(invoice.getSalexTax()));
 
         InvoiceTemplateDAO invoiceTemplateDAO = invoiceTemplateRepository.findById(invoice.getInvoiceTemplate().getId()).orElse(null);
         invoiceDAO.setInvoiceTemplateDAO(invoiceTemplateDAO);

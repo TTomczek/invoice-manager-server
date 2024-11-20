@@ -1,7 +1,6 @@
 package net.tomczek.invoice.manager.server.entities;
 
 import jakarta.persistence.*;
-import net.tomczek.invoice.manager.server.models.Address;
 
 import java.util.List;
 
@@ -9,11 +8,13 @@ import java.util.List;
 @Entity
 public class BusinessPartnerDAO extends BaseEntity<Integer> {
 
-    public BusinessPartnerDAO(Integer id, String name, String description, AddressDAO address) {
+    public BusinessPartnerDAO(Integer id, String name, String description, AddressDAO address, List<ContactPersonDAO> contactPersonDAOS, List<InvoiceDAO> invoiceDAOS) {
         super(id);
         this.name = name;
         this.description = description;
         this.address = address;
+        this.contactPersonDAOS = contactPersonDAOS;
+        this.invoiceDAOS = invoiceDAOS;
     }
 
     public BusinessPartnerDAO() {}

@@ -2,6 +2,8 @@ package net.tomczek.invoice.manager.server.models;
 
 public class Address {
 
+    private Integer id;
+
     private String street;
 
     private String houseNumber;
@@ -15,12 +17,22 @@ public class Address {
     public Address() {
     }
 
-    public Address(String street, String houseNumber, String zipCode, String city, String country) {
+    public Address(Integer id, String street, String houseNumber, String zipCode, String city, String country) {
+        this.id = id;
         this.street = street;
         this.houseNumber = houseNumber;
         this.zipCode = zipCode;
         this.city = city;
         this.country = country;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Address setId(Integer id) {
+        this.id = id;
+        return this;
     }
 
     public String getStreet() {

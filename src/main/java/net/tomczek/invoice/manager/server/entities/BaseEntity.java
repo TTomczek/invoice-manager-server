@@ -11,7 +11,7 @@ public abstract class BaseEntity<PK extends Serializable> {
 
     @Id
     @GeneratedValue
-    private PK id;
+    protected PK id;
 
     public BaseEntity() {
     }
@@ -24,8 +24,9 @@ public abstract class BaseEntity<PK extends Serializable> {
         return id;
     }
 
-    public void setId(PK id) {
+    public BaseEntity<PK> setId(PK id) {
         this.id = id;
+        return this;
     }
 
     @Override
