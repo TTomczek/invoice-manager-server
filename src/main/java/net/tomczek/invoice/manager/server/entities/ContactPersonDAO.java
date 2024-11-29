@@ -25,7 +25,7 @@ public class ContactPersonDAO extends BaseEntity<Integer> {
 
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private AddressDAO address;
 
     @ManyToOne(fetch = FetchType.LAZY)

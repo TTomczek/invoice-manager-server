@@ -16,6 +16,6 @@ management:
             exposure:
                 include: "*"
 
-file-storage:
-    local:
-        storage-path: target/files
+server:
+    servlet:
+        context-path: /${spring.application.name}

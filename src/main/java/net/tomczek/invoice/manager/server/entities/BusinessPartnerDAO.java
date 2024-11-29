@@ -23,7 +23,7 @@ public class BusinessPartnerDAO extends BaseEntity<Integer> {
 
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private AddressDAO address;
 
     @OneToMany(mappedBy = "businessPartner", fetch = FetchType.LAZY)

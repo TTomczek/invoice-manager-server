@@ -41,3 +41,5 @@ Linux:
 ## Server profiles
     develop: Deactivates the security features of the server
     localfilestorage: Stores files on the local file system
+    h2: Uses a file based H2 database
+    mariadb: Uses a MariaDB database
