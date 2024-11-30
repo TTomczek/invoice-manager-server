@@ -1,6 +1,7 @@
 package net.tomczek.invoice.manager.server.services;
 
 import net.tomczek.invoice.manager.server.entities.BusinessPartnerDAO;
+import net.tomczek.invoice.manager.server.models.Address;
 import net.tomczek.invoice.manager.server.models.BusinessPartner;
 import net.tomczek.invoice.manager.server.models.converter.BusinessPartnerConverter;
 import net.tomczek.invoice.manager.server.models.converter.ContactPersonConverter;
@@ -15,19 +16,24 @@ import java.util.List;
 public class BusinessPartnerServiceImpl implements IBusinessPartnerService {
 
     @Autowired
-    public BusinessPartnerServiceImpl(ContactPersonConverter contactPersonConverter, BusinessPartnersRepository businessPartnersRepository, InvoiceConverter invoiceConverter) {
+    public BusinessPartnerServiceImpl(ContactPersonConverter contactPersonConverter, BusinessPartnersRepository businessPartnersRepository, InvoiceConverter invoiceConverter, IAddressService addressService) {
         this.contactPersonConverter = contactPersonConverter;
         this.businessPartnersRepository = businessPartnersRepository;
         this.invoiceConverter = invoiceConverter;
+        this.addressService = addressService;
     }
 
     private final ContactPersonConverter contactPersonConverter;
     private final BusinessPartnersRepository businessPartnersRepository;
     private final InvoiceConverter invoiceConverter;
+    private final IAddressService addressService;
 
 
     @Override
     public BusinessPartner createBusinessPartner(BusinessPartner businessPartner) {
+        Address address = businessPartner.getAddress();
+        Address savedAddress = addressService.createAddress(address);
+        businessPartner.setAddress(savedAddress);
         BusinessPartnerDAO businessPartnerDAOToSave = BusinessPartnerConverter.toDAO(businessPartner);
         BusinessPartnerDAO savedBusinessPartnerDAO = businessPartnersRepository.save(businessPartnerDAOToSave);
         BusinessPartner savedBusinessPartner = BusinessPartnerConverter.toEntityFromDAO(savedBusinessPartnerDAO);

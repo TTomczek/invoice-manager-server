@@ -10,6 +10,7 @@ public class AddressConverter {
 
     public static AddressDTO toDTO(Address address) {
         AddressDTO addressDTO = new AddressDTO();
+        addressDTO.setId(address.getId());
         addressDTO.setStreet(address.getStreet());
         addressDTO.setNumber(address.getHouseNumber());
         addressDTO.setZip(address.getZipCode());
@@ -22,8 +23,9 @@ public class AddressConverter {
         return addresses.stream().map(AddressConverter::toDTO).toList();
     }
 
-    public static Address toEntityFromDAO(net.tomczek.invoice.manager.server.entities.AddressDAO addressDAO) {
+    public static Address toEntityFromDAO(AddressDAO addressDAO) {
         Address address = new Address();
+        address.setId(addressDAO.getId());
         address.setStreet(addressDAO.getStreet());
         address.setHouseNumber(addressDAO.getHouseNumber());
         address.setZipCode(addressDAO.getZipCode());
@@ -38,6 +40,7 @@ public class AddressConverter {
 
     public static Address toEntityFromDTO(AddressDTO addressDTO) {
         Address address = new Address();
+        address.setId(addressDTO.getId());
         address.setStreet(addressDTO.getStreet());
         address.setHouseNumber(addressDTO.getNumber());
         address.setZipCode(addressDTO.getZip());
@@ -52,6 +55,7 @@ public class AddressConverter {
 
     public static AddressDAO toDAO(Address address) {
         AddressDAO addressDAO = new AddressDAO();
+        addressDAO.setId(address.getId());
         addressDAO.setStreet(address.getStreet());
         addressDAO.setHouseNumber(address.getHouseNumber());
         addressDAO.setZipCode(address.getZipCode());

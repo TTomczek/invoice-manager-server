@@ -25,6 +25,7 @@ public class BusinessPartnersApiDelegateImpl implements BusinessPartnersApiDeleg
     @Override
     public ResponseEntity<BusinessPartnerDTO> createBusinessPartner(BusinessPartnerDTO businessPartnerDTO) {
         BusinessPartner businessPartner = BusinessPartnerConverter.toEntityFromDTO(businessPartnerDTO);
+
         BusinessPartner createdBusinessPartner = businessPartnerService.createBusinessPartner(businessPartner);
         BusinessPartnerDTO createdBusinessPartnerDTO = BusinessPartnerConverter.toDTO(createdBusinessPartner);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBusinessPartnerDTO);
