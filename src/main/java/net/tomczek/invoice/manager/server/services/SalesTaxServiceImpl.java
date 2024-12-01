@@ -4,6 +4,8 @@ import net.tomczek.invoice.manager.server.entities.SalesTaxDAO;
 import net.tomczek.invoice.manager.server.models.SalesTax;
 import net.tomczek.invoice.manager.server.models.converter.SalesTaxConverter;
 import net.tomczek.invoice.manager.server.repositories.SalesTaxRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Service
 public class SalesTaxServiceImpl implements ISalesTaxService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SalesTaxServiceImpl.class);
 
     @Autowired
     public SalesTaxServiceImpl(SalesTaxRepository salesTaxRepository) {
@@ -23,6 +27,7 @@ public class SalesTaxServiceImpl implements ISalesTaxService {
     public SalesTax createSalesTax(SalesTax salesTax) {
         SalesTaxDAO salesTaxDAO = SalesTaxConverter.toDAO(salesTax);
         SalesTaxDAO savedSalesTaxDAO = salesTaxRepository.save(salesTaxDAO);
+        logger.debug("SalesTax saved: {}", savedSalesTaxDAO);
         return SalesTaxConverter.toEntityFromDAO(savedSalesTaxDAO);
     }
 
@@ -32,6 +37,7 @@ public class SalesTaxServiceImpl implements ISalesTaxService {
         if (salesTaxDAO == null) {
             return null;
         }
+        logger.debug("SalesTax deleted: {}", salesTaxDAO);
 
         salesTaxRepository.delete(salesTaxDAO);
         return SalesTaxConverter.toEntityFromDAO(salesTaxDAO);
@@ -40,12 +46,17 @@ public class SalesTaxServiceImpl implements ISalesTaxService {
     @Override
     public List<SalesTax> getAllSalesTaxs() {
         List<SalesTaxDAO> salesTaxDAOs = salesTaxRepository.findAll();
+        logger.debug("Fetched salesTaxes: {}", salesTaxDAOs.size());
         return SalesTaxConverter.toEntityFromDAO(salesTaxDAOs);
     }
 
     @Override
     public SalesTax getSalesTaxById(Integer id) {
         SalesTaxDAO salesTaxDAO = salesTaxRepository.findById(id).orElse(null);
+        if (salesTaxDAO == null) {
+            return null;
+        }
+        logger.debug("Fetched salesTax: {}", salesTaxDAO);
         return SalesTaxConverter.toEntityFromDAO(salesTaxDAO);
     }
 
@@ -59,6 +70,7 @@ public class SalesTaxServiceImpl implements ISalesTaxService {
         salesTaxDAO.setRate(salesTax.getRate());
         salesTaxDAO.setName(salesTax.getName());
         SalesTaxDAO updatedSalesTaxDAO = salesTaxRepository.save(salesTaxDAO);
+        logger.debug("SalesTax updated: {}", updatedSalesTaxDAO);
         return SalesTaxConverter.toEntityFromDAO(updatedSalesTaxDAO);
     }
 

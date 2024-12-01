@@ -4,6 +4,8 @@ import net.tomczek.invoice.manager.server.entities.InvoiceTemplateDAO;
 import net.tomczek.invoice.manager.server.models.InvoiceTemplate;
 import net.tomczek.invoice.manager.server.models.converter.InvoiceTemplateConverter;
 import net.tomczek.invoice.manager.server.repositories.InvoiceTemplateRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Service
 public class InvoiceTemplateServiceImpl implements IInvoiceTemplateService {
+
+    private static final Logger logger = LoggerFactory.getLogger(InvoiceTemplateServiceImpl.class);
 
     @Autowired
     public InvoiceTemplateServiceImpl(InvoiceTemplateConverter invoiceTemplateConverter, InvoiceTemplateRepository invoiceTemplateRepository) {
@@ -25,6 +29,7 @@ public class InvoiceTemplateServiceImpl implements IInvoiceTemplateService {
     public InvoiceTemplate createInvoiceTemplate(InvoiceTemplate invoiceTemplate) {
         InvoiceTemplateDAO invoiceTemplateDAOToSave = invoiceTemplateConverter.toDAO(invoiceTemplate);
         InvoiceTemplateDAO savedInvoiceTemplateDAO = invoiceTemplateRepository.save(invoiceTemplateDAOToSave);
+        logger.debug("InvoiceTemplate saved: {}", savedInvoiceTemplateDAO);
         InvoiceTemplate savedInvoiceTemplate = invoiceTemplateConverter.toEntityFromDAO(savedInvoiceTemplateDAO);
         return savedInvoiceTemplate;
     }
@@ -35,6 +40,7 @@ public class InvoiceTemplateServiceImpl implements IInvoiceTemplateService {
         if (invoiceTemplateDAO == null) {
             return null;
         }
+        logger.debug("InvoiceTemplate deleted: {}", invoiceTemplateDAO);
 
         invoiceTemplateRepository.deleteById(id);
         return invoiceTemplateConverter.toEntityFromDAO(invoiceTemplateDAO);
@@ -42,12 +48,18 @@ public class InvoiceTemplateServiceImpl implements IInvoiceTemplateService {
 
     @Override
     public List<InvoiceTemplate> getAllInvoiceTemplates() {
-        return invoiceTemplateConverter.toEntityFromDAO(invoiceTemplateRepository.findAll());
+        List<InvoiceTemplateDAO> invoiceTemplateDAOs = invoiceTemplateRepository.findAll();
+        logger.debug("Fetched invoiceTemplates: {}", invoiceTemplateDAOs.size());
+        return invoiceTemplateConverter.toEntityFromDAO(invoiceTemplateDAOs);
     }
 
     @Override
     public InvoiceTemplate getInvoiceTemplateById(Integer id) {
         InvoiceTemplateDAO invoiceTemplateDAO = invoiceTemplateRepository.findById(id).orElse(null);
+        if (invoiceTemplateDAO == null) {
+            return null;
+        }
+        logger.debug("Fetched invoiceTemplate: {}", invoiceTemplateDAO);
         return invoiceTemplateConverter.toEntityFromDAO(invoiceTemplateDAO);
     }
 
@@ -65,6 +77,7 @@ public class InvoiceTemplateServiceImpl implements IInvoiceTemplateService {
         invoiceTemplateDAO.setMarginBottomOtherPages(invoiceTemplate.getMarginBottomOtherPages());
         invoiceTemplateDAO.setBackgroundPdfId(invoiceTemplate.getBackgroundPdfId());
         InvoiceTemplateDAO updatedInvoiceTemplateDAO = invoiceTemplateRepository.save(invoiceTemplateDAO);
+        logger.debug("InvoiceTemplate updated: {}", updatedInvoiceTemplateDAO);
         return invoiceTemplateConverter.toEntityFromDAO(updatedInvoiceTemplateDAO);
     }
 

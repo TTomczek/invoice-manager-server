@@ -4,6 +4,8 @@ import net.tomczek.invoice.manager.server.entities.AddressDAO;
 import net.tomczek.invoice.manager.server.models.Address;
 import net.tomczek.invoice.manager.server.models.converter.AddressConverter;
 import net.tomczek.invoice.manager.server.repositories.AddressRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Service
 public class AddressServiceImpl implements IAddressService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AddressServiceImpl.class);
 
     @Autowired
     public AddressServiceImpl(AddressRepository addressRepository) {
@@ -23,6 +27,7 @@ public class AddressServiceImpl implements IAddressService {
     public Address createAddress(Address address) {
         AddressDAO addressDAOToSave = AddressConverter.toDAO(address);
         AddressDAO savedAddressDAO = addressRepository.save(addressDAOToSave);
+        logger.debug("Address saved: {}", savedAddressDAO);
         Address savedAddress = AddressConverter.toEntityFromDAO(savedAddressDAO);
         return savedAddress;
     }
@@ -34,6 +39,7 @@ public class AddressServiceImpl implements IAddressService {
             return null;
         }
         addressRepository.deleteById(id);
+        logger.debug("Address deleted: {}", addressDAO);
         Address address = AddressConverter.toEntityFromDAO(addressDAO);
         return address;
     }
@@ -42,6 +48,7 @@ public class AddressServiceImpl implements IAddressService {
     public List<Address> getAllAddresss() {
         List<AddressDAO> addressDAOs = addressRepository.findAll();
         List<Address> addresses = AddressConverter.toEntityFromDAO(addressDAOs);
+        logger.debug("Fetched addresses: {}", addresses.size());
         return addresses;
     }
 
@@ -49,6 +56,7 @@ public class AddressServiceImpl implements IAddressService {
     public Address getAddressById(Integer id) {
         AddressDAO addressDAO = addressRepository.findById(id).orElse(null);
         Address address = AddressConverter.toEntityFromDAO(addressDAO);
+        logger.debug("Fetched address: {}", address);
         return address;
     }
 
@@ -66,6 +74,7 @@ public class AddressServiceImpl implements IAddressService {
                 .setZipCode(address.getZipCode());
 
         AddressDAO savedAddressDAO = addressRepository.save(addressDAO);
+        logger.debug("Address updated: {}", savedAddressDAO);
         Address savedAddress = AddressConverter.toEntityFromDAO(savedAddressDAO);
         return savedAddress;
     }

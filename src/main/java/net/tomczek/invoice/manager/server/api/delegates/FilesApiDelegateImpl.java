@@ -1,7 +1,6 @@
 package net.tomczek.invoice.manager.server.api.delegates;
 
 import net.tomczek.invoice.manager.api.server.api.FilesApiDelegate;
-import net.tomczek.invoice.manager.api.server.model.ErrorDTO;
 import net.tomczek.invoice.manager.api.server.model.FileDTO;
 import net.tomczek.invoice.manager.server.models.FileWithContent;
 import net.tomczek.invoice.manager.server.models.converter.FileConverter;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class FilesApiDelegateImpl implements FilesApiDelegate {
@@ -19,15 +19,12 @@ public class FilesApiDelegateImpl implements FilesApiDelegate {
         this.fileStorageService = fileStorageService;
     }
 
-    private IFileStorageService fileStorageService;
+    private final IFileStorageService fileStorageService;
 
     @Override
     public ResponseEntity<FileDTO> downloadFileById(Integer id) {
         try {
-            FileWithContent fileWithContent = fileStorageService.getFile(id);
-            if (fileWithContent == null) {
-                return ResponseEntity.notFound().build();
-            }
+            FileWithContent fileWithContent = this.fileStorageService.getFile(id);
             FileDTO fileDTO = FileConverter.toDTO(fileWithContent);
             return ResponseEntity.ok(fileDTO);
         } catch (Exception e) {
@@ -36,12 +33,12 @@ public class FilesApiDelegateImpl implements FilesApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Integer> uploadFile(FileDTO fileDTO) {
+    public ResponseEntity<Integer> uploadFile(Integer id, String fileName, MultipartFile data) {
         try {
-            Integer id = fileStorageService.storeFile(fileDTO.getFileName(), fileDTO.getData().getContentAsByteArray());
-            return ResponseEntity.status(HttpStatus.CREATED).body(id);
+            int fileId = this.fileStorageService.storeFile(fileName, data.getBytes());
+            return ResponseEntity.ok(fileId);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

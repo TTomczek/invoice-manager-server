@@ -7,6 +7,8 @@ import net.tomczek.invoice.manager.server.models.converter.BusinessPartnerConver
 import net.tomczek.invoice.manager.server.models.converter.ContactPersonConverter;
 import net.tomczek.invoice.manager.server.models.converter.InvoiceConverter;
 import net.tomczek.invoice.manager.server.repositories.BusinessPartnersRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Service
 public class BusinessPartnerServiceImpl implements IBusinessPartnerService {
+
+    private static final Logger logger = LoggerFactory.getLogger(BusinessPartnerServiceImpl.class);
 
     @Autowired
     public BusinessPartnerServiceImpl(ContactPersonConverter contactPersonConverter, BusinessPartnersRepository businessPartnersRepository, InvoiceConverter invoiceConverter, IAddressService addressService) {
@@ -36,6 +40,7 @@ public class BusinessPartnerServiceImpl implements IBusinessPartnerService {
         businessPartner.setAddress(savedAddress);
         BusinessPartnerDAO businessPartnerDAOToSave = BusinessPartnerConverter.toDAO(businessPartner);
         BusinessPartnerDAO savedBusinessPartnerDAO = businessPartnersRepository.save(businessPartnerDAOToSave);
+        logger.debug("BusinessPartner saved: {}", savedBusinessPartnerDAO);
         BusinessPartner savedBusinessPartner = BusinessPartnerConverter.toEntityFromDAO(savedBusinessPartnerDAO);
         return savedBusinessPartner;
     }
@@ -48,12 +53,14 @@ public class BusinessPartnerServiceImpl implements IBusinessPartnerService {
         }
 
         businessPartnersRepository.deleteById(id);
+        logger.debug("BusinessPartner deleted: {}", businessPartnerDAO);
         return BusinessPartnerConverter.toEntityFromDAO(businessPartnerDAO);
     }
 
     @Override
     public List<BusinessPartner> getAllBusinessPartners() {
         List<BusinessPartnerDAO> businessPartnerDAOs = businessPartnersRepository.findAll();
+        logger.debug("Fetched business partners: {}", businessPartnerDAOs.size());
         return BusinessPartnerConverter.toEntityFromDAO(businessPartnerDAOs);
     }
 
@@ -63,6 +70,7 @@ public class BusinessPartnerServiceImpl implements IBusinessPartnerService {
         if (businessPartnerDAO == null) {
             return null;
         }
+        logger.debug("Fetched business partner: {}", businessPartnerDAO);
 
         return BusinessPartnerConverter.toEntityFromDAO(businessPartnerDAO);
     }
@@ -87,6 +95,7 @@ public class BusinessPartnerServiceImpl implements IBusinessPartnerService {
         businessPartnerDAO.setInvoiceDAOS(invoiceConverter.toDAO(businessPartner.getInvoices()));
 
         BusinessPartnerDAO updatedBusinessPartnerDAO = businessPartnersRepository.save(businessPartnerDAO);
+        logger.debug("BusinessPartner updated: {}", updatedBusinessPartnerDAO);
         BusinessPartner updatedBusinessPartner = BusinessPartnerConverter.toEntityFromDAO(updatedBusinessPartnerDAO);
         return updatedBusinessPartner;
     }

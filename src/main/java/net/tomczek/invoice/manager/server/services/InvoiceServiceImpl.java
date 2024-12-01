@@ -4,6 +4,8 @@ import net.tomczek.invoice.manager.server.entities.*;
 import net.tomczek.invoice.manager.server.models.Invoice;
 import net.tomczek.invoice.manager.server.models.converter.*;
 import net.tomczek.invoice.manager.server.repositories.InvoicesRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ import java.util.List;
 @Service
 public class InvoiceServiceImpl implements IInvoiceService {
 
-    private final ContactPersonConverter contactPersonConverter;
+    private static final Logger logger = LoggerFactory.getLogger(InvoiceServiceImpl.class);
 
     @Autowired
     public InvoiceServiceImpl(InvoiceConverter invoiceConverter, InvoicesRepository invoiceRepository, ContactPersonConverter contactPersonConverter, InvoiceTemplateConverter invoiceTemplateConverter) {
@@ -24,12 +26,14 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
     private final InvoiceConverter invoiceConverter;
     private final InvoicesRepository invoiceRepository;
+    private final ContactPersonConverter contactPersonConverter;
     private final InvoiceTemplateConverter invoiceTemplateConverter;
 
     @Override
     public Invoice createInvoice(Invoice invoice) {
         InvoiceDAO invoiceDAOToSave = invoiceConverter.toDAO(invoice);
         InvoiceDAO savedInvoiceDAO = invoiceRepository.save(invoiceDAOToSave);
+        logger.debug("Invoice saved: {}", savedInvoiceDAO);
         return invoiceConverter.toEntityFromDAO(savedInvoiceDAO);
     }
 
@@ -41,12 +45,14 @@ public class InvoiceServiceImpl implements IInvoiceService {
         }
 
         invoiceRepository.deleteById(id);
+        logger.debug("Invoice deleted: {}", invoiceDAO);
         return invoiceConverter.toEntityFromDAO(invoiceDAO);
     }
 
     @Override
     public List<Invoice> getAllInvoices() {
         List<InvoiceDAO> invoiceDAOs = invoiceRepository.findAll();
+        logger.debug("Fetched invoices: {}", invoiceDAOs.size());
         return invoiceConverter.toEntityFromDAO(invoiceDAOs);
     }
 
@@ -56,6 +62,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
         if (invoiceDAO == null) {
             return null;
         }
+        logger.debug("Fetched invoice: {}", invoiceDAO);
 
         return invoiceConverter.toEntityFromDAO(invoiceDAO);
     }
@@ -86,6 +93,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
         invoiceDAO.setCustomer(businessPartnerDAO);
 
         InvoiceDAO updatedInvoiceDAO = invoiceRepository.save(invoiceDAO);
+        logger.debug("Invoice updated: {}", updatedInvoiceDAO);
         return invoiceConverter.toEntityFromDAO(updatedInvoiceDAO);
     }
 

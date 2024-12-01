@@ -4,6 +4,8 @@ import net.tomczek.invoice.manager.server.entities.InvoicePositionDAO;
 import net.tomczek.invoice.manager.server.models.InvoicePosition;
 import net.tomczek.invoice.manager.server.models.converter.InvoicePositionConverter;
 import net.tomczek.invoice.manager.server.repositories.InvoicePositionsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Service
 public class InvoicePositionsServiceImpl implements IInvoicePositionsService {
+
+    private static final Logger logger = LoggerFactory.getLogger(InvoicePositionsServiceImpl.class);
 
     @Autowired
     public InvoicePositionsServiceImpl(InvoicePositionsRepository invoicePositionsRepository) {
@@ -23,6 +27,7 @@ public class InvoicePositionsServiceImpl implements IInvoicePositionsService {
     public InvoicePosition createInvoicePosition(InvoicePosition invoicePosition) {
         InvoicePositionDAO invoicePositionDAOToSave = InvoicePositionConverter.toDAO(invoicePosition);
         InvoicePositionDAO savedInvoicePositionDAO = invoicePositionsRepository.save(invoicePositionDAOToSave);
+        logger.debug("InvoicePosition saved: {}", savedInvoicePositionDAO);
         return InvoicePositionConverter.toEntityFromDAO(savedInvoicePositionDAO);
     }
 
@@ -34,12 +39,14 @@ public class InvoicePositionsServiceImpl implements IInvoicePositionsService {
         }
 
         invoicePositionsRepository.deleteById(id);
+        logger.debug("InvoicePosition deleted: {}", invoicePositionDAO);
         return InvoicePositionConverter.toEntityFromDAO(invoicePositionDAO);
     }
 
     @Override
     public List<InvoicePosition> getAllInvoicePositions() {
         List<InvoicePositionDAO> invoicePositionDAOs = invoicePositionsRepository.findAll();
+        logger.debug("Fetched invoicePositions: {}", invoicePositionDAOs.size());
         return InvoicePositionConverter.toEntityFromDAO(invoicePositionDAOs);
     }
 
@@ -49,6 +56,7 @@ public class InvoicePositionsServiceImpl implements IInvoicePositionsService {
         if (invoicePositionDAO == null) {
             return null;
         }
+        logger.debug("Fetched invoicePosition: {}", invoicePositionDAO);
 
         return InvoicePositionConverter.toEntityFromDAO(invoicePositionDAO);
     }
@@ -66,6 +74,7 @@ public class InvoicePositionsServiceImpl implements IInvoicePositionsService {
         invoicePositionDAO.setPricePerUnitInCents(invoicePosition.getPricePerUnitInCents());
 
         InvoicePositionDAO updatedInvoicePositionDAO = invoicePositionsRepository.save(invoicePositionDAO);
+        logger.debug("InvoicePosition updated: {}", updatedInvoicePositionDAO);
         return InvoicePositionConverter.toEntityFromDAO(updatedInvoicePositionDAO);
     }
 

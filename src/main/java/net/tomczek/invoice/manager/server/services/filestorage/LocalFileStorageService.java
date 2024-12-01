@@ -34,20 +34,27 @@ public class LocalFileStorageService implements IFileStorageService {
 
     @Override
     public int storeFile(String fileName, byte[] fileContent) throws Exception {
-        initStorageDirectoryIfNecessary();
+        boolean creationSuccess = initStorageDirectoryIfNecessary();
+        if (!creationSuccess) {
+            logger.error("Could not create storage directory at path [{}]", properties.getStoragePath());
+            throw new Exception("Could not create storage directory");
+        }
 
         LocalFileStorageFileDAO fileDAO = new LocalFileStorageFileDAO();
         fileDAO.setFilename(fileName);
         LocalFileStorageFileDAO savedFile = localFileStorageFileRepository.save(fileDAO);
 
-        String path = properties.getStoragePath() + "/" + savedFile.getId();
-        System.out.println("Storing file with id [" + savedFile.getId() + "] in: [" + path + "]");
+        String path = properties.getStoragePath() + "/" + savedFile.getId() + ".pdf";
         logger.debug("Storing file with id [{}] in: [{}]", savedFile.getId(), path);
 
         File file = new File(path);
-        file.createNewFile();
-        Path newPAth = Files.write(file.toPath(), fileContent);
-        System.out.println("File stored in: [" + newPAth + "]");
+        boolean fileCreated = file.createNewFile();
+        if (!fileCreated) {
+            logger.error("Could not create file at path [{}]", path);
+            throw new Exception("Could not create file");
+        }
+        Path newPath = Files.write(file.toPath(), fileContent);
+        logger.debug("File stored in: [{}]", newPath);
 
         return savedFile.getId();
     }
@@ -57,7 +64,8 @@ public class LocalFileStorageService implements IFileStorageService {
         Optional<LocalFileStorageFileDAO> fileOptional = localFileStorageFileRepository.findById(fileId);
         if (fileOptional.isPresent()) {
             LocalFileStorageFileDAO fileNameMapping = fileOptional.get();
-            String path = properties.getStoragePath() + "/" + fileId;
+            String path = properties.getStoragePath() + "/" + fileId + ".pdf";
+            logger.debug("Retrieving file with id [{}] from: [{}]", fileId, path);
             return new FileWithContent(fileNameMapping.getId(), fileNameMapping.getFilename(), Files.readAllBytes(new File(path).toPath()));
         }
         return null;
@@ -66,20 +74,22 @@ public class LocalFileStorageService implements IFileStorageService {
     @Override
     public boolean deleteFile(int fileId) throws Exception {
         localFileStorageFileRepository.findById(fileId).ifPresent(localFileStorageFileRepository::delete);
-        String path = properties.getStoragePath() + "/" + fileId;
+        String path = properties.getStoragePath() + "/" + fileId + ".pdf";
+        logger.debug("Deleting file with id [{}] from: [{}]", fileId, path);
         return new File(path).delete();
     }
 
     @Override
     public boolean fileExists(int fileId) throws Exception {
-        String path = properties.getStoragePath() + "/" + fileId;
+        String path = properties.getStoragePath() + "/" + fileId + ".pdf";
         return new File(path).exists();
     }
 
-    private void initStorageDirectoryIfNecessary() {
+    private boolean initStorageDirectoryIfNecessary() {
         File storageDirectory = new File(properties.getStoragePath());
         if (!storageDirectory.exists()) {
-            storageDirectory.mkdirs();
+            return storageDirectory.mkdirs();
         }
+        return true;
     }
 }

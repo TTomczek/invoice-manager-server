@@ -8,6 +8,8 @@ import net.tomczek.invoice.manager.server.models.ContactPerson;
 import net.tomczek.invoice.manager.server.models.converter.BusinessPartnerConverter;
 import net.tomczek.invoice.manager.server.models.converter.ContactPersonConverter;
 import net.tomczek.invoice.manager.server.repositories.ContactPersonsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public class ContactPersonImpl implements IContactPersonService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ContactPersonImpl.class);
 
     @Autowired
     public ContactPersonImpl(ContactPersonsRepository contactPersonsRepository, ContactPersonConverter contactPersonConverter, IAddressService addressService) {
@@ -35,6 +39,7 @@ public class ContactPersonImpl implements IContactPersonService {
         contactPerson.setAddress(savedAddress);
         ContactPersonDAO contactPersonDAOToSave = contactPersonConverter.toDAO(contactPerson);
         ContactPersonDAO savedContactPersonDAO = contactPersonsRepository.save(contactPersonDAOToSave);
+        logger.debug("ContactPerson saved: {}", savedContactPersonDAO);
         ContactPerson savedContactPerson = contactPersonConverter.toEntityFromDAO(savedContactPersonDAO);
         return savedContactPerson;
     }
@@ -47,18 +52,21 @@ public class ContactPersonImpl implements IContactPersonService {
         }
 
         contactPersonsRepository.deleteById(id);
+        logger.debug("ContactPerson deleted: {}", contactPersonDAO);
         return contactPersonConverter.toEntityFromDAO(contactPersonDAO);
     }
 
     @Override
     public List<ContactPerson> getAllContactPersons() {
         List<ContactPersonDAO> contactPersonDAOs = contactPersonsRepository.findAll();
+        logger.debug("Fetched contactPersons: {}", contactPersonDAOs.size());
         return contactPersonConverter.toEntityFromDAO(contactPersonDAOs);
     }
 
     @Override
     public ContactPerson getContactPersonById(Integer id) {
         ContactPersonDAO contactPersonDAO = contactPersonsRepository.findById(id).orElse(null);
+        logger.debug("Fetched contactPerson: {}", contactPersonDAO);
         return contactPersonConverter.toEntityFromDAO(contactPersonDAO);
     }
 
@@ -85,6 +93,7 @@ public class ContactPersonImpl implements IContactPersonService {
         contactPersonDAO.setSalutation(contactPerson.getSalutation());
 
         ContactPersonDAO updatedContactPersonDAO = contactPersonsRepository.save(contactPersonDAO);
+        logger.debug("ContactPerson updated: {}", updatedContactPersonDAO);
         return contactPersonConverter.toEntityFromDAO(updatedContactPersonDAO);
     }
 

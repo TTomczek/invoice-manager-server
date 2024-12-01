@@ -14,12 +14,12 @@ public class FileConverter {
         return fileDTO;
     }
 
-    public static FileWithContent toEntityFromDTO(FileDTO fileDTO) {
+    public static FileWithContent toEntityFromDTO(Integer id, String filename, byte[] content) {
         try {
             FileWithContent fileWithContent = new FileWithContent();
-            fileWithContent.setId(fileDTO.getId());
-            fileWithContent.setFileName(fileDTO.getFileName());
-            fileWithContent.setFileContent(fileDTO.getData().getContentAsByteArray());
+            fileWithContent.setId(id);
+            fileWithContent.setFileName(filename);
+            fileWithContent.setFileContent(content);
             return fileWithContent;
         } catch (Exception e) {
             return null;

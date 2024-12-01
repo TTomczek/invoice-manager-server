@@ -34,3 +34,4 @@ build/
 
 invoice-manager-db.mv.db
 invoice-manager-db.trace.db
+*.log
