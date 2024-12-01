@@ -4,6 +4,7 @@ import net.tomczek.invoice.manager.server.entities.InvoiceTemplateDAO;
 import net.tomczek.invoice.manager.server.models.InvoiceTemplate;
 import net.tomczek.invoice.manager.server.models.converter.InvoiceTemplateConverter;
 import net.tomczek.invoice.manager.server.repositories.InvoiceTemplateRepository;
+import net.tomczek.invoice.manager.server.services.filestorage.IFileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,15 @@ public class InvoiceTemplateServiceImpl implements IInvoiceTemplateService {
     private static final Logger logger = LoggerFactory.getLogger(InvoiceTemplateServiceImpl.class);
 
     @Autowired
-    public InvoiceTemplateServiceImpl(InvoiceTemplateConverter invoiceTemplateConverter, InvoiceTemplateRepository invoiceTemplateRepository) {
+    public InvoiceTemplateServiceImpl(InvoiceTemplateConverter invoiceTemplateConverter, InvoiceTemplateRepository invoiceTemplateRepository, IFileStorageService fileStorageService) {
         this.invoiceTemplateConverter = invoiceTemplateConverter;
         this.invoiceTemplateRepository = invoiceTemplateRepository;
+        this.fileStorageService = fileStorageService;
     }
 
     private final InvoiceTemplateConverter invoiceTemplateConverter;
     private final InvoiceTemplateRepository invoiceTemplateRepository;
+    private final IFileStorageService fileStorageService;
 
     @Override
     public InvoiceTemplate createInvoiceTemplate(InvoiceTemplate invoiceTemplate) {
@@ -40,9 +43,14 @@ public class InvoiceTemplateServiceImpl implements IInvoiceTemplateService {
         if (invoiceTemplateDAO == null) {
             return null;
         }
-        logger.debug("InvoiceTemplate deleted: {}", invoiceTemplateDAO);
+        try {
+            this.fileStorageService.deleteFile(invoiceTemplateDAO.getBackgroundPdfId());
+        } catch (Exception e) {
+            logger.warn("Could not delete file with id [{}]", invoiceTemplateDAO.getBackgroundPdfId());
+        }
 
         invoiceTemplateRepository.deleteById(id);
+        logger.debug("InvoiceTemplate deleted: {}", invoiceTemplateDAO);
         return invoiceTemplateConverter.toEntityFromDAO(invoiceTemplateDAO);
     }
 

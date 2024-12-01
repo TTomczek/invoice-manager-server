@@ -82,4 +82,17 @@ public class InvoiceTemplateDAO extends BaseEntity<Integer> {
         this.backgroundPdfId = backgroundPdfId;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "InvoiceTemplateDAO{" +
+            "name='" + name + '\'' +
+            ", marginTopFirstPage=" + marginTopFirstPage +
+            ", marginBottomFirstPage=" + marginBottomFirstPage +
+            ", marginTopOtherPages=" + marginTopOtherPages +
+            ", marginBottomOtherPages=" + marginBottomOtherPages +
+            ", backgroundPdfId=" + backgroundPdfId +
+            ", id=" + id +
+            '}';
+    }
 }

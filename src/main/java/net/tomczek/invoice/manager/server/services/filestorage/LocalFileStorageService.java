@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 /**
@@ -66,7 +67,7 @@ public class LocalFileStorageService implements IFileStorageService {
             LocalFileStorageFileDAO fileNameMapping = fileOptional.get();
             String path = properties.getStoragePath() + "/" + fileId + ".pdf";
             logger.debug("Retrieving file with id [{}] from: [{}]", fileId, path);
-            return new FileWithContent(fileNameMapping.getId(), fileNameMapping.getFilename(), Files.readAllBytes(new File(path).toPath()));
+            return new FileWithContent(fileNameMapping.getId(), fileNameMapping.getFilename(), Files.readAllBytes(Paths.get(path)));
         }
         return null;
     }

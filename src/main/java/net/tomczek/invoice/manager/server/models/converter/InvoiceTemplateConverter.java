@@ -18,6 +18,7 @@ public class InvoiceTemplateConverter {
         invoiceTemplateDTO.setMarginBottomFirstPage(invoiceTemplate.getMarginBottomFirstPage());
         invoiceTemplateDTO.setMarginTopOtherPages(invoiceTemplate.getMarginTopOtherPages());
         invoiceTemplateDTO.setMarginBottomOtherPages(invoiceTemplate.getMarginBottomOtherPages());
+        invoiceTemplateDTO.setFileId(invoiceTemplate.getBackgroundPdfId());
 
         return invoiceTemplateDTO;
     }
@@ -34,6 +35,7 @@ public class InvoiceTemplateConverter {
         invoiceTemplate.setMarginBottomFirstPage(invoiceTemplateDTO.getMarginBottomFirstPage());
         invoiceTemplate.setMarginTopOtherPages(invoiceTemplateDTO.getMarginTopOtherPages());
         invoiceTemplate.setMarginBottomOtherPages(invoiceTemplateDTO.getMarginBottomOtherPages());
+        invoiceTemplate.setBackgroundPdfId(invoiceTemplateDTO.getFileId());
 
         return invoiceTemplate;
     }
@@ -50,6 +52,7 @@ public class InvoiceTemplateConverter {
         invoiceTemplate.setMarginBottomFirstPage(invoiceTemplateDAO.getMarginBottomFirstPage());
         invoiceTemplate.setMarginTopOtherPages(invoiceTemplateDAO.getMarginTopOtherPages());
         invoiceTemplate.setMarginBottomOtherPages(invoiceTemplateDAO.getMarginBottomOtherPages());
+        invoiceTemplate.setBackgroundPdfId(invoiceTemplateDAO.getBackgroundPdfId());
 
         return invoiceTemplate;
     }
@@ -66,6 +69,7 @@ public class InvoiceTemplateConverter {
         invoiceTemplateDAO.setMarginBottomFirstPage(invoiceTemplate.getMarginBottomFirstPage());
         invoiceTemplateDAO.setMarginTopOtherPages(invoiceTemplate.getMarginTopOtherPages());
         invoiceTemplateDAO.setMarginBottomOtherPages(invoiceTemplate.getMarginBottomOtherPages());
+        invoiceTemplateDAO.setBackgroundPdfId(invoiceTemplate.getBackgroundPdfId());
 
         return invoiceTemplateDAO;
     }
