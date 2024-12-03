@@ -23,7 +23,7 @@ public class BusinessPartnerDAO extends BaseEntity<Integer> {
 
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private AddressDAO address;
 
     @OneToMany(mappedBy = "businessPartner", fetch = FetchType.LAZY)
@@ -75,5 +75,17 @@ public class BusinessPartnerDAO extends BaseEntity<Integer> {
     public BusinessPartnerDAO setInvoiceDAOS(List<InvoiceDAO> invoiceDAOS) {
         this.invoiceDAOS = invoiceDAOS;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "BusinessPartnerDAO{" +
+            "name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", address=" + address +
+            ", contactPersonDAOS=" + contactPersonDAOS +
+            ", invoiceDAOS=" + invoiceDAOS +
+            ", id=" + id +
+            '}';
     }
 }

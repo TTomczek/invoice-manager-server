@@ -76,4 +76,16 @@ public class InvoicePositionDAO extends BaseEntity<Integer> {
         this.invoice = invoiceDAO;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "InvoicePositionDAO{" +
+            "description='" + description + '\'' +
+            ", quantity=" + quantity +
+            ", unitEt=" + unitEt +
+            ", pricePerUnitInCents=" + pricePerUnitInCents +
+            ", invoice=" + invoice +
+            ", id=" + id +
+            '}';
+    }
 }

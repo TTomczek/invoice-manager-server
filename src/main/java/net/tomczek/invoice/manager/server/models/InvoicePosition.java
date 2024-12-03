@@ -80,4 +80,16 @@ public class InvoicePosition {
         this.invoice = invoice;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "InvoicePosition{" +
+            "id=" + id +
+            ", description='" + description + '\'' +
+            ", quantity=" + quantity +
+            ", unit=" + unit +
+            ", pricePerUnitInCents=" + pricePerUnitInCents +
+            ", invoice=" + invoice +
+            '}';
+    }
 }

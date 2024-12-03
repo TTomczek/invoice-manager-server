@@ -42,4 +42,13 @@ public class SalesTaxDAO extends BaseEntity<Integer> {
         this.rate = rate;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "SalesTaxDAO{" +
+            "name='" + name + '\'' +
+            ", rate=" + rate +
+            ", id=" + id +
+            '}';
+    }
 }

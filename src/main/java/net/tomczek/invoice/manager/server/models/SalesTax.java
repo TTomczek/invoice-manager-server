@@ -45,4 +45,13 @@ public class SalesTax {
         this.rate = rate;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "SalesTax{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", rate=" + rate +
+            '}';
+    }
 }

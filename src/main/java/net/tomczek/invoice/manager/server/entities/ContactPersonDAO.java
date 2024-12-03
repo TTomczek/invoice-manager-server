@@ -25,7 +25,7 @@ public class ContactPersonDAO extends BaseEntity<Integer> {
 
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private AddressDAO address;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -86,5 +86,18 @@ public class ContactPersonDAO extends BaseEntity<Integer> {
     public ContactPersonDAO setSalutation(SalutationET salutation) {
         this.salutation = salutation;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "ContactPersonDAO{" +
+            "name='" + name + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", email='" + email + '\'' +
+            ", address=" + address +
+            ", businessPartner=" + businessPartner +
+            ", salutation=" + salutation +
+            ", id=" + id +
+            '}';
     }
 }

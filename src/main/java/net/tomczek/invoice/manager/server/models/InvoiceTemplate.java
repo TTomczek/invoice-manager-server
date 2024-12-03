@@ -87,4 +87,17 @@ public class InvoiceTemplate {
         this.backgroundPdfId = backgroundPdfId;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "InvoiceTemplate{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", marginTopFirstPage=" + marginTopFirstPage +
+            ", marginBottomFirstPage=" + marginBottomFirstPage +
+            ", marginTopOtherPages=" + marginTopOtherPages +
+            ", marginBottomOtherPages=" + marginBottomOtherPages +
+            ", backgroundPdfId=" + backgroundPdfId +
+            '}';
+    }
 }

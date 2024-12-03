@@ -27,4 +27,11 @@ public class LocalFileStorageFileDAO extends BaseEntity<Integer> {
         this.filename = filename;
     }
 
+    @Override
+    public String toString() {
+        return "LocalFileStorageFileDAO{" +
+            "filename='" + filename + '\'' +
+            ", id=" + id +
+            '}';
+    }
 }

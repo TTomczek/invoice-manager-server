@@ -167,4 +167,24 @@ public class Invoice {
         this.customer = customer;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+            "id=" + id +
+            ", description='" + description + '\'' +
+            ", perMail=" + perMail +
+            ", preText='" + preText + '\'' +
+            ", postText='" + postText + '\'' +
+            ", serviceProvidedFrom=" + serviceProvidedFrom +
+            ", serviceProvidedTo=" + serviceProvidedTo +
+            ", orderNumber='" + orderNumber + '\'' +
+            ", generatedInvoiceId=" + generatedInvoiceId +
+            ", salexTax=" + salexTax +
+            ", invoicePositions=" + invoicePositions +
+            ", receiver=" + receiver +
+            ", invoiceTemplate=" + invoiceTemplate +
+            ", customer=" + customer +
+            '}';
+    }
 }

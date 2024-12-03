@@ -73,4 +73,16 @@ public class AddressDAO extends BaseEntity<Integer> {
             this.country = country;
             return this;
         }
+
+    @Override
+    public String toString() {
+        return "AddressDAO{" +
+            "country='" + country + '\'' +
+            ", id=" + id +
+            ", city='" + city + '\'' +
+            ", zipCode='" + zipCode + '\'' +
+            ", houseNumber='" + houseNumber + '\'' +
+            ", street='" + street + '\'' +
+            '}';
+    }
 }

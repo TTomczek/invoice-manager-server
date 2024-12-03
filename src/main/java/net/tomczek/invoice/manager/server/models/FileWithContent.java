@@ -1,5 +1,7 @@
 package net.tomczek.invoice.manager.server.models;
 
+import java.util.Arrays;
+
 /**
  * Internal model for LocalFileStorageFileDAO
  */
@@ -45,5 +47,12 @@ public class FileWithContent {
         return fileContent;
     }
 
-
+    @Override
+    public String toString() {
+        return "FileWithContent{" +
+            "id=" + id +
+            ", fileName='" + fileName + '\'' +
+            ", fileContent=" + Arrays.toString(fileContent) +
+            '}';
+    }
 }

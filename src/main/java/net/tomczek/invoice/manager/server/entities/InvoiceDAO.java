@@ -179,4 +179,24 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         this.customer = customer;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "InvoiceDAO{" +
+            "description='" + description + '\'' +
+            ", perMail=" + perMail +
+            ", preText='" + preText + '\'' +
+            ", postText='" + postText + '\'' +
+            ", serviceProvidedFrom=" + serviceProvidedFrom +
+            ", serviceProvidedTo=" + serviceProvidedTo +
+            ", orderNumber='" + orderNumber + '\'' +
+            ", generatedInvoiceId=" + generatedInvoiceId +
+            ", salexTax=" + salexTax +
+            ", invoicePosition=" + invoicePosition +
+            ", receiver=" + receiver +
+            ", invoiceTemplateDAO=" + invoiceTemplateDAO +
+            ", customer=" + customer +
+            ", id=" + id +
+            '}';
+    }
 }

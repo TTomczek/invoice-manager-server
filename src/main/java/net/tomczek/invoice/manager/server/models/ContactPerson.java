@@ -89,4 +89,17 @@ public class ContactPerson {
         this.salutation = salutation;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "ContactPerson{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", email='" + email + '\'' +
+            ", address=" + address +
+            ", businessPartner=" + businessPartner +
+            ", salutation=" + salutation +
+            '}';
+    }
 }

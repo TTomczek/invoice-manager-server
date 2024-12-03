@@ -78,4 +78,16 @@ public class BusinessPartner {
         this.invoices = invoices;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "BusinessPartner{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", address=" + address +
+            ", contactPersons=" + contactPersons +
+            ", invoices=" + invoices +
+            '}';
+    }
 }
