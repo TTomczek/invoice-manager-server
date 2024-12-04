@@ -1,6 +1,6 @@
 package net.tomczek.invoice.manager.server.services;
 
-import net.tomczek.invoice.manager.server.models.BusinessPartner;
+import net.tomczek.invoice.manager.server.entities.BusinessPartner;
 
 import java.util.List;
 
@@ -15,6 +15,8 @@ public interface IBusinessPartnerService {
     BusinessPartner getBusinessPartnerById(Integer id);
 
     BusinessPartner updateBusinessPartnerById(Integer id, BusinessPartner businessPartner);
+
+    List<BusinessPartner> getAllBusinessPartnerByIds(List<Integer> ids);
 
     boolean exists(Integer id);
 

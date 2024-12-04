@@ -1,6 +1,6 @@
 package net.tomczek.invoice.manager.server.services;
 
-import net.tomczek.invoice.manager.server.models.SalesTax;
+import net.tomczek.invoice.manager.server.entities.SalesTax;
 
 import java.util.List;
 

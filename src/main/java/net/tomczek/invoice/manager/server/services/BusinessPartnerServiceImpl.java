@@ -1,11 +1,11 @@
 package net.tomczek.invoice.manager.server.services;
 
-import net.tomczek.invoice.manager.server.entities.BusinessPartnerDAO;
-import net.tomczek.invoice.manager.server.models.Address;
-import net.tomczek.invoice.manager.server.models.BusinessPartner;
-import net.tomczek.invoice.manager.server.models.converter.BusinessPartnerConverter;
-import net.tomczek.invoice.manager.server.models.converter.ContactPersonConverter;
-import net.tomczek.invoice.manager.server.models.converter.InvoiceConverter;
+import jakarta.transaction.Transactional;
+import net.tomczek.invoice.manager.server.converter.ContactPersonConverter;
+import net.tomczek.invoice.manager.server.converter.InvoiceConverter;
+import net.tomczek.invoice.manager.server.entities.Address;
+import net.tomczek.invoice.manager.server.entities.BusinessPartner;
+import net.tomczek.invoice.manager.server.converter.BusinessPartnerConverter;
 import net.tomczek.invoice.manager.server.repositories.BusinessPartnersRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,84 +20,84 @@ public class BusinessPartnerServiceImpl implements IBusinessPartnerService {
     private static final Logger logger = LoggerFactory.getLogger(BusinessPartnerServiceImpl.class);
 
     @Autowired
-    public BusinessPartnerServiceImpl(ContactPersonConverter contactPersonConverter, BusinessPartnersRepository businessPartnersRepository, InvoiceConverter invoiceConverter, IAddressService addressService) {
-        this.contactPersonConverter = contactPersonConverter;
+    public BusinessPartnerServiceImpl(BusinessPartnersRepository businessPartnersRepository, IAddressService addressService) {
         this.businessPartnersRepository = businessPartnersRepository;
-        this.invoiceConverter = invoiceConverter;
         this.addressService = addressService;
     }
 
-    private final ContactPersonConverter contactPersonConverter;
     private final BusinessPartnersRepository businessPartnersRepository;
-    private final InvoiceConverter invoiceConverter;
     private final IAddressService addressService;
 
-
     @Override
+    @Transactional
     public BusinessPartner createBusinessPartner(BusinessPartner businessPartner) {
         Address address = businessPartner.getAddress();
         Address savedAddress = addressService.createAddress(address);
         businessPartner.setAddress(savedAddress);
-        BusinessPartnerDAO businessPartnerDAOToSave = BusinessPartnerConverter.toDAO(businessPartner);
-        BusinessPartnerDAO savedBusinessPartnerDAO = businessPartnersRepository.save(businessPartnerDAOToSave);
-        logger.debug("BusinessPartner saved: {}", savedBusinessPartnerDAO);
-        BusinessPartner savedBusinessPartner = BusinessPartnerConverter.toEntityFromDAO(savedBusinessPartnerDAO);
+        BusinessPartner savedBusinessPartner = businessPartnersRepository.save(businessPartner);
+        logger.debug("BusinessPartner saved: {}", savedBusinessPartner);
         return savedBusinessPartner;
     }
 
     @Override
     public BusinessPartner deleteBusinessPartnerById(Integer id) {
-        BusinessPartnerDAO businessPartnerDAO = businessPartnersRepository.findById(id).orElse(null);
-        if (businessPartnerDAO == null) {
+        BusinessPartner businessPartner = businessPartnersRepository.findById(id).orElse(null);
+        if (businessPartner == null) {
             return null;
         }
 
         businessPartnersRepository.deleteById(id);
-        logger.debug("BusinessPartner deleted: {}", businessPartnerDAO);
-        return BusinessPartnerConverter.toEntityFromDAO(businessPartnerDAO);
+        logger.debug("BusinessPartner deleted: {}", businessPartner);
+        return businessPartner;
     }
 
     @Override
     public List<BusinessPartner> getAllBusinessPartners() {
-        List<BusinessPartnerDAO> businessPartnerDAOs = businessPartnersRepository.findAll();
-        logger.debug("Fetched business partners: {}", businessPartnerDAOs.size());
-        return BusinessPartnerConverter.toEntityFromDAO(businessPartnerDAOs);
+        List<BusinessPartner> businessPartners = businessPartnersRepository.findAll();
+        logger.debug("Fetched business partners: {}", businessPartners.size());
+        return businessPartners;
     }
 
     @Override
     public BusinessPartner getBusinessPartnerById(Integer id) {
-        BusinessPartnerDAO businessPartnerDAO = businessPartnersRepository.findById(id).orElse(null);
-        if (businessPartnerDAO == null) {
+        BusinessPartner businessPartner = businessPartnersRepository.findById(id).orElse(null);
+        if (businessPartner == null) {
             return null;
         }
-        logger.debug("Fetched business partner: {}", businessPartnerDAO);
+        logger.debug("Fetched business partner: {}", businessPartner);
 
-        return BusinessPartnerConverter.toEntityFromDAO(businessPartnerDAO);
+        return businessPartner;
     }
 
     @Override
     public BusinessPartner updateBusinessPartnerById(Integer id, BusinessPartner businessPartner) {
-        BusinessPartnerDAO businessPartnerDAO = businessPartnersRepository.findById(id).orElse(null);
-        if (businessPartnerDAO == null) {
+        BusinessPartner businessPartnertoUpdate = businessPartnersRepository.findById(id).orElse(null);
+        if (businessPartnertoUpdate == null) {
             return null;
         }
 
-        businessPartnerDAO.setName(businessPartner.getName());
-        businessPartnerDAO.setDescription(businessPartner.getDescription());
+        businessPartnertoUpdate.setName(businessPartner.getName());
+        businessPartnertoUpdate.setDescription(businessPartner.getDescription());
 
-        businessPartnerDAO.getAddress().setStreet(businessPartner.getAddress().getStreet());
-        businessPartnerDAO.getAddress().setHouseNumber(businessPartner.getAddress().getHouseNumber());
-        businessPartnerDAO.getAddress().setZipCode(businessPartner.getAddress().getZipCode());
-        businessPartnerDAO.getAddress().setCity(businessPartner.getAddress().getCity());
-        businessPartnerDAO.getAddress().setCountry(businessPartner.getAddress().getCountry());
+        businessPartnertoUpdate.getAddress().setStreet(businessPartner.getAddress().getStreet());
+        businessPartnertoUpdate.getAddress().setHouseNumber(businessPartner.getAddress().getHouseNumber());
+        businessPartnertoUpdate.getAddress().setZipCode(businessPartner.getAddress().getZipCode());
+        businessPartnertoUpdate.getAddress().setCity(businessPartner.getAddress().getCity());
+        businessPartnertoUpdate.getAddress().setCountry(businessPartner.getAddress().getCountry());
 
-        businessPartnerDAO.setContactPersonDAOS(contactPersonConverter.toDAO(businessPartner.getContactPersons()));
-        businessPartnerDAO.setInvoiceDAOS(invoiceConverter.toDAO(businessPartner.getInvoices()));
+        businessPartnertoUpdate.setContactPersons(businessPartner.getContactPersons());
+        businessPartnertoUpdate.setInvoices(businessPartner.getInvoices());
 
-        BusinessPartnerDAO updatedBusinessPartnerDAO = businessPartnersRepository.save(businessPartnerDAO);
-        logger.debug("BusinessPartner updated: {}", updatedBusinessPartnerDAO);
-        BusinessPartner updatedBusinessPartner = BusinessPartnerConverter.toEntityFromDAO(updatedBusinessPartnerDAO);
+        BusinessPartner updatedBusinessPartner = businessPartnersRepository.save(businessPartnertoUpdate);
+        logger.debug("BusinessPartner updated: {}", updatedBusinessPartner);
         return updatedBusinessPartner;
+    }
+
+    @Override
+    public List<BusinessPartner> getAllBusinessPartnerByIds(List<Integer> ids) {
+        List<BusinessPartner> businessPartners = businessPartnersRepository.findAllById(ids);
+        logger.debug("Fetched business partners by ids: {}", businessPartners.size());
+        return businessPartners;
     }
 
     @Override

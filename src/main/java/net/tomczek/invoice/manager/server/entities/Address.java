@@ -5,9 +5,9 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "address")
-public class AddressDAO extends BaseEntity<Integer> {
+public class Address extends BaseEntity<Integer> {
 
-        public AddressDAO(Integer id, String street, String houseNumber, String zipCode, String city, String country) {
+        public Address(Integer id, String street, String houseNumber, String zipCode, String city, String country) {
             super(id);
             this.street = street;
             this.houseNumber = houseNumber;
@@ -16,7 +16,7 @@ public class AddressDAO extends BaseEntity<Integer> {
             this.country = country;
         }
 
-        public AddressDAO() {
+        public Address() {
         }
 
         private String street;
@@ -33,7 +33,7 @@ public class AddressDAO extends BaseEntity<Integer> {
             return street;
         }
 
-        public AddressDAO setStreet(String street) {
+        public Address setStreet(String street) {
             this.street = street;
             return this;
         }
@@ -42,7 +42,7 @@ public class AddressDAO extends BaseEntity<Integer> {
             return houseNumber;
         }
 
-        public AddressDAO setHouseNumber(String houseNumber) {
+        public Address setHouseNumber(String houseNumber) {
             this.houseNumber = houseNumber;
             return this;
         }
@@ -51,7 +51,7 @@ public class AddressDAO extends BaseEntity<Integer> {
             return zipCode;
         }
 
-        public AddressDAO setZipCode(String zipCode) {
+        public Address setZipCode(String zipCode) {
             this.zipCode = zipCode;
             return this;
         }
@@ -60,7 +60,7 @@ public class AddressDAO extends BaseEntity<Integer> {
             return city;
         }
 
-        public AddressDAO setCity(String city) {
+        public Address setCity(String city) {
             this.city = city;
             return this;
         }
@@ -69,7 +69,7 @@ public class AddressDAO extends BaseEntity<Integer> {
             return country;
         }
 
-        public AddressDAO setCountry(String country) {
+        public Address setCountry(String country) {
             this.country = country;
             return this;
         }

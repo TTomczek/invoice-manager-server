@@ -1,20 +1,14 @@
-package net.tomczek.invoice.manager.server.models;
+package net.tomczek.invoice.manager.server.entities;
 
-/**
- * Internal model for InvoiceTemplateDAO/InvoiceTemplateDTO
- */
-public class InvoiceTemplate {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
-    private Integer id;
-    private String name;
-    private float marginTopFirstPage;
-    private float marginBottomFirstPage;
-    private float marginTopOtherPages;
-    private float marginBottomOtherPages;
-    private Integer backgroundPdfId;
+@Table(name = "invoice_templates")
+@Entity
+public class InvoiceTemplate extends BaseEntity<Integer> {
 
     public InvoiceTemplate(Integer id, String name, float marginTopFirstPage, float marginBottomFirstPage, float marginTopOtherPages, float marginBottomOtherPages, Integer backgroundPdfId) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.marginTopFirstPage = marginTopFirstPage;
         this.marginBottomFirstPage = marginBottomFirstPage;
@@ -23,16 +17,17 @@ public class InvoiceTemplate {
         this.backgroundPdfId = backgroundPdfId;
     }
 
-    public InvoiceTemplate() {}
-
-    public Integer getId() {
-        return id;
+    public InvoiceTemplate() {
     }
 
-    public InvoiceTemplate setId(Integer id) {
-        this.id = id;
-        return this;
-    }
+    private String name;
+
+    private float marginTopFirstPage;
+    private float marginBottomFirstPage;
+    private float marginTopOtherPages;
+    private float marginBottomOtherPages;
+
+    private Integer backgroundPdfId;
 
     public String getName() {
         return name;
@@ -65,8 +60,8 @@ public class InvoiceTemplate {
         return marginTopOtherPages;
     }
 
-    public InvoiceTemplate setMarginTopOtherPages(float marginTopOtherPages) {
-        this.marginTopOtherPages = marginTopOtherPages;
+    public InvoiceTemplate setMarginTopOtherPages(float marginTopFollowingPages) {
+        this.marginTopOtherPages = marginTopFollowingPages;
         return this;
     }
 
@@ -74,8 +69,8 @@ public class InvoiceTemplate {
         return marginBottomOtherPages;
     }
 
-    public InvoiceTemplate setMarginBottomOtherPages(float marginBottomOtherPages) {
-        this.marginBottomOtherPages = marginBottomOtherPages;
+    public InvoiceTemplate setMarginBottomOtherPages(float marginBottomFollowingPages) {
+        this.marginBottomOtherPages = marginBottomFollowingPages;
         return this;
     }
 
@@ -90,14 +85,14 @@ public class InvoiceTemplate {
 
     @Override
     public String toString() {
-        return "InvoiceTemplate{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
+        return "InvoiceTemplateDAO{" +
+            "name='" + name + '\'' +
             ", marginTopFirstPage=" + marginTopFirstPage +
             ", marginBottomFirstPage=" + marginBottomFirstPage +
             ", marginTopOtherPages=" + marginTopOtherPages +
             ", marginBottomOtherPages=" + marginBottomOtherPages +
             ", backgroundPdfId=" + backgroundPdfId +
+            ", id=" + id +
             '}';
     }
 }

@@ -2,8 +2,9 @@ package net.tomczek.invoice.manager.server.api.delegates;
 
 import net.tomczek.invoice.manager.api.server.api.ContactPersonsApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.ContactPersonDTO;
-import net.tomczek.invoice.manager.server.models.ContactPerson;
-import net.tomczek.invoice.manager.server.models.converter.ContactPersonConverter;
+import net.tomczek.invoice.manager.server.entities.ContactPerson;
+import net.tomczek.invoice.manager.server.converter.ContactPersonConverter;
+import net.tomczek.invoice.manager.server.services.IBusinessPartnerService;
 import net.tomczek.invoice.manager.server.services.IContactPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,26 +17,26 @@ import java.util.List;
 public class ContactPersonsApiDelegateImpl implements ContactPersonsApiDelegate {
 
     @Autowired
-    public ContactPersonsApiDelegateImpl(IContactPersonService contactPersonService, ContactPersonConverter contactPersonConverter) {
+    public ContactPersonsApiDelegateImpl(IContactPersonService contactPersonService, IBusinessPartnerService businessPartnerService) {
         this.contactPersonService = contactPersonService;
-        this.contactPersonConverter = contactPersonConverter;
+        this.businessPartnerService = businessPartnerService;
     }
 
     private final IContactPersonService contactPersonService;
-    private final ContactPersonConverter contactPersonConverter;
+    private final IBusinessPartnerService businessPartnerService;
 
     @Override
     public ResponseEntity<List<ContactPersonDTO>> getAllContactPersons() {
         List<ContactPerson> contactPersons = this.contactPersonService.getAllContactPersons();
-        List<ContactPersonDTO> contactPersonDTOs = this.contactPersonConverter.toDTO(contactPersons);
+        List<ContactPersonDTO> contactPersonDTOs = ContactPersonConverter.toDTO(contactPersons);
         return ResponseEntity.ok(contactPersonDTOs);
     }
 
     @Override
     public ResponseEntity<ContactPersonDTO> createContactPerson(ContactPersonDTO contactPersonDTO) {
-        ContactPerson contactPerson = this.contactPersonConverter.toEntityFromDTO(contactPersonDTO);
+        ContactPerson contactPerson = ContactPersonConverter.toEntity(contactPersonDTO, businessPartnerService);
         ContactPerson createdContactPerson = this.contactPersonService.createContactPerson(contactPerson);
-        ContactPersonDTO createdContactPersonDTO = this.contactPersonConverter.toDTO(createdContactPerson);
+        ContactPersonDTO createdContactPersonDTO = ContactPersonConverter.toDTO(createdContactPerson);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdContactPersonDTO);
     }
 
@@ -45,7 +46,7 @@ public class ContactPersonsApiDelegateImpl implements ContactPersonsApiDelegate 
         if (deletedContactPerson == null) {
             return ResponseEntity.notFound().build();
         } else {
-            ContactPersonDTO deletedContactPersonDTO = this.contactPersonConverter.toDTO(deletedContactPerson);
+            ContactPersonDTO deletedContactPersonDTO = ContactPersonConverter.toDTO(deletedContactPerson);
             return ResponseEntity.ok(deletedContactPersonDTO);
         }
     }
@@ -56,19 +57,19 @@ public class ContactPersonsApiDelegateImpl implements ContactPersonsApiDelegate 
         if (contactPerson == null) {
             return ResponseEntity.notFound().build();
         } else {
-            ContactPersonDTO contactPersonDTO = this.contactPersonConverter.toDTO(contactPerson);
+            ContactPersonDTO contactPersonDTO = ContactPersonConverter.toDTO(contactPerson);
             return ResponseEntity.ok(contactPersonDTO);
         }
     }
 
     @Override
     public ResponseEntity<ContactPersonDTO> updateContactPersonById(Integer id, ContactPersonDTO contactPersonDTO) {
-        ContactPerson contactPerson = this.contactPersonConverter.toEntityFromDTO(contactPersonDTO);
+        ContactPerson contactPerson = ContactPersonConverter.toEntity(contactPersonDTO, businessPartnerService);
         ContactPerson updatedContactPerson = this.contactPersonService.updateContactPersonById(id, contactPerson);
         if (updatedContactPerson == null) {
             return ResponseEntity.notFound().build();
         } else {
-            ContactPersonDTO updatedContactPersonDTO = this.contactPersonConverter.toDTO(updatedContactPerson);
+            ContactPersonDTO updatedContactPersonDTO = ContactPersonConverter.toDTO(updatedContactPerson);
             return ResponseEntity.ok(updatedContactPersonDTO);
         }
     }

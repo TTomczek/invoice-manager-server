@@ -10,9 +10,9 @@ import java.util.List;
  */
 @Table(name = "invoices")
 @Entity
-public class InvoiceDAO extends BaseEntity<Integer> {
+public class Invoice extends BaseEntity<Integer> {
 
-    public InvoiceDAO(Integer id, String description, boolean perMail, String preText, String postText, LocalDate serviceProvidedFrom, LocalDate serviceProvidedTo, String orderNumber, Integer generatedInvoiceId, SalesTaxDAO salexTax, List<InvoicePositionDAO> invoicePosition, ContactPersonDAO receiver, InvoiceTemplateDAO invoiceTemplateDAO, BusinessPartnerDAO customer) {
+    public Invoice(Integer id, String description, boolean perMail, String preText, String postText, LocalDate serviceProvidedFrom, LocalDate serviceProvidedTo, String orderNumber, Integer generatedInvoiceId, SalesTax salexTax, List<InvoicePosition> invoicePosition, ContactPerson receiver, InvoiceTemplate invoiceTemplate, BusinessPartner customer) {
         super(id);
         this.description = description;
         this.perMail = perMail;
@@ -25,11 +25,11 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         this.salexTax = salexTax;
         this.invoicePosition = invoicePosition;
         this.receiver = receiver;
-        this.invoiceTemplateDAO = invoiceTemplateDAO;
+        this.invoiceTemplate = invoiceTemplate;
         this.customer = customer;
     }
 
-    public InvoiceDAO() {
+    public Invoice() {
     }
 
     private String description;
@@ -49,25 +49,25 @@ public class InvoiceDAO extends BaseEntity<Integer> {
     private Integer generatedInvoiceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private SalesTaxDAO salexTax;
+    private SalesTax salexTax;
 
     @OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY)
-    private List<InvoicePositionDAO> invoicePosition;
+    private List<InvoicePosition> invoicePosition;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private ContactPersonDAO receiver;
+    private ContactPerson receiver;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private InvoiceTemplateDAO invoiceTemplateDAO;
+    private InvoiceTemplate invoiceTemplate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private BusinessPartnerDAO customer;
+    private BusinessPartner customer;
 
     public String getDescription() {
         return description;
     }
 
-    public InvoiceDAO setDescription(String description) {
+    public Invoice setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -76,7 +76,7 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         return perMail;
     }
 
-    public InvoiceDAO setPerMail(boolean perMail) {
+    public Invoice setPerMail(boolean perMail) {
         this.perMail = perMail;
         return this;
     }
@@ -85,7 +85,7 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         return preText;
     }
 
-    public InvoiceDAO setPreText(String preText) {
+    public Invoice setPreText(String preText) {
         this.preText = preText;
         return this;
     }
@@ -94,7 +94,7 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         return postText;
     }
 
-    public InvoiceDAO setPostText(String postText) {
+    public Invoice setPostText(String postText) {
         this.postText = postText;
         return this;
     }
@@ -103,7 +103,7 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         return serviceProvidedFrom;
     }
 
-    public InvoiceDAO setServiceProvidedFrom(LocalDate serviceProvidedFrom) {
+    public Invoice setServiceProvidedFrom(LocalDate serviceProvidedFrom) {
         this.serviceProvidedFrom = serviceProvidedFrom;
         return this;
     }
@@ -112,7 +112,7 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         return serviceProvidedTo;
     }
 
-    public InvoiceDAO setServiceProvidedTo(LocalDate serviceProvidedTo) {
+    public Invoice setServiceProvidedTo(LocalDate serviceProvidedTo) {
         this.serviceProvidedTo = serviceProvidedTo;
         return this;
     }
@@ -121,7 +121,7 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         return orderNumber;
     }
 
-    public InvoiceDAO setOrderNumber(String orderNumber) {
+    public Invoice setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
         return this;
     }
@@ -130,52 +130,52 @@ public class InvoiceDAO extends BaseEntity<Integer> {
         return generatedInvoiceId;
     }
 
-    public InvoiceDAO setGeneratedInvoiceId(Integer generatedInvoiceId) {
+    public Invoice setGeneratedInvoiceId(Integer generatedInvoiceId) {
         this.generatedInvoiceId = generatedInvoiceId;
         return this;
     }
 
-    public SalesTaxDAO getSalexTax() {
+    public SalesTax getSalexTax() {
         return salexTax;
     }
 
-    public InvoiceDAO setSalexTax(SalesTaxDAO salexTax) {
+    public Invoice setSalexTax(SalesTax salexTax) {
         this.salexTax = salexTax;
         return this;
     }
 
-    public List<InvoicePositionDAO> getInvoicePosition() {
+    public List<InvoicePosition> getInvoicePosition() {
         return invoicePosition;
     }
 
-    public InvoiceDAO setInvoicePosition(List<InvoicePositionDAO> invoicePositionDAOS) {
-        this.invoicePosition = invoicePositionDAOS;
+    public Invoice setInvoicePosition(List<InvoicePosition> invoicePositions) {
+        this.invoicePosition = invoicePositions;
         return this;
     }
 
-    public ContactPersonDAO getReceiver() {
+    public ContactPerson getReceiver() {
         return receiver;
     }
 
-    public InvoiceDAO setReceiver(ContactPersonDAO receiver) {
+    public Invoice setReceiver(ContactPerson receiver) {
         this.receiver = receiver;
         return this;
     }
 
-    public InvoiceTemplateDAO getInvoiceTemplateDAO() {
-        return invoiceTemplateDAO;
+    public InvoiceTemplate getInvoiceTemplate() {
+        return invoiceTemplate;
     }
 
-    public InvoiceDAO setInvoiceTemplateDAO(InvoiceTemplateDAO invoiceTemplateDAO) {
-        this.invoiceTemplateDAO = invoiceTemplateDAO;
+    public Invoice setInvoiceTemplate(InvoiceTemplate invoiceTemplate) {
+        this.invoiceTemplate = invoiceTemplate;
         return this;
     }
 
-    public BusinessPartnerDAO getCustomer() {
+    public BusinessPartner getCustomer() {
         return customer;
     }
 
-    public InvoiceDAO setCustomer(BusinessPartnerDAO customer) {
+    public Invoice setCustomer(BusinessPartner customer) {
         this.customer = customer;
         return this;
     }
@@ -194,7 +194,7 @@ public class InvoiceDAO extends BaseEntity<Integer> {
             ", salexTax=" + salexTax +
             ", invoicePosition=" + invoicePosition +
             ", receiver=" + receiver +
-            ", invoiceTemplateDAO=" + invoiceTemplateDAO +
+            ", invoiceTemplateDAO=" + invoiceTemplate +
             ", customer=" + customer +
             ", id=" + id +
             '}';

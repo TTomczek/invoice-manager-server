@@ -1,8 +1,6 @@
 package net.tomczek.invoice.manager.server.services;
 
-import net.tomczek.invoice.manager.server.entities.*;
-import net.tomczek.invoice.manager.server.models.Invoice;
-import net.tomczek.invoice.manager.server.models.converter.*;
+import net.tomczek.invoice.manager.server.entities.Invoice;
 import net.tomczek.invoice.manager.server.repositories.InvoicesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,84 +15,80 @@ public class InvoiceServiceImpl implements IInvoiceService {
     private static final Logger logger = LoggerFactory.getLogger(InvoiceServiceImpl.class);
 
     @Autowired
-    public InvoiceServiceImpl(InvoiceConverter invoiceConverter, InvoicesRepository invoiceRepository, ContactPersonConverter contactPersonConverter, InvoiceTemplateConverter invoiceTemplateConverter) {
-        this.invoiceConverter = invoiceConverter;
+    public InvoiceServiceImpl(InvoicesRepository invoiceRepository) {
         this.invoiceRepository = invoiceRepository;
-        this.contactPersonConverter = contactPersonConverter;
-        this.invoiceTemplateConverter = invoiceTemplateConverter;
     }
 
-    private final InvoiceConverter invoiceConverter;
     private final InvoicesRepository invoiceRepository;
-    private final ContactPersonConverter contactPersonConverter;
-    private final InvoiceTemplateConverter invoiceTemplateConverter;
 
     @Override
     public Invoice createInvoice(Invoice invoice) {
-        InvoiceDAO invoiceDAOToSave = invoiceConverter.toDAO(invoice);
-        InvoiceDAO savedInvoiceDAO = invoiceRepository.save(invoiceDAOToSave);
-        logger.debug("Invoice saved: {}", savedInvoiceDAO);
-        return invoiceConverter.toEntityFromDAO(savedInvoiceDAO);
+        Invoice savedInvoice = invoiceRepository.save(invoice);
+        logger.debug("Invoice saved: {}", savedInvoice);
+        return savedInvoice;
     }
 
     @Override
     public Invoice deleteInvoiceById(Integer id) {
-        InvoiceDAO invoiceDAO = invoiceRepository.findById(id).orElse(null);
-        if (invoiceDAO == null) {
+        Invoice invoice = invoiceRepository.findById(id).orElse(null);
+        if (invoice == null) {
             return null;
         }
 
         invoiceRepository.deleteById(id);
-        logger.debug("Invoice deleted: {}", invoiceDAO);
-        return invoiceConverter.toEntityFromDAO(invoiceDAO);
+        logger.debug("Invoice deleted: {}", invoice);
+        return invoice;
     }
 
     @Override
     public List<Invoice> getAllInvoices() {
-        List<InvoiceDAO> invoiceDAOs = invoiceRepository.findAll();
-        logger.debug("Fetched invoices: {}", invoiceDAOs.size());
-        return invoiceConverter.toEntityFromDAO(invoiceDAOs);
+        List<Invoice> invoices = invoiceRepository.findAll();
+        logger.debug("Fetched invoices: {}", invoices.size());
+        return invoices;
     }
 
     @Override
     public Invoice getInvoiceById(Integer id) {
-        InvoiceDAO invoiceDAO = invoiceRepository.findById(id).orElse(null);
-        if (invoiceDAO == null) {
+        Invoice invoice = invoiceRepository.findById(id).orElse(null);
+        if (invoice == null) {
             return null;
         }
-        logger.debug("Fetched invoice: {}", invoiceDAO);
+        logger.debug("Fetched invoice: {}", invoice);
 
-        return invoiceConverter.toEntityFromDAO(invoiceDAO);
+        return invoice;
     }
 
     @Override
     public Invoice updateInvoiceById(Integer id, Invoice invoice) {
-        InvoiceDAO invoiceDAO = invoiceRepository.findById(id).orElse(null);
-        if (invoiceDAO == null) {
+        Invoice invoiceToUpdate = invoiceRepository.findById(id).orElse(null);
+        if (invoiceToUpdate == null) {
             return null;
         }
 
-        invoiceDAO.setDescription(invoice.getDescription());
-        invoiceDAO.setPerMail(invoice.isPerMail());
-        invoiceDAO.setPreText(invoice.getPreText());
-        invoiceDAO.setPostText(invoice.getPostText());
-        invoiceDAO.setServiceProvidedFrom(invoice.getServiceProvidedFrom());
-        invoiceDAO.setServiceProvidedTo(invoice.getServiceProvidedTo());
-        invoiceDAO.setOrderNumber(invoice.getOrderNumber());
-        invoiceDAO.setGeneratedInvoiceId(invoice.getGeneratedInvoiceId());
-        invoiceDAO.setSalexTax(SalesTaxConverter.toDAO(invoice.getSalexTax()));
-        List<InvoicePositionDAO> invoicePositionDAOs = InvoicePositionConverter.toDAO(invoice.getInvoicePositions());
-        invoiceDAO.setInvoicePosition(invoicePositionDAOs);
-        ContactPersonDAO contactPersonDAO = contactPersonConverter.toDAO(invoice.getReceiver());
-        invoiceDAO.setReceiver(contactPersonDAO);
-        InvoiceTemplateDAO invoiceTemplateDAO = invoiceTemplateConverter.toDAO(invoice.getInvoiceTemplate());
-        invoiceDAO.setInvoiceTemplateDAO(invoiceTemplateDAO);
-        BusinessPartnerDAO businessPartnerDAO = BusinessPartnerConverter.toDAO(invoice.getCustomer());
-        invoiceDAO.setCustomer(businessPartnerDAO);
+        invoiceToUpdate.setDescription(invoice.getDescription());
+        invoiceToUpdate.setPerMail(invoice.isPerMail());
+        invoiceToUpdate.setPreText(invoice.getPreText());
+        invoiceToUpdate.setPostText(invoice.getPostText());
+        invoiceToUpdate.setServiceProvidedFrom(invoice.getServiceProvidedFrom());
+        invoiceToUpdate.setServiceProvidedTo(invoice.getServiceProvidedTo());
+        invoiceToUpdate.setOrderNumber(invoice.getOrderNumber());
+        invoiceToUpdate.setGeneratedInvoiceId(invoice.getGeneratedInvoiceId());
+        invoiceToUpdate.setSalexTax(invoice.getSalexTax());
+        invoiceToUpdate.setInvoicePosition(invoice.getInvoicePosition());
+        invoiceToUpdate.setReceiver(invoice.getReceiver());
+        invoiceToUpdate.setInvoiceTemplate(invoice.getInvoiceTemplate());
+        invoiceToUpdate.setCustomer(invoice.getCustomer());
 
-        InvoiceDAO updatedInvoiceDAO = invoiceRepository.save(invoiceDAO);
-        logger.debug("Invoice updated: {}", updatedInvoiceDAO);
-        return invoiceConverter.toEntityFromDAO(updatedInvoiceDAO);
+        Invoice updatedInvoice = invoiceRepository.save(invoiceToUpdate);
+        logger.debug("Invoice updated: {}", updatedInvoice);
+        return updatedInvoice;
+    }
+
+    @Override
+    public List<Invoice> getAllInvoiceByIds(List<Integer> ids) {
+        List<Invoice> invoices = invoiceRepository.findAllById(ids);
+        logger.debug("Fetched invoices by ids: {}", invoices.size());
+        return invoices;
     }
 
     @Override

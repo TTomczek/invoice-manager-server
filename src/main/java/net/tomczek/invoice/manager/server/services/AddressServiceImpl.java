@@ -1,8 +1,7 @@
 package net.tomczek.invoice.manager.server.services;
 
-import net.tomczek.invoice.manager.server.entities.AddressDAO;
-import net.tomczek.invoice.manager.server.models.Address;
-import net.tomczek.invoice.manager.server.models.converter.AddressConverter;
+import net.tomczek.invoice.manager.server.converter.AddressConverter;
+import net.tomczek.invoice.manager.server.entities.Address;
 import net.tomczek.invoice.manager.server.repositories.AddressRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,57 +24,51 @@ public class AddressServiceImpl implements IAddressService {
 
     @Override
     public Address createAddress(Address address) {
-        AddressDAO addressDAOToSave = AddressConverter.toDAO(address);
-        AddressDAO savedAddressDAO = addressRepository.save(addressDAOToSave);
-        logger.debug("Address saved: {}", savedAddressDAO);
-        Address savedAddress = AddressConverter.toEntityFromDAO(savedAddressDAO);
+        Address savedAddress = addressRepository.save(address);
+        logger.debug("Address saved: {}", savedAddress);
         return savedAddress;
     }
 
     @Override
     public Address deleteAddressById(Integer id) {
-        AddressDAO addressDAO = addressRepository.findById(id).orElse(null);
-        if (addressDAO == null) {
+        Address address = addressRepository.findById(id).orElse(null);
+        if (address == null) {
             return null;
         }
         addressRepository.deleteById(id);
-        logger.debug("Address deleted: {}", addressDAO);
-        Address address = AddressConverter.toEntityFromDAO(addressDAO);
+        logger.debug("Address deleted: {}", address);
         return address;
     }
 
     @Override
     public List<Address> getAllAddresss() {
-        List<AddressDAO> addressDAOs = addressRepository.findAll();
-        List<Address> addresses = AddressConverter.toEntityFromDAO(addressDAOs);
+        List<Address> addresses = addressRepository.findAll();
         logger.debug("Fetched addresses: {}", addresses.size());
         return addresses;
     }
 
     @Override
     public Address getAddressById(Integer id) {
-        AddressDAO addressDAO = addressRepository.findById(id).orElse(null);
-        Address address = AddressConverter.toEntityFromDAO(addressDAO);
+        Address address = addressRepository.findById(id).orElse(null);
         logger.debug("Fetched address: {}", address);
         return address;
     }
 
     @Override
     public Address updateAddressById(Integer id, Address address) {
-        AddressDAO addressDAO = addressRepository.findById(id).orElse(null);
-        if (addressDAO == null) {
+        Address addresstoUpdate = addressRepository.findById(id).orElse(null);
+        if (addresstoUpdate == null) {
             return null;
         }
 
-        addressDAO.setCity(address.getCity())
+        addresstoUpdate.setCity(address.getCity())
                 .setCountry(address.getCountry())
                 .setHouseNumber(address.getHouseNumber())
                 .setStreet(address.getStreet())
                 .setZipCode(address.getZipCode());
 
-        AddressDAO savedAddressDAO = addressRepository.save(addressDAO);
-        logger.debug("Address updated: {}", savedAddressDAO);
-        Address savedAddress = AddressConverter.toEntityFromDAO(savedAddressDAO);
+        Address savedAddress = addressRepository.save(addresstoUpdate);
+        logger.debug("Address updated: {}", savedAddress);
         return savedAddress;
     }
 
@@ -83,4 +76,6 @@ public class AddressServiceImpl implements IAddressService {
     public boolean exists(Integer id) {
         return addressRepository.existsById(id);
     }
+
+
 }

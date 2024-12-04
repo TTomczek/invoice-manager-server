@@ -1,12 +1,8 @@
 package net.tomczek.invoice.manager.server.services;
 
-import net.tomczek.invoice.manager.server.entities.BusinessPartnerDAO;
-import net.tomczek.invoice.manager.server.entities.ContactPersonDAO;
-import net.tomczek.invoice.manager.server.models.Address;
-import net.tomczek.invoice.manager.server.models.BusinessPartner;
-import net.tomczek.invoice.manager.server.models.ContactPerson;
-import net.tomczek.invoice.manager.server.models.converter.BusinessPartnerConverter;
-import net.tomczek.invoice.manager.server.models.converter.ContactPersonConverter;
+import net.tomczek.invoice.manager.server.entities.Address;
+import net.tomczek.invoice.manager.server.entities.BusinessPartner;
+import net.tomczek.invoice.manager.server.entities.ContactPerson;
 import net.tomczek.invoice.manager.server.repositories.ContactPersonsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +17,12 @@ public class ContactPersonImpl implements IContactPersonService {
     private static final Logger logger = LoggerFactory.getLogger(ContactPersonImpl.class);
 
     @Autowired
-    public ContactPersonImpl(ContactPersonsRepository contactPersonsRepository, ContactPersonConverter contactPersonConverter, IAddressService addressService) {
+    public ContactPersonImpl(ContactPersonsRepository contactPersonsRepository, IAddressService addressService) {
         this.contactPersonsRepository = contactPersonsRepository;
-        this.contactPersonConverter = contactPersonConverter;
         this.addressService = addressService;
     }
 
     private final ContactPersonsRepository contactPersonsRepository;
-    private final ContactPersonConverter contactPersonConverter;
     private final IAddressService addressService;
 
 
@@ -37,64 +31,68 @@ public class ContactPersonImpl implements IContactPersonService {
         Address address = contactPerson.getAddress();
         Address savedAddress = addressService.createAddress(address);
         contactPerson.setAddress(savedAddress);
-        ContactPersonDAO contactPersonDAOToSave = contactPersonConverter.toDAO(contactPerson);
-        ContactPersonDAO savedContactPersonDAO = contactPersonsRepository.save(contactPersonDAOToSave);
-        logger.debug("ContactPerson saved: {}", savedContactPersonDAO);
-        ContactPerson savedContactPerson = contactPersonConverter.toEntityFromDAO(savedContactPersonDAO);
+        ContactPerson savedContactPerson = contactPersonsRepository.save(contactPerson);
+        logger.debug("ContactPerson saved: {}", savedContactPerson);
         return savedContactPerson;
     }
 
     @Override
     public ContactPerson deleteContactPersonById(Integer id) {
-        ContactPersonDAO contactPersonDAO = contactPersonsRepository.findById(id).orElse(null);
-        if (contactPersonDAO == null) {
+        ContactPerson contactPerson = contactPersonsRepository.findById(id).orElse(null);
+        if (contactPerson == null) {
             return null;
         }
 
         contactPersonsRepository.deleteById(id);
-        logger.debug("ContactPerson deleted: {}", contactPersonDAO);
-        return contactPersonConverter.toEntityFromDAO(contactPersonDAO);
+        logger.debug("ContactPerson deleted: {}", contactPerson);
+        return contactPerson;
     }
 
     @Override
     public List<ContactPerson> getAllContactPersons() {
-        List<ContactPersonDAO> contactPersonDAOs = contactPersonsRepository.findAll();
-        logger.debug("Fetched contactPersons: {}", contactPersonDAOs.size());
-        return contactPersonConverter.toEntityFromDAO(contactPersonDAOs);
+        List<ContactPerson> contactPeople = contactPersonsRepository.findAll();
+        logger.debug("Fetched contactPersons: {}", contactPeople.size());
+        return contactPeople;
     }
 
     @Override
     public ContactPerson getContactPersonById(Integer id) {
-        ContactPersonDAO contactPersonDAO = contactPersonsRepository.findById(id).orElse(null);
-        logger.debug("Fetched contactPerson: {}", contactPersonDAO);
-        return contactPersonConverter.toEntityFromDAO(contactPersonDAO);
+        ContactPerson contactPerson = contactPersonsRepository.findById(id).orElse(null);
+        logger.debug("Fetched contactPerson: {}", contactPerson);
+        return contactPerson;
     }
 
     @Override
     public ContactPerson updateContactPersonById(Integer id, ContactPerson contactPerson) {
-        ContactPersonDAO contactPersonDAO = contactPersonsRepository.findById(id).orElse(null);
-        if (contactPersonDAO == null) {
+        ContactPerson contactPersonToUpdate = contactPersonsRepository.findById(id).orElse(null);
+        if (contactPersonToUpdate == null) {
             return null;
         }
 
-        contactPersonDAO.setName(contactPerson.getName());
-        contactPersonDAO.setFirstName(contactPerson.getFirstName());
-        contactPersonDAO.setEmail(contactPerson.getEmail());
+        contactPersonToUpdate.setName(contactPerson.getName());
+        contactPersonToUpdate.setFirstName(contactPerson.getFirstName());
+        contactPersonToUpdate.setEmail(contactPerson.getEmail());
 
-        contactPersonDAO.getAddress().setCity(contactPerson.getAddress().getCity());
-        contactPersonDAO.getAddress().setCountry(contactPerson.getAddress().getCountry());
-        contactPersonDAO.getAddress().setStreet(contactPerson.getAddress().getStreet());
-        contactPersonDAO.getAddress().setZipCode(contactPerson.getAddress().getZipCode());
-        contactPersonDAO.getAddress().setHouseNumber(contactPerson.getAddress().getHouseNumber());
+        contactPersonToUpdate.getAddress().setCity(contactPerson.getAddress().getCity());
+        contactPersonToUpdate.getAddress().setCountry(contactPerson.getAddress().getCountry());
+        contactPersonToUpdate.getAddress().setStreet(contactPerson.getAddress().getStreet());
+        contactPersonToUpdate.getAddress().setZipCode(contactPerson.getAddress().getZipCode());
+        contactPersonToUpdate.getAddress().setHouseNumber(contactPerson.getAddress().getHouseNumber());
 
         BusinessPartner businessPartner = contactPerson.getBusinessPartner();
-        BusinessPartnerDAO businessPartnerDAO = BusinessPartnerConverter.toDAO(businessPartner);
-        contactPersonDAO.setBusinessPartner(businessPartnerDAO);
-        contactPersonDAO.setSalutation(contactPerson.getSalutation());
+        contactPersonToUpdate.setBusinessPartner(businessPartner);
+        contactPersonToUpdate.setSalutation(contactPerson.getSalutation());
 
-        ContactPersonDAO updatedContactPersonDAO = contactPersonsRepository.save(contactPersonDAO);
-        logger.debug("ContactPerson updated: {}", updatedContactPersonDAO);
-        return contactPersonConverter.toEntityFromDAO(updatedContactPersonDAO);
+        ContactPerson updatedContactPerson = contactPersonsRepository.save(contactPersonToUpdate);
+        logger.debug("ContactPerson updated: {}", updatedContactPerson);
+        return updatedContactPerson;
+    }
+
+    @Override
+    public List<ContactPerson> getAllContactPersonByIds(List<Integer> ids) {
+        List<ContactPerson> contactPersons = contactPersonsRepository.findAllById(ids);
+        logger.debug("Fetched contactPersons by ids: {}", contactPersons.size());
+        return contactPersons;
     }
 
     @Override

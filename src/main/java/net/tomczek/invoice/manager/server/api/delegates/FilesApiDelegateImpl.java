@@ -3,7 +3,7 @@ package net.tomczek.invoice.manager.server.api.delegates;
 import net.tomczek.invoice.manager.api.server.api.FilesApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.DownloadFileDTO;
 import net.tomczek.invoice.manager.server.models.FileWithContent;
-import net.tomczek.invoice.manager.server.models.converter.FileConverter;
+import net.tomczek.invoice.manager.server.converter.FileConverter;
 import net.tomczek.invoice.manager.server.services.filestorage.IFileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

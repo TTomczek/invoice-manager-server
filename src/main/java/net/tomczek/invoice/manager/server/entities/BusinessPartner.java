@@ -1,38 +1,36 @@
-package net.tomczek.invoice.manager.server.models;
+package net.tomczek.invoice.manager.server.entities;
+
+import jakarta.persistence.*;
 
 import java.util.List;
 
-/**
- * Internal model for BusinessPartnerDAO/BusinessPartnerDTO
- */
-public class BusinessPartner {
+@Table(name = "business_partners")
+@Entity
+public class BusinessPartner extends BaseEntity<Integer> {
 
-    private Integer id;
-    private String name;
-    private String description;
-    private Address address;
-    private List<ContactPerson> contactPersons;
-    private List<Invoice> invoices;
-
-    public BusinessPartner(Integer id, String name, String description, Address address, List<ContactPerson> contactPersons, List<Invoice> invoices) {
-        this.id = id;
+    public BusinessPartner(Integer id, String name, String description, Address address, List<ContactPerson> contactPeople, List<Invoice> invoices) {
+        super(id);
         this.name = name;
         this.description = description;
         this.address = address;
-        this.contactPersons = contactPersons;
+        this.contactPeople = contactPeople;
         this.invoices = invoices;
     }
 
     public BusinessPartner() {}
 
-    public Integer getId() {
-        return id;
-    }
+    private String name;
 
-    public BusinessPartner setId(Integer id) {
-        this.id = id;
-        return this;
-    }
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Address address;
+
+    @OneToMany(mappedBy = "businessPartner", fetch = FetchType.LAZY)
+    private List<ContactPerson> contactPeople;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Invoice> invoices;
 
     public String getName() {
         return name;
@@ -62,11 +60,11 @@ public class BusinessPartner {
     }
 
     public List<ContactPerson> getContactPersons() {
-        return contactPersons;
+        return contactPeople;
     }
 
-    public BusinessPartner setContactPersons(List<ContactPerson> contactPersons) {
-        this.contactPersons = contactPersons;
+    public BusinessPartner setContactPersons(List<ContactPerson> contactPeople) {
+        this.contactPeople = contactPeople;
         return this;
     }
 
@@ -81,13 +79,13 @@ public class BusinessPartner {
 
     @Override
     public String toString() {
-        return "BusinessPartner{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
+        return "BusinessPartnerDAO{" +
+            "name='" + name + '\'' +
             ", description='" + description + '\'' +
             ", address=" + address +
-            ", contactPersons=" + contactPersons +
-            ", invoices=" + invoices +
+            ", contactPersonDAOS=" + contactPeople +
+            ", invoiceDAOS=" + invoices +
+            ", id=" + id +
             '}';
     }
 }

@@ -1,4 +1,4 @@
-package net.tomczek.invoice.manager.server.models.converter;
+package net.tomczek.invoice.manager.server.converter;
 
 import net.tomczek.invoice.manager.api.server.model.DownloadFileDTO;
 import net.tomczek.invoice.manager.api.server.model.FileDTO;

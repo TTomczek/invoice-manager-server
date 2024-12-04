@@ -1,11 +1,9 @@
 package net.tomczek.invoice.manager.server.repositories;
 
-import net.tomczek.invoice.manager.server.entities.BusinessPartnerDAO;
+import net.tomczek.invoice.manager.server.entities.BusinessPartner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface BusinessPartnersRepository extends JpaRepository<BusinessPartnerDAO, Integer> {
+public interface BusinessPartnersRepository extends JpaRepository<BusinessPartner, Integer> {
 }

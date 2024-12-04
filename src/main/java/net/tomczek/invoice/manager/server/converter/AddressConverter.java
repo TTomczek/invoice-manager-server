@@ -1,0 +1,40 @@
+package net.tomczek.invoice.manager.server.converter;
+
+import net.tomczek.invoice.manager.api.server.model.AddressDTO;
+import net.tomczek.invoice.manager.server.entities.Address;
+
+import java.util.List;
+
+public class AddressConverter {
+
+    public static AddressDTO toDTO(Address address) {
+        AddressDTO addressDTO = new AddressDTO();
+        addressDTO.setId(address.getId());
+        addressDTO.setStreet(address.getStreet());
+        addressDTO.setNumber(address.getHouseNumber());
+        addressDTO.setZip(address.getZipCode());
+        addressDTO.setCity(address.getCity());
+        addressDTO.setCountry(address.getCountry());
+        return addressDTO;
+    }
+
+    public static List<AddressDTO> toDTO(List<Address> addresses) {
+        return addresses.stream().map(AddressConverter::toDTO).toList();
+    }
+
+    public static Address toEntity(AddressDTO addressDTO) {
+        Address address = new Address();
+        address.setId(addressDTO.getId());
+        address.setStreet(addressDTO.getStreet());
+        address.setHouseNumber(addressDTO.getNumber());
+        address.setZipCode(addressDTO.getZip());
+        address.setCity(addressDTO.getCity());
+        address.setCountry(addressDTO.getCountry());
+        return address;
+    }
+
+    public static List<Address> toEntity(List<AddressDTO> addresses) {
+        return addresses.stream().map(AddressConverter::toEntity).toList();
+    }
+
+}

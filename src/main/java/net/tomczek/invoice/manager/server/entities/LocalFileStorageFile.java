@@ -7,14 +7,14 @@ import org.springframework.context.annotation.Profile;
 @Table(name = "local_file_storage_files")
 @Entity
 @Profile("localfilestorage")
-public class LocalFileStorageFileDAO extends BaseEntity<Integer> {
+public class LocalFileStorageFile extends BaseEntity<Integer> {
 
-    public LocalFileStorageFileDAO(Integer id, String filename) {
+    public LocalFileStorageFile(Integer id, String filename) {
         super(id);
         this.filename = filename;
     }
 
-    public LocalFileStorageFileDAO() {
+    public LocalFileStorageFile() {
     }
 
     private String filename;

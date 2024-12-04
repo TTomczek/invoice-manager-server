@@ -1,8 +1,6 @@
 package net.tomczek.invoice.manager.server.services;
 
-import net.tomczek.invoice.manager.server.entities.SalesTaxDAO;
-import net.tomczek.invoice.manager.server.models.SalesTax;
-import net.tomczek.invoice.manager.server.models.converter.SalesTaxConverter;
+import net.tomczek.invoice.manager.server.entities.SalesTax;
 import net.tomczek.invoice.manager.server.repositories.SalesTaxRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,53 +23,52 @@ public class SalesTaxServiceImpl implements ISalesTaxService {
 
     @Override
     public SalesTax createSalesTax(SalesTax salesTax) {
-        SalesTaxDAO salesTaxDAO = SalesTaxConverter.toDAO(salesTax);
-        SalesTaxDAO savedSalesTaxDAO = salesTaxRepository.save(salesTaxDAO);
-        logger.debug("SalesTax saved: {}", savedSalesTaxDAO);
-        return SalesTaxConverter.toEntityFromDAO(savedSalesTaxDAO);
+        SalesTax savedSalesTax = salesTaxRepository.save(salesTax);
+        logger.debug("SalesTax saved: {}", savedSalesTax);
+        return savedSalesTax;
     }
 
     @Override
     public SalesTax deleteSalesTaxById(Integer id) {
-        SalesTaxDAO salesTaxDAO = salesTaxRepository.findById(id).orElse(null);
-        if (salesTaxDAO == null) {
+        SalesTax salesTax = salesTaxRepository.findById(id).orElse(null);
+        if (salesTax == null) {
             return null;
         }
-        logger.debug("SalesTax deleted: {}", salesTaxDAO);
+        logger.debug("SalesTax deleted: {}", salesTax);
 
-        salesTaxRepository.delete(salesTaxDAO);
-        return SalesTaxConverter.toEntityFromDAO(salesTaxDAO);
+        salesTaxRepository.delete(salesTax);
+        return salesTax;
     }
 
     @Override
     public List<SalesTax> getAllSalesTaxs() {
-        List<SalesTaxDAO> salesTaxDAOs = salesTaxRepository.findAll();
-        logger.debug("Fetched salesTaxes: {}", salesTaxDAOs.size());
-        return SalesTaxConverter.toEntityFromDAO(salesTaxDAOs);
+        List<SalesTax> salesTaxes = salesTaxRepository.findAll();
+        logger.debug("Fetched salesTaxes: {}", salesTaxes.size());
+        return salesTaxes;
     }
 
     @Override
     public SalesTax getSalesTaxById(Integer id) {
-        SalesTaxDAO salesTaxDAO = salesTaxRepository.findById(id).orElse(null);
-        if (salesTaxDAO == null) {
+        SalesTax salesTax = salesTaxRepository.findById(id).orElse(null);
+        if (salesTax == null) {
             return null;
         }
-        logger.debug("Fetched salesTax: {}", salesTaxDAO);
-        return SalesTaxConverter.toEntityFromDAO(salesTaxDAO);
+        logger.debug("Fetched salesTax: {}", salesTax);
+        return salesTax;
     }
 
     @Override
     public SalesTax updateSalesTaxById(Integer id, SalesTax salesTax) {
-        SalesTaxDAO salesTaxDAO = salesTaxRepository.findById(id).orElse(null);
-        if (salesTaxDAO == null) {
+        SalesTax salesTaxToUpdate = salesTaxRepository.findById(id).orElse(null);
+        if (salesTaxToUpdate == null) {
             return null;
         }
 
-        salesTaxDAO.setRate(salesTax.getRate());
-        salesTaxDAO.setName(salesTax.getName());
-        SalesTaxDAO updatedSalesTaxDAO = salesTaxRepository.save(salesTaxDAO);
-        logger.debug("SalesTax updated: {}", updatedSalesTaxDAO);
-        return SalesTaxConverter.toEntityFromDAO(updatedSalesTaxDAO);
+        salesTaxToUpdate.setRate(salesTax.getRate());
+        salesTaxToUpdate.setName(salesTax.getName());
+        SalesTax updatedSalesTax = salesTaxRepository.save(salesTaxToUpdate);
+        logger.debug("SalesTax updated: {}", updatedSalesTax);
+        return updatedSalesTax;
     }
 
     @Override

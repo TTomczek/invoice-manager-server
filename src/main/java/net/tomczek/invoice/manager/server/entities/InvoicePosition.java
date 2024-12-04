@@ -1,40 +1,36 @@
-package net.tomczek.invoice.manager.server.models;
+package net.tomczek.invoice.manager.server.entities;
 
-import net.tomczek.invoice.manager.server.entities.UnitET;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-/**
- * Internal model for InvoicePositionDAO/InvoicePositionDTO
- */
-public class InvoicePosition {
+@Table(name = "invoice_positions")
+@Entity
+public class InvoicePosition extends BaseEntity<Integer> {
 
-    private Integer id;
-    private String description;
-    private float quantity;
-    private UnitET unit;
-    private BigDecimal pricePerUnitInCents;
-    private Invoice invoice;
-
-    public InvoicePosition(Integer id, String description, float quantity, UnitET unit, BigDecimal pricePerUnitInCents, Invoice invoice) {
-        this.id = id;
+    public InvoicePosition(Integer id, String description, float quantity, UnitET unitEt, BigDecimal pricePerUnitInCents, Invoice invoice) {
+        super(id);
         this.description = description;
         this.quantity = quantity;
-        this.unit = unit;
+        this.unitEt = unitEt;
         this.pricePerUnitInCents = pricePerUnitInCents;
         this.invoice = invoice;
     }
 
-    public InvoicePosition() {}
-
-    public Integer getId() {
-        return id;
+    public InvoicePosition() {
     }
 
-    public InvoicePosition setId(Integer id) {
-        this.id = id;
-        return this;
-    }
+    private String description;
+
+    private float quantity;
+
+    @Enumerated(EnumType.STRING)
+    private UnitET unitEt;
+
+    private BigDecimal pricePerUnitInCents;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Invoice invoice;
 
     public String getDescription() {
         return description;
@@ -54,12 +50,12 @@ public class InvoicePosition {
         return this;
     }
 
-    public UnitET getUnit() {
-        return unit;
+    public UnitET getUnitEt() {
+        return unitEt;
     }
 
-    public InvoicePosition setUnit(UnitET unit) {
-        this.unit = unit;
+    public InvoicePosition setUnitEt(UnitET unitEt) {
+        this.unitEt = unitEt;
         return this;
     }
 
@@ -83,13 +79,13 @@ public class InvoicePosition {
 
     @Override
     public String toString() {
-        return "InvoicePosition{" +
-            "id=" + id +
-            ", description='" + description + '\'' +
+        return "InvoicePositionDAO{" +
+            "description='" + description + '\'' +
             ", quantity=" + quantity +
-            ", unit=" + unit +
+            ", unitEt=" + unitEt +
             ", pricePerUnitInCents=" + pricePerUnitInCents +
             ", invoice=" + invoice +
+            ", id=" + id +
             '}';
     }
 }

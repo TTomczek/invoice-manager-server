@@ -1,10 +1,10 @@
 package net.tomczek.invoice.manager.server.services;
 
-import net.tomczek.invoice.manager.server.models.InvoicePosition;
+import net.tomczek.invoice.manager.server.entities.InvoicePosition;
 
 import java.util.List;
 
-public interface IInvoicePositionsService {
+public interface IInvoicePositionService {
 
     InvoicePosition createInvoicePosition(InvoicePosition invoicePosition);
 
@@ -15,6 +15,8 @@ public interface IInvoicePositionsService {
     InvoicePosition getInvoicePositionById(Integer id);
 
     InvoicePosition updateInvoicePositionById(Integer id, InvoicePosition invoicePosition);
+
+    List<InvoicePosition> getAllInvoicePositionByIds(List<Integer> ids);
 
     boolean exists(Integer id);
 }

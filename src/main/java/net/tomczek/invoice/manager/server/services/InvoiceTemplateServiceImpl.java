@@ -1,8 +1,7 @@
 package net.tomczek.invoice.manager.server.services;
 
-import net.tomczek.invoice.manager.server.entities.InvoiceTemplateDAO;
-import net.tomczek.invoice.manager.server.models.InvoiceTemplate;
-import net.tomczek.invoice.manager.server.models.converter.InvoiceTemplateConverter;
+import net.tomczek.invoice.manager.server.entities.InvoiceTemplate;
+import net.tomczek.invoice.manager.server.converter.InvoiceTemplateConverter;
 import net.tomczek.invoice.manager.server.repositories.InvoiceTemplateRepository;
 import net.tomczek.invoice.manager.server.services.filestorage.IFileStorageService;
 import org.slf4j.Logger;
@@ -18,75 +17,71 @@ public class InvoiceTemplateServiceImpl implements IInvoiceTemplateService {
     private static final Logger logger = LoggerFactory.getLogger(InvoiceTemplateServiceImpl.class);
 
     @Autowired
-    public InvoiceTemplateServiceImpl(InvoiceTemplateConverter invoiceTemplateConverter, InvoiceTemplateRepository invoiceTemplateRepository, IFileStorageService fileStorageService) {
-        this.invoiceTemplateConverter = invoiceTemplateConverter;
+    public InvoiceTemplateServiceImpl( InvoiceTemplateRepository invoiceTemplateRepository, IFileStorageService fileStorageService) {
         this.invoiceTemplateRepository = invoiceTemplateRepository;
         this.fileStorageService = fileStorageService;
     }
 
-    private final InvoiceTemplateConverter invoiceTemplateConverter;
     private final InvoiceTemplateRepository invoiceTemplateRepository;
     private final IFileStorageService fileStorageService;
 
     @Override
     public InvoiceTemplate createInvoiceTemplate(InvoiceTemplate invoiceTemplate) {
-        InvoiceTemplateDAO invoiceTemplateDAOToSave = invoiceTemplateConverter.toDAO(invoiceTemplate);
-        InvoiceTemplateDAO savedInvoiceTemplateDAO = invoiceTemplateRepository.save(invoiceTemplateDAOToSave);
-        logger.debug("InvoiceTemplate saved: {}", savedInvoiceTemplateDAO);
-        InvoiceTemplate savedInvoiceTemplate = invoiceTemplateConverter.toEntityFromDAO(savedInvoiceTemplateDAO);
+        InvoiceTemplate savedInvoiceTemplate = invoiceTemplateRepository.save(invoiceTemplate);
+        logger.debug("InvoiceTemplate saved: {}", savedInvoiceTemplate);
         return savedInvoiceTemplate;
     }
 
     @Override
     public InvoiceTemplate deleteInvoiceTemplateById(Integer id) {
-        InvoiceTemplateDAO invoiceTemplateDAO = invoiceTemplateRepository.findById(id).orElse(null);
-        if (invoiceTemplateDAO == null) {
+        InvoiceTemplate invoiceTemplate = invoiceTemplateRepository.findById(id).orElse(null);
+        if (invoiceTemplate == null) {
             return null;
         }
         try {
-            this.fileStorageService.deleteFile(invoiceTemplateDAO.getBackgroundPdfId());
+            this.fileStorageService.deleteFile(invoiceTemplate.getBackgroundPdfId());
         } catch (Exception e) {
-            logger.warn("Could not delete file with id [{}]", invoiceTemplateDAO.getBackgroundPdfId());
+            logger.warn("Could not delete file with id [{}]", invoiceTemplate.getBackgroundPdfId());
         }
 
         invoiceTemplateRepository.deleteById(id);
-        logger.debug("InvoiceTemplate deleted: {}", invoiceTemplateDAO);
-        return invoiceTemplateConverter.toEntityFromDAO(invoiceTemplateDAO);
+        logger.debug("InvoiceTemplate deleted: {}", invoiceTemplate);
+        return invoiceTemplate;
     }
 
     @Override
     public List<InvoiceTemplate> getAllInvoiceTemplates() {
-        List<InvoiceTemplateDAO> invoiceTemplateDAOs = invoiceTemplateRepository.findAll();
-        logger.debug("Fetched invoiceTemplates: {}", invoiceTemplateDAOs.size());
-        return invoiceTemplateConverter.toEntityFromDAO(invoiceTemplateDAOs);
+        List<InvoiceTemplate> invoiceTemplates = invoiceTemplateRepository.findAll();
+        logger.debug("Fetched invoiceTemplates: {}", invoiceTemplates.size());
+        return invoiceTemplates;
     }
 
     @Override
     public InvoiceTemplate getInvoiceTemplateById(Integer id) {
-        InvoiceTemplateDAO invoiceTemplateDAO = invoiceTemplateRepository.findById(id).orElse(null);
-        if (invoiceTemplateDAO == null) {
+        InvoiceTemplate invoiceTemplate = invoiceTemplateRepository.findById(id).orElse(null);
+        if (invoiceTemplate == null) {
             return null;
         }
-        logger.debug("Fetched invoiceTemplate: {}", invoiceTemplateDAO);
-        return invoiceTemplateConverter.toEntityFromDAO(invoiceTemplateDAO);
+        logger.debug("Fetched invoiceTemplate: {}", invoiceTemplate);
+        return invoiceTemplate;
     }
 
     @Override
     public InvoiceTemplate updateInvoiceTemplateById(Integer id, InvoiceTemplate invoiceTemplate) {
-        InvoiceTemplateDAO invoiceTemplateDAO = invoiceTemplateRepository.findById(id).orElse(null);
-        if (invoiceTemplateDAO == null) {
+        InvoiceTemplate invoiceTemplateToUpdate = invoiceTemplateRepository.findById(id).orElse(null);
+        if (invoiceTemplateToUpdate == null) {
             return null;
         }
 
-        invoiceTemplateDAO.setName(invoiceTemplate.getName());
-        invoiceTemplateDAO.setMarginTopFirstPage(invoiceTemplate.getMarginTopFirstPage());
-        invoiceTemplateDAO.setMarginBottomFirstPage(invoiceTemplate.getMarginBottomFirstPage());
-        invoiceTemplateDAO.setMarginTopOtherPages(invoiceTemplate.getMarginTopOtherPages());
-        invoiceTemplateDAO.setMarginBottomOtherPages(invoiceTemplate.getMarginBottomOtherPages());
-        invoiceTemplateDAO.setBackgroundPdfId(invoiceTemplate.getBackgroundPdfId());
-        InvoiceTemplateDAO updatedInvoiceTemplateDAO = invoiceTemplateRepository.save(invoiceTemplateDAO);
-        logger.debug("InvoiceTemplate updated: {}", updatedInvoiceTemplateDAO);
-        return invoiceTemplateConverter.toEntityFromDAO(updatedInvoiceTemplateDAO);
+        invoiceTemplateToUpdate.setName(invoiceTemplate.getName());
+        invoiceTemplateToUpdate.setMarginTopFirstPage(invoiceTemplate.getMarginTopFirstPage());
+        invoiceTemplateToUpdate.setMarginBottomFirstPage(invoiceTemplate.getMarginBottomFirstPage());
+        invoiceTemplateToUpdate.setMarginTopOtherPages(invoiceTemplate.getMarginTopOtherPages());
+        invoiceTemplateToUpdate.setMarginBottomOtherPages(invoiceTemplate.getMarginBottomOtherPages());
+        invoiceTemplateToUpdate.setBackgroundPdfId(invoiceTemplate.getBackgroundPdfId());
+        InvoiceTemplate updatedInvoiceTemplate = invoiceTemplateRepository.save(invoiceTemplateToUpdate);
+        logger.debug("InvoiceTemplate updated: {}", updatedInvoiceTemplate);
+        return updatedInvoiceTemplate;
     }
 
     @Override

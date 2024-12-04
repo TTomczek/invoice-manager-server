@@ -2,8 +2,8 @@ package net.tomczek.invoice.manager.server.api.delegates;
 
 import net.tomczek.invoice.manager.api.server.api.SalesTaxesApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.SalesTaxDTO;
-import net.tomczek.invoice.manager.server.models.SalesTax;
-import net.tomczek.invoice.manager.server.models.converter.SalesTaxConverter;
+import net.tomczek.invoice.manager.server.entities.SalesTax;
+import net.tomczek.invoice.manager.server.converter.SalesTaxConverter;
 import net.tomczek.invoice.manager.server.services.ISalesTaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,7 +53,7 @@ public class SalesTaxApiDelegateImpl implements SalesTaxesApiDelegate {
 
     @Override
     public ResponseEntity<SalesTaxDTO> createSalesTax(SalesTaxDTO salesTaxDTO) {
-        SalesTax salesTax = SalesTaxConverter.toEntityFromDTO(salesTaxDTO);
+        SalesTax salesTax = SalesTaxConverter.toEntity(salesTaxDTO);
         SalesTax createdSalesTax = this.salesTaxService.createSalesTax(salesTax);
         SalesTaxDTO createdSalesTaxDTO = SalesTaxConverter.toDTO(createdSalesTax);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSalesTaxDTO);
@@ -61,7 +61,7 @@ public class SalesTaxApiDelegateImpl implements SalesTaxesApiDelegate {
 
     @Override
     public ResponseEntity<SalesTaxDTO> updateSalesTaxById(Integer id, SalesTaxDTO salesTaxDTO) {
-        SalesTax salesTax = SalesTaxConverter.toEntityFromDTO(salesTaxDTO);
+        SalesTax salesTax = SalesTaxConverter.toEntity(salesTaxDTO);
         SalesTax updatedSalesTax = this.salesTaxService.updateSalesTaxById(id, salesTax);
         if (updatedSalesTax == null) {
             return ResponseEntity.notFound().build();

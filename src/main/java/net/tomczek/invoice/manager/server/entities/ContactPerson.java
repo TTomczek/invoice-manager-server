@@ -1,22 +1,13 @@
-package net.tomczek.invoice.manager.server.models;
+package net.tomczek.invoice.manager.server.entities;
 
-import net.tomczek.invoice.manager.server.entities.SalutationET;
+import jakarta.persistence.*;
 
-/**
- * Internal model for ContactPersonDAO/ContactPersonDTO
- */
-public class ContactPerson {
-
-    private Integer id;
-    private String name;
-    private String firstName;
-    private String email;
-    private Address address;
-    private BusinessPartner businessPartner;
-    private SalutationET salutation;
+@Table(name = "contact_persons")
+@Entity
+public class ContactPerson extends BaseEntity<Integer> {
 
     public ContactPerson(Integer id, String name, String firstName, String email, Address address, BusinessPartner businessPartner, SalutationET salutation) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.firstName = firstName;
         this.email = email;
@@ -25,16 +16,23 @@ public class ContactPerson {
         this.salutation = salutation;
     }
 
-    public ContactPerson() {}
-
-    public Integer getId() {
-        return id;
+    public ContactPerson() {
     }
 
-    public ContactPerson setId(Integer id) {
-        this.id = id;
-        return this;
-    }
+    private String name;
+
+    private String firstName;
+
+    private String email;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Address address;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private BusinessPartner businessPartner;
+
+    @Enumerated(EnumType.STRING)
+    private SalutationET salutation;
 
     public String getName() {
         return name;
@@ -92,14 +90,14 @@ public class ContactPerson {
 
     @Override
     public String toString() {
-        return "ContactPerson{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
+        return "ContactPersonDAO{" +
+            "name='" + name + '\'' +
             ", firstName='" + firstName + '\'' +
             ", email='" + email + '\'' +
             ", address=" + address +
             ", businessPartner=" + businessPartner +
             ", salutation=" + salutation +
+            ", id=" + id +
             '}';
     }
 }

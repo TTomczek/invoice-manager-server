@@ -1,32 +1,29 @@
-package net.tomczek.invoice.manager.server.models;
+package net.tomczek.invoice.manager.server.entities;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 
 /**
- * Internal model for SalesTaxDAO/SalesTaxDTO
+ * Umsatzsteuer
  */
-public class SalesTax {
-
-    private Integer id;
-    private String name;
-    private BigDecimal rate;
+@Table(name = "sales_taxes")
+@Entity
+public class SalesTax extends BaseEntity<Integer> {
 
     public SalesTax(Integer id, String name, BigDecimal rate) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.rate = rate;
     }
 
-    public SalesTax() {}
-
-    public Integer getId() {
-        return id;
+    public SalesTax() {
     }
 
-    public SalesTax setId(Integer id) {
-        this.id = id;
-        return this;
-    }
+    private String name;
+
+    private BigDecimal rate;
 
     public String getName() {
         return name;
@@ -48,10 +45,10 @@ public class SalesTax {
 
     @Override
     public String toString() {
-        return "SalesTax{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
+        return "SalesTaxDAO{" +
+            "name='" + name + '\'' +
             ", rate=" + rate +
+            ", id=" + id +
             '}';
     }
 }

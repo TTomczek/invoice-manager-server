@@ -2,9 +2,11 @@ package net.tomczek.invoice.manager.server.api.delegates;
 
 import net.tomczek.invoice.manager.api.server.api.BusinessPartnersApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.BusinessPartnerDTO;
-import net.tomczek.invoice.manager.server.models.BusinessPartner;
-import net.tomczek.invoice.manager.server.models.converter.BusinessPartnerConverter;
+import net.tomczek.invoice.manager.server.entities.BusinessPartner;
+import net.tomczek.invoice.manager.server.converter.BusinessPartnerConverter;
 import net.tomczek.invoice.manager.server.services.IBusinessPartnerService;
+import net.tomczek.invoice.manager.server.services.IContactPersonService;
+import net.tomczek.invoice.manager.server.services.IInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +18,19 @@ import java.util.List;
 public class BusinessPartnersApiDelegateImpl implements BusinessPartnersApiDelegate {
 
     @Autowired
-    public BusinessPartnersApiDelegateImpl(IBusinessPartnerService businessPartnerService) {
+    public BusinessPartnersApiDelegateImpl(IBusinessPartnerService businessPartnerService, IContactPersonService contactPersonService, IInvoiceService invoiceService) {
         this.businessPartnerService = businessPartnerService;
+        this.contactPersonService = contactPersonService;
+        this.invoiceService = invoiceService;
     }
 
     private final IBusinessPartnerService businessPartnerService;
+    private final IContactPersonService contactPersonService;
+    private final IInvoiceService invoiceService;
 
     @Override
     public ResponseEntity<BusinessPartnerDTO> createBusinessPartner(BusinessPartnerDTO businessPartnerDTO) {
-        BusinessPartner businessPartner = BusinessPartnerConverter.toEntityFromDTO(businessPartnerDTO);
+        BusinessPartner businessPartner = BusinessPartnerConverter.toEntity(businessPartnerDTO, contactPersonService, invoiceService);
 
         BusinessPartner createdBusinessPartner = businessPartnerService.createBusinessPartner(businessPartner);
         BusinessPartnerDTO createdBusinessPartnerDTO = BusinessPartnerConverter.toDTO(createdBusinessPartner);
@@ -62,7 +68,7 @@ public class BusinessPartnersApiDelegateImpl implements BusinessPartnersApiDeleg
 
     @Override
     public ResponseEntity<BusinessPartnerDTO> updateBusinessPartnerById(Integer id, BusinessPartnerDTO businessPartnerDTO) {
-        BusinessPartner businessPartner = BusinessPartnerConverter.toEntityFromDTO(businessPartnerDTO);
+        BusinessPartner businessPartner = BusinessPartnerConverter.toEntity(businessPartnerDTO, contactPersonService, invoiceService);
         BusinessPartner updatedBusinessPartner = businessPartnerService.updateBusinessPartnerById(id, businessPartner);
         BusinessPartnerDTO updatedBusinessPartnerDTO = BusinessPartnerConverter.toDTO(updatedBusinessPartner);
         return ResponseEntity.ok().body(updatedBusinessPartnerDTO);

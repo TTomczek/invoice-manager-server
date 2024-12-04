@@ -1,6 +1,6 @@
 package net.tomczek.invoice.manager.server.services.filestorage;
 
-import net.tomczek.invoice.manager.server.entities.LocalFileStorageFileDAO;
+import net.tomczek.invoice.manager.server.entities.LocalFileStorageFile;
 import net.tomczek.invoice.manager.server.models.FileWithContent;
 import net.tomczek.invoice.manager.server.repositories.LocalFileStorageFileRepository;
 import org.slf4j.Logger;
@@ -41,9 +41,9 @@ public class LocalFileStorageService implements IFileStorageService {
             throw new Exception("Could not create storage directory");
         }
 
-        LocalFileStorageFileDAO fileDAO = new LocalFileStorageFileDAO();
+        LocalFileStorageFile fileDAO = new LocalFileStorageFile();
         fileDAO.setFilename(fileName);
-        LocalFileStorageFileDAO savedFile = localFileStorageFileRepository.save(fileDAO);
+        LocalFileStorageFile savedFile = localFileStorageFileRepository.save(fileDAO);
 
         String path = properties.getStoragePath() + "/" + savedFile.getId() + ".pdf";
         logger.debug("Storing file with id [{}] in: [{}]", savedFile.getId(), path);
@@ -62,9 +62,9 @@ public class LocalFileStorageService implements IFileStorageService {
 
     @Override
     public FileWithContent getFile(int fileId) throws Exception {
-        Optional<LocalFileStorageFileDAO> fileOptional = localFileStorageFileRepository.findById(fileId);
+        Optional<LocalFileStorageFile> fileOptional = localFileStorageFileRepository.findById(fileId);
         if (fileOptional.isPresent()) {
-            LocalFileStorageFileDAO fileNameMapping = fileOptional.get();
+            LocalFileStorageFile fileNameMapping = fileOptional.get();
             String path = properties.getStoragePath() + "/" + fileId + ".pdf";
             logger.debug("Retrieving file with id [{}] from: [{}]", fileId, path);
             return new FileWithContent(fileNameMapping.getId(), fileNameMapping.getFilename(), Files.readAllBytes(Paths.get(path)));

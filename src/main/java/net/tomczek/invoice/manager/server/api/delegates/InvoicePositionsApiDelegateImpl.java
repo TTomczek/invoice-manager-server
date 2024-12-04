@@ -2,10 +2,10 @@ package net.tomczek.invoice.manager.server.api.delegates;
 
 import net.tomczek.invoice.manager.api.server.api.InvoicePositionsApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.InvoicePositionDTO;
-import net.tomczek.invoice.manager.api.server.model.InvoiceTemplateDTO;
-import net.tomczek.invoice.manager.server.models.InvoicePosition;
-import net.tomczek.invoice.manager.server.models.converter.InvoicePositionConverter;
-import net.tomczek.invoice.manager.server.services.IInvoicePositionsService;
+import net.tomczek.invoice.manager.server.entities.InvoicePosition;
+import net.tomczek.invoice.manager.server.converter.InvoicePositionConverter;
+import net.tomczek.invoice.manager.server.services.IInvoicePositionService;
+import net.tomczek.invoice.manager.server.services.IInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +17,17 @@ import java.util.List;
 public class InvoicePositionsApiDelegateImpl implements InvoicePositionsApiDelegate {
 
     @Autowired
-    public InvoicePositionsApiDelegateImpl(IInvoicePositionsService invoicePositionsService) {
+    public InvoicePositionsApiDelegateImpl(IInvoicePositionService invoicePositionsService, IInvoiceService invoiceService) {
         this.invoicePositionsService = invoicePositionsService;
+        this.invoiceService = invoiceService;
     }
 
-    private final IInvoicePositionsService invoicePositionsService;
+    private final IInvoicePositionService invoicePositionsService;
+    private final IInvoiceService invoiceService;
 
     @Override
     public ResponseEntity<InvoicePositionDTO> createPosition(InvoicePositionDTO invoicePositionDTO) {
-        InvoicePosition invoicePosition = InvoicePositionConverter.toEntityFromDTO(invoicePositionDTO);
+        InvoicePosition invoicePosition = InvoicePositionConverter.toEntity(invoicePositionDTO, invoiceService);
         InvoicePosition createdInvoicePosition = invoicePositionsService.createInvoicePosition(invoicePosition);
         InvoicePositionDTO createdInvoicePositionDTO = InvoicePositionConverter.toDTO(createdInvoicePosition);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdInvoicePositionDTO);
@@ -62,7 +64,7 @@ public class InvoicePositionsApiDelegateImpl implements InvoicePositionsApiDeleg
 
     @Override
     public ResponseEntity<InvoicePositionDTO> updateInvoicePositionById(Integer id, InvoicePositionDTO invoicePositionDTO) {
-        InvoicePosition invoicePosition = InvoicePositionConverter.toEntityFromDTO(invoicePositionDTO);
+        InvoicePosition invoicePosition = InvoicePositionConverter.toEntity(invoicePositionDTO, invoiceService);
         InvoicePosition updatedInvoicePosition = invoicePositionsService.updateInvoicePositionById(id, invoicePosition);
         InvoicePositionDTO updatedInvoicePositionDTO = InvoicePositionConverter.toDTO(updatedInvoicePosition);
         return ResponseEntity.ok(updatedInvoicePositionDTO);

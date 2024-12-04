@@ -21,6 +21,8 @@ server:
         context-path: /${spring.application.name}
 
 logging:
+    file:
+        path: logs
     level:
         net:
             tomczek: DEBUG

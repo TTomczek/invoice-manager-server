@@ -1,7 +1,6 @@
 package net.tomczek.invoice.manager.server.services;
 
-import net.tomczek.invoice.manager.server.models.Address;
-import net.tomczek.invoice.manager.server.models.BusinessPartner;
+import net.tomczek.invoice.manager.server.entities.Address;
 
 import java.util.List;
 
