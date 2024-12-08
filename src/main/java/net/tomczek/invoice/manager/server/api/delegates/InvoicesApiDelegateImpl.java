@@ -1,9 +1,13 @@
 package net.tomczek.invoice.manager.server.api.delegates;
 
 import net.tomczek.invoice.manager.api.server.api.InvoicesApiDelegate;
+import net.tomczek.invoice.manager.api.server.model.FileDTO;
 import net.tomczek.invoice.manager.api.server.model.InvoiceDTO;
+import net.tomczek.invoice.manager.api.server.model.InvoicePositionDTO;
+import net.tomczek.invoice.manager.server.converter.InvoicePositionConverter;
 import net.tomczek.invoice.manager.server.entities.Invoice;
 import net.tomczek.invoice.manager.server.converter.InvoiceConverter;
+import net.tomczek.invoice.manager.server.entities.InvoicePosition;
 import net.tomczek.invoice.manager.server.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -75,5 +79,22 @@ public class InvoicesApiDelegateImpl implements InvoicesApiDelegate {
         Invoice updatedInvoice = invoiceService.updateInvoiceById(id, invoice);
         InvoiceDTO updatedInvoiceDTO = InvoiceConverter.toDTO(updatedInvoice);
         return ResponseEntity.ok().body(updatedInvoiceDTO);
+    }
+
+    @Override
+    public ResponseEntity<List<InvoicePositionDTO>> getAllPositionsOfInvoice(Integer id) {
+        Invoice invoice = invoiceService.getInvoiceById(id);
+        if (invoice == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            List<InvoicePosition> invoicePositions = invoicePositionService.getAllInvoicePositions();
+            List<InvoicePositionDTO> invoicePositionDTOS = InvoicePositionConverter.toDTO(invoicePositions);
+            return ResponseEntity.ok().body(invoicePositionDTOS);
+        }
+    }
+
+    @Override
+    public ResponseEntity<FileDTO> getInvoicePdfById(Integer id) {
+        return InvoicesApiDelegate.super.getInvoicePdfById(id);
     }
 }

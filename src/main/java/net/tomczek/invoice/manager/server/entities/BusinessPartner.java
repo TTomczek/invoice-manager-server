@@ -83,7 +83,7 @@ public class BusinessPartner extends BaseEntity<Integer> {
             "name='" + name + '\'' +
             ", description='" + description + '\'' +
             ", address=" + address +
-            ", contactPersonDAOS=" + contactPeople +
+            ", contactPersonDAOS=" + contactPeople.size() +
             ", invoiceDAOS=" + invoices +
             ", id=" + id +
             '}';

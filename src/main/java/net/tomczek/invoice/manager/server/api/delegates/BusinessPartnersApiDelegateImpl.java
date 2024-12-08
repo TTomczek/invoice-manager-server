@@ -2,8 +2,11 @@ package net.tomczek.invoice.manager.server.api.delegates;
 
 import net.tomczek.invoice.manager.api.server.api.BusinessPartnersApiDelegate;
 import net.tomczek.invoice.manager.api.server.model.BusinessPartnerDTO;
+import net.tomczek.invoice.manager.api.server.model.ContactPersonDTO;
+import net.tomczek.invoice.manager.server.converter.ContactPersonConverter;
 import net.tomczek.invoice.manager.server.entities.BusinessPartner;
 import net.tomczek.invoice.manager.server.converter.BusinessPartnerConverter;
+import net.tomczek.invoice.manager.server.entities.ContactPerson;
 import net.tomczek.invoice.manager.server.services.IBusinessPartnerService;
 import net.tomczek.invoice.manager.server.services.IContactPersonService;
 import net.tomczek.invoice.manager.server.services.IInvoiceService;
@@ -72,5 +75,17 @@ public class BusinessPartnersApiDelegateImpl implements BusinessPartnersApiDeleg
         BusinessPartner updatedBusinessPartner = businessPartnerService.updateBusinessPartnerById(id, businessPartner);
         BusinessPartnerDTO updatedBusinessPartnerDTO = BusinessPartnerConverter.toDTO(updatedBusinessPartner);
         return ResponseEntity.ok().body(updatedBusinessPartnerDTO);
+    }
+
+    @Override
+    public ResponseEntity<List<ContactPersonDTO>> getAllContactPersonsOfBusinessPartner(Integer id) {
+        BusinessPartner businessPartner = businessPartnerService.getBusinessPartnerById(id);
+        if (businessPartner == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            List<ContactPerson> contactPeople = businessPartner.getContactPersons();
+            List<ContactPersonDTO> contactPersonDTOS = ContactPersonConverter.toDTO(contactPeople);
+            return ResponseEntity.ok().body(contactPersonDTOS);
+        }
     }
 }

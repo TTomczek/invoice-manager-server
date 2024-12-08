@@ -5,7 +5,7 @@ This is the server for the Invoice Manager project. It is a Spring Boot applicat
 ## Building the project
 
 ### Requirements
-    1. Java 17
+    1. Java 21
     3. [invoice-manager-api](https://github.com/TTomczek/invoice-manager-api)
     4. Docker
 
@@ -43,3 +43,6 @@ Linux:
     localfilestorage: Stores files on the local file system
     h2: Uses a file based H2 database
     mariadb: Uses a MariaDB database
+
+## API Documentation
+The API documentation is available at `http://localhost:8080/invoice-manager-server/swagger-ui.html`

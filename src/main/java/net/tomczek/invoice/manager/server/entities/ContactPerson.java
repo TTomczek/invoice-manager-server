@@ -95,7 +95,7 @@ public class ContactPerson extends BaseEntity<Integer> {
             ", firstName='" + firstName + '\'' +
             ", email='" + email + '\'' +
             ", address=" + address +
-            ", businessPartner=" + businessPartner +
+            ", businessPartner=" + businessPartner.getName() +
             ", salutation=" + salutation +
             ", id=" + id +
             '}';
