@@ -1,6 +1,7 @@
 package net.tomczek.invoice.manager.server.services;
 
 import net.tomczek.invoice.manager.server.entities.Invoice;
+import net.tomczek.invoice.manager.server.models.FileWithContent;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface IInvoiceService {
     List<Invoice> getAllInvoiceByIds(List<Integer> ids);
 
     boolean exists(Integer id);
+
+    Integer generateInvoicePdf(Integer id);
 }

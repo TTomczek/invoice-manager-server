@@ -17,7 +17,7 @@ public class SecurityConfig {
     @Bean
     @Profile("!develop")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Alle Requests mit GET müssen die VIEWERT Rolle haben
+        // Alle Requests mit GET müssen die VIEWER Rolle haben
         // Alle anderen Request die Manager rolle
         http.authorizeHttpRequests(request -> request
                 .requestMatchers(HttpMethod.GET, "/**").hasRole("VIEWER")

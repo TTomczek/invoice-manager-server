@@ -1,7 +1,10 @@
 package net.tomczek.invoice.manager.server.services;
 
 import net.tomczek.invoice.manager.server.entities.Invoice;
+import net.tomczek.invoice.manager.server.models.FileWithContent;
 import net.tomczek.invoice.manager.server.repositories.InvoicesRepository;
+import net.tomczek.invoice.manager.server.services.filestorage.IFileStorageService;
+import net.tomczek.invoice.manager.server.services.invoicegenerator.IInvoiceGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +18,15 @@ public class InvoiceServiceImpl implements IInvoiceService {
     private static final Logger logger = LoggerFactory.getLogger(InvoiceServiceImpl.class);
 
     @Autowired
-    public InvoiceServiceImpl(InvoicesRepository invoiceRepository) {
+    public InvoiceServiceImpl(InvoicesRepository invoiceRepository, IInvoiceGenerator invoiceGenerator, IFileStorageService fileStorageService) {
         this.invoiceRepository = invoiceRepository;
+        this.invoiceGenerator = invoiceGenerator;
+        this.fileStorageService = fileStorageService;
     }
 
     private final InvoicesRepository invoiceRepository;
+    private final IInvoiceGenerator invoiceGenerator;
+    private final IFileStorageService fileStorageService;
 
     @Override
     public Invoice createInvoice(Invoice invoice) {
@@ -73,8 +80,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
         invoiceToUpdate.setServiceProvidedTo(invoice.getServiceProvidedTo());
         invoiceToUpdate.setOrderNumber(invoice.getOrderNumber());
         invoiceToUpdate.setGeneratedInvoiceId(invoice.getGeneratedInvoiceId());
-        invoiceToUpdate.setSalexTax(invoice.getSalexTax());
-        invoiceToUpdate.setInvoicePosition(invoice.getInvoicePosition());
+        invoiceToUpdate.setSalesTax(invoice.getSalesTax());
+        invoiceToUpdate.setInvoicePositions(invoice.getInvoicePositions());
         invoiceToUpdate.setReceiver(invoice.getReceiver());
         invoiceToUpdate.setInvoiceTemplate(invoice.getInvoiceTemplate());
         invoiceToUpdate.setCustomer(invoice.getCustomer());
@@ -94,5 +101,35 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Override
     public boolean exists(Integer id) {
         return invoiceRepository.existsById(id);
+    }
+
+    @Override
+    public Integer generateInvoicePdf(Integer id) {
+
+        Invoice invoice = this.getInvoiceById(id);
+        if (invoice == null) {
+            return null;
+        }
+
+
+        byte[] generatedInvoice = this.invoiceGenerator.generateInvoice(invoice);
+        if (generatedInvoice == null) {
+            return null;
+        }
+
+        try {
+            FileWithContent file = new FileWithContent(null, "invoice_" + id + ".pdf", generatedInvoice);
+            Integer storedFileId = this.fileStorageService.storeFile(file.getFileName(), generatedInvoice);
+            file.setId(storedFileId);
+
+            invoice.setGeneratedInvoiceId(storedFileId);
+            this.updateInvoiceById(id, invoice);
+
+            logger.debug("Generated invoice stored: {}", file);
+            return file.getId();
+        } catch (Exception e) {
+            logger.error("Error while storing generated invoice", e);
+            return null;
+        }
     }
 }

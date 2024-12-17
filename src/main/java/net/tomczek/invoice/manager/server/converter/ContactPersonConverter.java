@@ -33,6 +33,7 @@ public class ContactPersonConverter {
         contactPersonDTO.setEmail(contactPerson.getEmail());
         contactPersonDTO.setSalutation(SalutationConverter.toDTO(contactPerson.getSalutation()));
         contactPersonDTO.setAddress(AddressConverter.toDTO(contactPerson.getAddress()));
+        contactPersonDTO.setBusinessPartner(contactPerson.getBusinessPartner().getId());
         return contactPersonDTO;
     }
 

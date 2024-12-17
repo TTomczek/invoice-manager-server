@@ -48,6 +48,8 @@ public class Invoice extends BaseEntity<Integer> {
 
     private Integer generatedInvoiceId;
 
+    private boolean paid;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private SalesTax salexTax;
 
@@ -57,7 +59,7 @@ public class Invoice extends BaseEntity<Integer> {
     @ManyToOne(fetch = FetchType.LAZY)
     private ContactPerson receiver;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private InvoiceTemplate invoiceTemplate;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -135,20 +137,29 @@ public class Invoice extends BaseEntity<Integer> {
         return this;
     }
 
-    public SalesTax getSalexTax() {
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public Invoice setPaid(boolean paid) {
+        this.paid = paid;
+        return this;
+    }
+
+    public SalesTax getSalesTax() {
         return salexTax;
     }
 
-    public Invoice setSalexTax(SalesTax salexTax) {
+    public Invoice setSalesTax(SalesTax salexTax) {
         this.salexTax = salexTax;
         return this;
     }
 
-    public List<InvoicePosition> getInvoicePosition() {
+    public List<InvoicePosition> getInvoicePositions() {
         return invoicePosition;
     }
 
-    public Invoice setInvoicePosition(List<InvoicePosition> invoicePositions) {
+    public Invoice setInvoicePositions(List<InvoicePosition> invoicePositions) {
         this.invoicePosition = invoicePositions;
         return this;
     }
@@ -192,7 +203,7 @@ public class Invoice extends BaseEntity<Integer> {
             ", orderNumber='" + orderNumber + '\'' +
             ", generatedInvoiceId=" + generatedInvoiceId +
             ", salexTax=" + salexTax +
-            ", invoicePosition=" + invoicePosition +
+            ", invoicePosition=" + invoicePosition.size() +
             ", receiver=" + receiver +
             ", invoiceTemplateDAO=" + invoiceTemplate +
             ", customer=" + customer +

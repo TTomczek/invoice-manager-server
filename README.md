@@ -43,6 +43,7 @@ Linux:
     localfilestorage: Stores files on the local file system
     h2: Uses a file based H2 database
     mariadb: Uses a MariaDB database
+    standard: use the standard invoice/pdf generator
 
 ## API Documentation
 The API documentation is available at `http://localhost:8080/invoice-manager-server/swagger-ui.html`

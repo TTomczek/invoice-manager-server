@@ -26,3 +26,15 @@ logging:
     level:
         net:
             tomczek: DEBUG
+
+
+company:
+    details:
+        name: "My Company"
+        street: "14 N Moore St"
+        city: "New York"
+        country: "USA"
+        house-number: "1"
+        zip-code: "10013"
+        phone-number: "216 245-2368"
+        email: "support@mycompany.com"

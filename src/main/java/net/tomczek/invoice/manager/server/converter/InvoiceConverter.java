@@ -21,11 +21,12 @@ public class InvoiceConverter {
         invoiceDTO.setServiceTo(invoice.getServiceProvidedTo());
         invoiceDTO.setOrderNumber(invoice.getOrderNumber());
         invoiceDTO.setCustomerNumber(invoice.getCustomer().getId());
-        invoiceDTO.setPositions(invoice.getInvoicePosition().stream().map(InvoicePosition::getId).collect(Collectors.toList()));
+        invoiceDTO.setPositions(invoice.getInvoicePositions().stream().map(InvoicePosition::getId).collect(Collectors.toList()));
         invoiceDTO.setReceiver(invoice.getReceiver().getId());
-        invoiceDTO.setSalesTax(invoice.getSalexTax().getId());
+        invoiceDTO.setSalesTax(invoice.getSalesTax().getId());
         invoiceDTO.setInvoiceTemplate(invoice.getInvoiceTemplate().getId());
         invoiceDTO.setFile(invoice.getGeneratedInvoiceId());
+        invoiceDTO.setPaid(invoice.isPaid());
 
         return invoiceDTO;
     }
@@ -48,8 +49,9 @@ public class InvoiceConverter {
         invoice.setInvoiceTemplate(its.getInvoiceTemplateById(invoiceDTO.getInvoiceTemplate()));
         invoice.setCustomer(bps.getBusinessPartnerById(invoiceDTO.getCustomerNumber()));
         invoice.setReceiver(cps.getContactPersonById(invoiceDTO.getReceiver()));
-        invoice.setSalexTax(sts.getSalesTaxById(invoiceDTO.getSalesTax()));
-        invoice.setInvoicePosition(ips.getAllInvoicePositionByIds(invoiceDTO.getPositions()));
+        invoice.setSalesTax(sts.getSalesTaxById(invoiceDTO.getSalesTax()));
+        invoice.setInvoicePositions(ips.getAllInvoicePositionByIds(invoiceDTO.getPositions()));
+        invoice.setPaid(invoiceDTO.getPaid());
 
         return invoice;
     }

@@ -1,6 +1,6 @@
 package net.tomczek.invoice.manager.server.services.filestorage;
 
-import net.tomczek.invoice.manager.server.entities.LocalFileStorageFileDAO;
+import net.tomczek.invoice.manager.server.entities.LocalFileStorageFile;
 import net.tomczek.invoice.manager.server.models.FileWithContent;
 import net.tomczek.invoice.manager.server.repositories.LocalFileStorageFileRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +39,7 @@ class LocalFileStorageServiceTest {
 
     @Test
     void storeFile() throws Exception {
-        when(repoMock.save(any(LocalFileStorageFileDAO.class))).thenReturn(new LocalFileStorageFileDAO(1, "storedFile.txt"));
+        when(repoMock.save(any(LocalFileStorageFile.class))).thenReturn(new LocalFileStorageFile(1, "storedFile.txt"));
         int id = cut.storeFile("testFile.txt", Files.readAllBytes(new File("src/test/resources/file.txt").toPath()));
 
         assertEquals(id, 1);
@@ -50,7 +50,7 @@ class LocalFileStorageServiceTest {
 
     @Test
     void getFile() throws Exception {
-        when(repoMock.findById(1)).thenReturn(java.util.Optional.of(new LocalFileStorageFileDAO(1, "storedFile.txt")));
+        when(repoMock.findById(1)).thenReturn(java.util.Optional.of(new LocalFileStorageFile(1, "storedFile.txt")));
         File file = new File("target/test/files/1");
         file.getParentFile().mkdirs();
         file.createNewFile();

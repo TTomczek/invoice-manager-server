@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title th:text="${invoice.customer.getName()} + '-' + ${invoice.getId()}">Rechnung</title>
+        <style>
+            body {
+                margin: 0;
+            }
+            body > * {
+                margin-top: 10px;
+            }
+            table {
+                width: 100%;
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            td, th {
+                border: 1px solid black;
+                padding: 8px;
+            }
+            th {
+                background-color: lightgrey;
+            }
+            #sender {
+                text-align: right;
+                margin-top: 30px;
+            }
+            #invoice-details {
+                text-align: right;
+                margin-top: 30px;
+            }
+            .greeting {
+                margin-top: 50px;
+            }
+            .nettoprice {
+                border-top: 2px solid black;
+            }
+            #total {
+                background-color: lightgrey;
+            }
+            #farewell {
+                margin-top: 50px;
+            }
+            @page:first {
+                margin-top: 100px;
+                margin-bottom: 100px;
+            }
+            @page {
+                margin-top: 200px;
+                margin-bottom: 300px;
+            }
+        </style>
+    </head>
+    <body th:style="'margin-top: '+ ${invoice.getInvoiceTemplate().getMarginTopFirstPage()} + '; margin-bottom: ' + ${invoice.getInvoiceTemplate().getMarginBottomFirstPage()}">
+        <div id="receiver">
+            <div th:text="${invoice.customer.getName()}"></div>
+            <div th:if="${invoice.receiver != null}" th:text="'z. Hd. ' + ${invoice.receiver.getSalutation()} + ' ' + ${invoice.receiver.getName()}"></div>
+            <div th:text="${invoice.customer.getAddress().getStreet()} + ${invoice.customer.getAddress().getHouseNumber()}"></div>
+            <div th:text="${invoice.customer.getAddress().getZipCode()} + ${invoice.customer.getAddress().getCity()}"></div>
+            <div th:text="${invoice.customer.getAddress().getCountry()}"></div>
+        </div>
+        <div id="sender">
+            <div th:text="${sender.getName()}"></div>
+            <div th:text="${sender.getStreet()} + ${sender.getHouseNumber()}"></div>
+            <div th:text="${sender.getZipCode()} + ${sender.getCity()}"></div>
+            <div th:text="${sender.getCountry()}"></div>
+            <div th:text="${sender.getPhoneNumber()}"></div>
+            <div th:text="${sender.getEmail()}"></div>
+        </div>
+        <div id="invoice-details">
+            <div th:text="'Datum: ' + ${#dates.format(#dates.createNow(), 'dd.MM.yyyy')}"></div>
+            <div th:text="'Rechnung Nr. ' + ${invoice.getId()}"></div>
+            <div th:text="'Rechnungsdatum ' + ${invoice.getServiceProvidedTo()}"></div>
+        </div>
+        <div class="greeting" th:if="${invoice.getReceiver()}">
+            <span th:if="${invoice.getReceiver().getSalutation().toString() == 'DIVERS'}" th:text="'Guten Tag ' + ${invoice.getReceiver().getName()} + ','"></span>
+            <span th:if="${invoice.getReceiver().getSalutation().toString() == 'FRAU'}" th:text="'Guten Tag Frau ' + ${invoice.getReceiver().getName()} + ','"></span>
+            <span th:if="${invoice.getReceiver().getSalutation().toString() == 'HERR'}" th:text="'Guten tag Herr ' + ${invoice.getReceiver().getName()} + ','"></span>
+        </div>
+        <div class="greeting" th:if="${invoice.getReceiver() == null}">
+            <span>Guten Tag,</span>
+        </div>
+        <div id="pretext">
+            <span th:text="${invoice.getPreText()}"></span>
+        </div>
+        <div id="position-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th id="table-col-position" style="width: 5%">Position</th>
+                        <th id="table-col-service" style="width: 75%">Leistung</th>
+                        <th id="table-col-price" style="width: 20%">Preis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="position,iter : ${invoice.getInvoicePositions()}">
+                        <td style="text-align: center" th:text="${iter.index + 1}"></td>
+                        <td th:text="${position.description}"></td>
+                        <td th:text="${(position.pricePerUnitInCents + position.quantity) / 100} + ' €'"></td>
+                    </tr>
+                    <tr>
+                        <td class="nettoprice" colspan="2">Nettopreis</td>
+                        <td class="nettoprice" th:text="${totalBeforetax} + ' €'"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" th:text="'Zzgl. ' + ${invoice.getSalesTax().getRate()} + '% ' + ${invoice.getSalesTax().getName()}"></td>
+                        <td th:text="${tax} + ' €'"></td>
+                    </tr>
+                    <tr id="total">
+                        <td colspan="2">Gesamtpreis</td>
+                        <td th:text="${total} + ' €'"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="posttext">
+            <span th:text="${invoice.getPostText()}"></span>
+        </div>
+        <div id="farewell">
+            <div>Vielen Dank für Ihren Auftrag.</div>
+            <div>Mit freundlichen Grüßen</div>
+            <div th:text="${sender.getName()}"></div>
+        </div>
+
+    </body>
+</html>

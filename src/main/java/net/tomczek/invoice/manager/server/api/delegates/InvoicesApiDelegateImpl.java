@@ -1,12 +1,11 @@
 package net.tomczek.invoice.manager.server.api.delegates;
 
 import net.tomczek.invoice.manager.api.server.api.InvoicesApiDelegate;
-import net.tomczek.invoice.manager.api.server.model.FileDTO;
 import net.tomczek.invoice.manager.api.server.model.InvoiceDTO;
 import net.tomczek.invoice.manager.api.server.model.InvoicePositionDTO;
+import net.tomczek.invoice.manager.server.converter.InvoiceConverter;
 import net.tomczek.invoice.manager.server.converter.InvoicePositionConverter;
 import net.tomczek.invoice.manager.server.entities.Invoice;
-import net.tomczek.invoice.manager.server.converter.InvoiceConverter;
 import net.tomczek.invoice.manager.server.entities.InvoicePosition;
 import net.tomczek.invoice.manager.server.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +93,13 @@ public class InvoicesApiDelegateImpl implements InvoicesApiDelegate {
     }
 
     @Override
-    public ResponseEntity<FileDTO> getInvoicePdfById(Integer id) {
-        return InvoicesApiDelegate.super.getInvoicePdfById(id);
+    public ResponseEntity<Integer> getInvoicePdfById(Integer id) {
+        Integer fileId = invoiceService.generateInvoicePdf(id);
+
+        if (fileId == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } else {
+            return ResponseEntity.ok().body(fileId);
+        }
     }
 }

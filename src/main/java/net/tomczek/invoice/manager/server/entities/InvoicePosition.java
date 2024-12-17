@@ -84,7 +84,7 @@ public class InvoicePosition extends BaseEntity<Integer> {
             ", quantity=" + quantity +
             ", unitEt=" + unitEt +
             ", pricePerUnitInCents=" + pricePerUnitInCents +
-            ", invoice=" + invoice +
+            ", invoice=" + invoice.getDescription() +
             ", id=" + id +
             '}';
     }

@@ -52,7 +52,7 @@ public class FileWithContent {
         return "FileWithContent{" +
             "id=" + id +
             ", fileName='" + fileName + '\'' +
-            ", fileContent=" + Arrays.toString(fileContent) +
+            ", fileContent=" + fileContent.length + " bytes" +
             '}';
     }
 }
