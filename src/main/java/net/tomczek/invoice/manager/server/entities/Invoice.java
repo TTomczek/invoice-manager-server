@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 public class Invoice extends BaseEntity<Integer> {
 
-    public Invoice(Integer id, String description, boolean perMail, String preText, String postText, LocalDate serviceProvidedFrom, LocalDate serviceProvidedTo, String orderNumber, Integer generatedInvoiceId, SalesTax salexTax, List<InvoicePosition> invoicePosition, ContactPerson receiver, InvoiceTemplate invoiceTemplate, BusinessPartner customer) {
+    public Invoice(Integer id, String description, boolean perMail, String preText, String postText, LocalDate serviceProvidedFrom, LocalDate serviceProvidedTo, String orderNumber, Integer generatedInvoiceId, SalesTax salexTax, List<InvoicePosition> invoicePosition, ContactPerson receiver, InvoiceTemplate invoiceTemplate, BusinessPartner customer, boolean paid) {
         super(id);
         this.description = description;
         this.perMail = perMail;
@@ -27,6 +27,7 @@ public class Invoice extends BaseEntity<Integer> {
         this.receiver = receiver;
         this.invoiceTemplate = invoiceTemplate;
         this.customer = customer;
+        this.paid = paid;
     }
 
     public Invoice() {
@@ -40,8 +41,10 @@ public class Invoice extends BaseEntity<Integer> {
 
     private String postText;
 
+    @Temporal(TemporalType.DATE)
     private LocalDate serviceProvidedFrom;
 
+    @Temporal(TemporalType.DATE)
     private LocalDate serviceProvidedTo;
 
     private String orderNumber;
@@ -208,6 +211,7 @@ public class Invoice extends BaseEntity<Integer> {
             ", invoiceTemplateDAO=" + invoiceTemplate +
             ", customer=" + customer +
             ", id=" + id +
+            ", paid=" + paid +
             '}';
     }
 }

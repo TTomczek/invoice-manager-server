@@ -40,7 +40,7 @@ public class StandardInvoiceGenerator implements IInvoiceGenerator {
 
         BigDecimal totalBeforetax = invoice.getInvoicePositions().stream()
                 .map(item -> item.getPricePerUnitInCents().multiply(BigDecimal.valueOf(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP);
 
         BigDecimal tax = invoice.getSalesTax().getRate().divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP).multiply(totalBeforetax).setScale(2, RoundingMode.HALF_UP);
 

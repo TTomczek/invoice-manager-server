@@ -85,6 +85,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
         invoiceToUpdate.setReceiver(invoice.getReceiver());
         invoiceToUpdate.setInvoiceTemplate(invoice.getInvoiceTemplate());
         invoiceToUpdate.setCustomer(invoice.getCustomer());
+        invoiceToUpdate.setPaid(invoice.isPaid());
 
         Invoice updatedInvoice = invoiceRepository.save(invoiceToUpdate);
         logger.debug("Invoice updated: {}", updatedInvoice);
@@ -109,6 +110,10 @@ public class InvoiceServiceImpl implements IInvoiceService {
         Invoice invoice = this.getInvoiceById(id);
         if (invoice == null) {
             return null;
+        }
+
+        if (invoice.getGeneratedInvoiceId() != null) {
+            return invoice.getGeneratedInvoiceId();
         }
 
 

@@ -46,12 +46,16 @@ public class InitDataLoader implements CommandLineRunner {
         SalesTax salesTax = this.salesTaxRepository.save(new SalesTax(null, "Mehrwertsteuer", new BigDecimal("19.00")));
         InvoiceTemplate invoiceTemplate = this.invoiceTemplateRepository.save(new InvoiceTemplate(null, "Standard", 15f, 10f, 10f, 10f, null));
         BusinessPartner businessPartner = this.businessPartnersRepository.save(new BusinessPartner(null, "Musterfirma", "Musterstraße", address, new ArrayList<ContactPerson>(), new ArrayList<Invoice>()));
-        ContactPerson contactPerson = this.contactPersonsRepository.save(new ContactPerson(null, "Max", "Mustermann", "max@mustermann.de", address, businessPartner, SalutationET.DIVERS));
+        ContactPerson contactPerson = this.contactPersonsRepository.save(new ContactPerson(null, "Mustermann", "Max", "max@mustermann.de", address, businessPartner, SalutationET.DIVERS));
         businessPartner.setContactPersons(List.of(contactPerson));
         this.businessPartnersRepository.save(businessPartner);
-        Invoice invoice = this.invoicesRepository.save(new Invoice(null, "Testrechnung", false, "Vorlage", "Nachricht", LocalDate.now().minusYears(1), null, "12345", null, salesTax, new ArrayList<InvoicePosition>(), contactPerson, invoiceTemplate, businessPartner));
+        Invoice invoice = this.invoicesRepository.save(new Invoice(null, "Testrechnung", false, "Vorlage", "Nachricht", LocalDate.now().minusYears(1), null, "12345", null, salesTax, new ArrayList<InvoicePosition>(), contactPerson, invoiceTemplate, businessPartner, false));
         InvoicePosition invoicePosition = this.invoicePositionsRepository.save(new InvoicePosition(null, "Testposition", 1f, UnitET.PIECE, new BigDecimal("100.00"), invoice));
         invoice.setInvoicePositions(List.of(invoicePosition));
         this.invoicesRepository.save(invoice);
+        Invoice invoice2 = this.invoicesRepository.save(new Invoice(null, "Testrechnung2", true, "Vorlage", "Nachricht", LocalDate.now().minusMonths(1), LocalDate.now(), "12345", null, salesTax, new ArrayList<InvoicePosition>(), contactPerson, invoiceTemplate, businessPartner, true));
+        InvoicePosition invoicePosition2 = this.invoicePositionsRepository.save(new InvoicePosition(null, "Testposition2", 1f, UnitET.PIECE, new BigDecimal("100.00"), invoice2));
+        invoice2.setInvoicePositions(List.of(invoicePosition2));
+        this.invoicesRepository.save(invoice2);
     }
 }
