@@ -11,8 +11,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class LocalFileStorageServiceTest {
@@ -21,7 +23,7 @@ class LocalFileStorageServiceTest {
     LocalFileStorageFileRepository repoMock = Mockito.mock(LocalFileStorageFileRepository.class);
 
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp() {
         LocalFileStorageProperties properties = new LocalFileStorageProperties();
         properties.setStoragePath("target/test/files");
         cut = new LocalFileStorageService(properties, repoMock);
@@ -43,15 +45,15 @@ class LocalFileStorageServiceTest {
         int id = cut.storeFile("testFile.txt", Files.readAllBytes(new File("src/test/resources/file.txt").toPath()));
 
         assertEquals(id, 1);
-        File expectedFile = new File("target/test/files/1");
+        File expectedFile = new File("target/test/files/1.txt");
         assertTrue(expectedFile.exists());
-        assertEquals(expectedFile.getName(), "1");
+        assertEquals(expectedFile.getName(), "1.txt");
     }
 
     @Test
     void getFile() throws Exception {
         when(repoMock.findById(1)).thenReturn(java.util.Optional.of(new LocalFileStorageFile(1, "storedFile.txt")));
-        File file = new File("target/test/files/1");
+        File file = new File("target/test/files/1.txt");
         file.getParentFile().mkdirs();
         file.createNewFile();
         Files.write(file.toPath(), "testcontent".getBytes());
@@ -63,11 +65,23 @@ class LocalFileStorageServiceTest {
     }
 
     @Test
-    void deleteFile() {
+    void deleteFile() throws Exception {
+        when(repoMock.save(any(LocalFileStorageFile.class))).thenReturn(new LocalFileStorageFile(1, "storedFile.txt"));
+        when(repoMock.findById(1)).thenReturn(java.util.Optional.of(new LocalFileStorageFile(1, "storedFile.txt")));
+        cut.storeFile("testFile.txt", Files.readAllBytes(new File("src/test/resources/file.txt").toPath()));
+
+        File expectedFile = new File("target/test/files/1.txt");
+        cut.deleteFile(1);
+        assertFalse(expectedFile.exists());
+        verify(repoMock).delete(any(LocalFileStorageFile.class));
     }
 
     @Test
-    void fileExists() {
-
+    void fileExists() throws Exception {
+        when(repoMock.save(any(LocalFileStorageFile.class))).thenReturn(new LocalFileStorageFile(1, "storedFile.txt"));
+        when(repoMock.findById(1)).thenReturn(java.util.Optional.of(new LocalFileStorageFile(1, "storedFile.txt")));
+        cut.storeFile("testFile.txt", Files.readAllBytes(new File("src/test/resources/file.txt").toPath()));
+        boolean fileExists = cut.fileExists(1);
+        assertTrue(fileExists);
     }
 }

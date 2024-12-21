@@ -9,6 +9,9 @@ import java.util.List;
 public class InvoicePositionConverter {
 
     public static InvoicePositionDTO toDTO(InvoicePosition invoicePosition) {
+        if (invoicePosition == null) {
+            return null;
+        }
         InvoicePositionDTO invoicePositionDTO = new InvoicePositionDTO();
         invoicePositionDTO.setId(invoicePosition.getId());
         invoicePositionDTO.setDescription(invoicePosition.getDescription());
@@ -20,10 +23,16 @@ public class InvoicePositionConverter {
     }
 
     public static List<InvoicePositionDTO> toDTO(List<InvoicePosition> invoicePositions) {
+        if (invoicePositions == null) {
+            return null;
+        }
         return invoicePositions.stream().map(InvoicePositionConverter::toDTO).toList();
     }
 
     public static InvoicePosition toEntity(InvoicePositionDTO invoicePositionDTO, IInvoiceService is) {
+        if (invoicePositionDTO == null) {
+            return null;
+        }
         InvoicePosition invoicePosition = new InvoicePosition();
         invoicePosition.setId(invoicePositionDTO.getId());
         invoicePosition.setDescription(invoicePositionDTO.getDescription());
@@ -35,6 +44,9 @@ public class InvoicePositionConverter {
     }
 
     public static List<InvoicePosition> toEntity(List<InvoicePositionDTO> invoicePositionDTOs, IInvoiceService is) {
+        if (invoicePositionDTOs == null) {
+            return null;
+        }
         return invoicePositionDTOs.stream().map((ip) -> toEntity(ip, is)).toList();
     }
 }

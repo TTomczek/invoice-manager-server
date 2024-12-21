@@ -2,6 +2,7 @@ package net.tomczek.invoice.manager.server.services.invoicegenerator;
 
 import net.tomczek.invoice.manager.server.config.CompanyDetailsProperties;
 import net.tomczek.invoice.manager.server.entities.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.StaticApplicationContext;
@@ -10,6 +11,7 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.time.LocalDate;
@@ -37,8 +39,8 @@ class StandardInvoiceGeneratorTest {
 
     Invoice testInvoice = null;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void init() {
         File dir = new File(storageDir);
         if (dir.exists() ) {
             if (dir.isDirectory()) {
@@ -48,7 +50,10 @@ class StandardInvoiceGeneratorTest {
             }
             dir.delete();
         }
+    }
 
+    @BeforeEach
+    void setUp() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(new StaticApplicationContext());
         templateResolver.setPrefix("classpath:/templates/");
@@ -99,9 +104,9 @@ class StandardInvoiceGeneratorTest {
         InvoiceTemplate invoiceTemplate = new InvoiceTemplate();
         invoiceTemplate.setId(1);
         invoiceTemplate.setName("Test invoice template");
-        invoiceTemplate.setMarginTopFirstPage(10);
+        invoiceTemplate.setMarginTopFirstPage(20);
+        invoiceTemplate.setMarginBottomFirstPage(20);
         invoiceTemplate.setMarginTopOtherPages(10);
-        invoiceTemplate.setMarginBottomFirstPage(10);
         invoiceTemplate.setMarginBottomOtherPages(10);
         invoiceTemplate.setBackgroundPdfId(1);
 
@@ -128,7 +133,7 @@ class StandardInvoiceGeneratorTest {
 
         InvoicePosition invoicePosition4 = new InvoicePosition();
         invoicePosition4.setId(4);
-        invoicePosition4.setQuantity(100);
+        invoicePosition4.setQuantity(10);
         invoicePosition4.setUnitEt(UnitET.HOUR);
         invoicePosition4.setPricePerUnitInCents(new BigDecimal(15000));
         invoicePosition4.setDescription("Test invoice position 4");
@@ -149,23 +154,23 @@ class StandardInvoiceGeneratorTest {
 
         InvoicePosition invoicePosition7 = new InvoicePosition();
         invoicePosition7.setId(7);
-        invoicePosition7.setQuantity(100);
+        invoicePosition7.setQuantity(1);
         invoicePosition7.setUnitEt(UnitET.HOUR);
         invoicePosition7.setPricePerUnitInCents(new BigDecimal(15000));
         invoicePosition7.setDescription("Test invoice position 7");
 
         InvoicePosition invoicePosition8 = new InvoicePosition();
         invoicePosition8.setId(8);
-        invoicePosition8.setQuantity(100);
+        invoicePosition8.setQuantity(3);
         invoicePosition8.setUnitEt(UnitET.HOUR);
-        invoicePosition8.setPricePerUnitInCents(new BigDecimal(15000));
+        invoicePosition8.setPricePerUnitInCents(new BigDecimal(1500));
         invoicePosition8.setDescription("Test invoice position 8");
 
         InvoicePosition invoicePosition9 = new InvoicePosition();
         invoicePosition9.setId(9);
         invoicePosition9.setQuantity(100);
         invoicePosition9.setUnitEt(UnitET.HOUR);
-        invoicePosition9.setPricePerUnitInCents(new BigDecimal(15000));
+        invoicePosition9.setPricePerUnitInCents(new BigDecimal(150));
         invoicePosition9.setDescription("Test invoice position 9");
 
         Invoice invoice = new Invoice();
@@ -210,13 +215,94 @@ class StandardInvoiceGeneratorTest {
 
         System.out.println("Generated file with size: " + resultingByteArray.length + " bytes");
 
-        File expectedFile = new File(storageDir + "generateInvoiceWith2PagesAndContactPerson.pdf");
-        expectedFile.getParentFile().mkdirs();
-        expectedFile.createNewFile();
-        Files.write(expectedFile.toPath(), resultingByteArray);
+        File expectedFile = saveFile("generateInvoiceWith2PagesAndContactPerson.pdf", resultingByteArray);
 
         assertThat(resultingByteArray.length).isGreaterThan(0);
         assertThat(expectedFile.exists()).isTrue();
+    }
 
+    @Test
+    void generateInvoiceWith1PageAndNoContactPerson() throws IOException {
+        testInvoice.setReceiver(null);
+        List<InvoicePosition> positions = testInvoice.getInvoicePositions();
+        positions = positions.subList(0, 5);
+        testInvoice.setInvoicePositions(positions);
+
+        byte[] resultingByteArray = null;
+        try {
+            resultingByteArray = standardInvoiceGenerator.generateInvoice(testInvoice);
+            if (resultingByteArray == null) {
+                fail("Invoice generation failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception thrown during invoice generation");
+        }
+
+        System.out.println("Generated file with size: " + resultingByteArray.length + " bytes");
+
+        File expectedFile = saveFile("generateInvoiceWith1PageAndNoContactPerson.pdf", resultingByteArray);
+
+        assertThat(resultingByteArray.length).isGreaterThan(0);
+        assertThat(expectedFile.exists()).isTrue();
+    }
+
+    @Test
+    void generateInvoiceWithNoPositionsNoServiceToNoPrePostTextsNoContactPersonNoCustomer() throws IOException {
+        testInvoice.setCustomer(null);
+        testInvoice.setReceiver(null);
+        testInvoice.setServiceProvidedTo(null);
+        testInvoice.setServiceProvidedFrom(null);
+        testInvoice.setPreText(null);
+        testInvoice.setPostText(null);
+        testInvoice.setInvoicePositions(null);
+
+        byte[] resultingByteArray = null;
+        try {
+            resultingByteArray = standardInvoiceGenerator.generateInvoice(testInvoice);
+            if (resultingByteArray == null) {
+                fail("Invoice generation failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception thrown during invoice generation");
+        }
+
+        System.out.println("Generated file with size: " + resultingByteArray.length + " bytes");
+
+        File expectedFile = saveFile("InvoiceWithNoPositionsNoServiceToNoPrePostTextsNoContactPersonNoCustomer.pdf", resultingByteArray);
+
+        assertThat(resultingByteArray.length).isGreaterThan(0);
+        assertThat(expectedFile.exists()).isTrue();
+    }
+
+    @Test
+    void generateInvoiceForHerrReceiver() throws IOException {
+        testInvoice.getReceiver().setSalutation(SalutationET.HERR);
+        byte[] resultingByteArray = null;
+        try {
+            resultingByteArray = standardInvoiceGenerator.generateInvoice(testInvoice);
+            if (resultingByteArray == null) {
+                fail("Invoice generation failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception thrown during invoice generation");
+        }
+
+        System.out.println("Generated file with size: " + resultingByteArray.length + " bytes");
+
+        File expectedFile = saveFile("InvoiceForHerrReceiver.pdf", resultingByteArray);
+
+        assertThat(resultingByteArray.length).isGreaterThan(0);
+        assertThat(expectedFile.exists()).isTrue();
+    }
+
+    private static File saveFile(String name, byte[] resultingByteArray) throws IOException {
+        File expectedFile = new File(storageDir + name);
+        expectedFile.getParentFile().mkdirs();
+        expectedFile.createNewFile();
+        Files.write(expectedFile.toPath(), resultingByteArray);
+        return expectedFile;
     }
 }

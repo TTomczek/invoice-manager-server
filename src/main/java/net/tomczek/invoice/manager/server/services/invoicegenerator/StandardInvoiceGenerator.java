@@ -2,6 +2,7 @@ package net.tomczek.invoice.manager.server.services.invoicegenerator;
 
 import net.tomczek.invoice.manager.server.config.CompanyDetailsProperties;
 import net.tomczek.invoice.manager.server.entities.Invoice;
+import net.tomczek.invoice.manager.server.entities.InvoiceTemplate;
 import org.jsoup.nodes.Document;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -38,11 +39,17 @@ public class StandardInvoiceGenerator implements IInvoiceGenerator {
             return null;
         }
 
-        BigDecimal totalBeforetax = invoice.getInvoicePositions().stream()
-                .map(item -> item.getPricePerUnitInCents().multiply(BigDecimal.valueOf(item.getQuantity())))
+        BigDecimal totalBeforetax = BigDecimal.ZERO;
+        BigDecimal tax = BigDecimal.ZERO;
+        if (invoice.getInvoicePositions() != null && !invoice.getInvoicePositions().isEmpty()) {
+            totalBeforetax = invoice.getInvoicePositions().stream()
+                .map(item -> item.getPricePerUnitInCents().multiply(BigDecimal.valueOf(item.getQuantity())).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP))
                 .reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP);
 
-        BigDecimal tax = invoice.getSalesTax().getRate().divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP).multiply(totalBeforetax).setScale(2, RoundingMode.HALF_UP);
+            tax = invoice.getSalesTax().getRate().multiply(totalBeforetax).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+        }
+        System.out.println("Total before tax: " + totalBeforetax);
+        System.out.println("Tax: " + tax);
 
         Context context = new Context();
         context.setVariable("invoice", invoice);
@@ -50,6 +57,7 @@ public class StandardInvoiceGenerator implements IInvoiceGenerator {
         context.setVariable("totalBeforetax", totalBeforetax);
         context.setVariable("tax", tax);
         context.setVariable("total", totalBeforetax.add(tax));
+        context.setVariable("marginCss", getMarginCssString(invoice.getInvoiceTemplate()));
         String html = templateEngine.process("invoice.html", context);
 
         Document document = Jsoup.parse(html);
@@ -67,5 +75,16 @@ public class StandardInvoiceGenerator implements IInvoiceGenerator {
             logger.error("Error while generating invoice", e);
             return null;
         }
+    }
+
+    private String getMarginCssString(InvoiceTemplate template) {
+        return "@page:first {\n" +
+            "    margin-top: " + template.getMarginTopFirstPage() + "mm;\n" +
+            "    margin-bottom: " + template.getMarginBottomFirstPage() + "mm;\n" +
+            "}\n" +
+            "@page {\n" +
+            "    margin-top: " + template.getMarginTopOtherPages() + "mm;\n" +
+            "    margin-bottom: " + template.getMarginBottomOtherPages() + "mm;\n" +
+            "}\n";
     }
 }

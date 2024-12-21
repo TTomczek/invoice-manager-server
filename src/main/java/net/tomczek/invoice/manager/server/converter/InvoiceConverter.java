@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 public class InvoiceConverter {
 
     public static InvoiceDTO toDTO(Invoice invoice) {
+        if (invoice == null) {
+            return null;
+        }
         InvoiceDTO invoiceDTO = new InvoiceDTO();
         invoiceDTO.setId(invoice.getId());
         invoiceDTO.setDescription(invoice.getDescription());
@@ -32,10 +35,16 @@ public class InvoiceConverter {
     }
 
     public static List<InvoiceDTO> toDTO(List<Invoice> invoices) {
+        if (invoices == null) {
+            return null;
+        }
         return invoices.stream().map(InvoiceConverter::toDTO).collect(Collectors.toList());
     }
 
     public static Invoice toEntity(InvoiceDTO invoiceDTO, IInvoiceTemplateService its, IContactPersonService cps, IBusinessPartnerService bps, IInvoicePositionService ips, ISalesTaxService sts) {
+        if (invoiceDTO == null) {
+            return null;
+        }
         Invoice invoice = new Invoice();
         invoice.setId(invoiceDTO.getId());
         invoice.setDescription(invoiceDTO.getDescription());
@@ -57,6 +66,9 @@ public class InvoiceConverter {
     }
 
     public static List<Invoice> toEntity(List<InvoiceDTO> invoiceDTOs, IInvoiceTemplateService its, IContactPersonService cps, IBusinessPartnerService bps, IInvoicePositionService ips, ISalesTaxService sts) {
+        if (invoiceDTOs == null) {
+            return null;
+        }
         return invoiceDTOs.stream().map((inv) -> toEntity(inv, its, cps, bps, ips, sts)).collect(Collectors.toList());
     }
 }

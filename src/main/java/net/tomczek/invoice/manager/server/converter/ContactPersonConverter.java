@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 public class ContactPersonConverter {
 
     public static ContactPerson toEntity(ContactPersonDTO contactPersonDTO, IBusinessPartnerService bps) {
+        if (contactPersonDTO == null) {
+            return null;
+        }
         ContactPerson contactPerson = new ContactPerson();
         contactPerson.setId(contactPersonDTO.getId());
         contactPerson.setFirstName(contactPersonDTO.getFirstName());
@@ -22,10 +25,16 @@ public class ContactPersonConverter {
     }
 
     public static List<ContactPerson> toEntity(List<ContactPersonDTO> contactPersonsDTOs, IBusinessPartnerService bps) {
+        if (contactPersonsDTOs == null) {
+            return null;
+        }
         return contactPersonsDTOs.stream().map((cp) -> toEntity(cp, bps)).collect(Collectors.toList());
     }
 
     public static ContactPersonDTO toDTO(ContactPerson contactPerson) {
+        if (contactPerson == null) {
+            return null;
+        }
         ContactPersonDTO contactPersonDTO = new ContactPersonDTO();
         contactPersonDTO.setId(contactPerson.getId());
         contactPersonDTO.setFirstName(contactPerson.getFirstName());
@@ -38,6 +47,9 @@ public class ContactPersonConverter {
     }
 
     public static List<ContactPersonDTO> toDTO(List<ContactPerson> contactPersons) {
+        if (contactPersons == null) {
+            return null;
+        }
         return contactPersons.stream().map(ContactPersonConverter::toDTO).collect(Collectors.toList());
     }
 }

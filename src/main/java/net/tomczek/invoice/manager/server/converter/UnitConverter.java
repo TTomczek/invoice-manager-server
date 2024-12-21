@@ -6,6 +6,9 @@ import net.tomczek.invoice.manager.server.entities.UnitET;
 public class UnitConverter {
 
     public static UnitET ToET(InvoicePositionDTO.UnitEnum unitEnum) {
+        if (unitEnum == null) {
+            return UnitET.PIECE;
+        }
         return switch (unitEnum) {
             case HOUR -> UnitET.HOUR;
             case PIECE -> UnitET.PIECE;
@@ -14,6 +17,9 @@ public class UnitConverter {
     }
 
     public static InvoicePositionDTO.UnitEnum ToDTO(UnitET unitET) {
+        if (unitET == null) {
+            return InvoicePositionDTO.UnitEnum.PIECE;
+        }
         return switch (unitET) {
             case HOUR -> InvoicePositionDTO.UnitEnum.HOUR;
             case PIECE -> InvoicePositionDTO.UnitEnum.PIECE;

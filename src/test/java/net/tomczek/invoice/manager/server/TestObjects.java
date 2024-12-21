@@ -1,9 +1,8 @@
-package net.tomczek.invoice.manager.server.models.converter;
+package net.tomczek.invoice.manager.server;
 
 import net.tomczek.invoice.manager.api.server.model.*;
 import net.tomczek.invoice.manager.server.entities.*;
 import net.tomczek.invoice.manager.server.models.*;
-import org.springframework.core.io.ByteArrayResource;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ConverterObjects {
+public class TestObjects {
 
     public static Address address;
     public static AddressDTO addressDTO;
@@ -21,7 +20,6 @@ public class ConverterObjects {
     public static ContactPersonDTO contactPersonDTO;
     public static FileWithContent fileWithContent;
     public static LocalFileStorageFile fileDAO;
-    public static FileDTO fileDTO;
     public static Invoice invoice;
     public static InvoiceDTO invoiceDTO;
     public static InvoicePosition invoicePosition;
@@ -33,6 +31,10 @@ public class ConverterObjects {
 
 
     static {
+        TestObjects.resetData();
+    }
+
+    public static void resetData() {
         address = new Address(43546, "Musterstraße 12", "12", "50667", "Köln", "Deutschland");
         addressDTO = new AddressDTO();
         addressDTO.setId(43546);
@@ -65,10 +67,6 @@ public class ConverterObjects {
 
         fileWithContent = new FileWithContent(3456, "Rechnung.pdf", new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0});
         fileDAO = new LocalFileStorageFile(3456, "Rechnung.pdf");
-        fileDTO = new FileDTO();
-        fileDTO.setId(3456);
-        fileDTO.setFileName("Rechnung.pdf");
-        fileDTO.setData(new ByteArrayResource(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}));
 
         salesTax = new SalesTax(3456, "MwSt. 19%", new BigDecimal("19.00"));
         salesTaxDTO = new SalesTaxDTO();
@@ -76,7 +74,7 @@ public class ConverterObjects {
         salesTaxDTO.setName("MwSt. 19%");
         salesTaxDTO.setRate(new BigDecimal("19.00"));
 
-        invoice = new Invoice(3456, "Rechnung 1", true, "PreText of invoice", "PostText of Invoice", LocalDate.now().minus(5, ChronoUnit.DAYS), LocalDate.now().minus(1, ChronoUnit.DAYS), "0987654", 123, salesTax, new ArrayList<>(), contactPerson, null, businessPartner);
+        invoice = new Invoice(3456, "Rechnung 1", true, "PreText of invoice", "PostText of Invoice", LocalDate.now().minus(5, ChronoUnit.DAYS), LocalDate.now().minus(1, ChronoUnit.DAYS), "0987654", 123, salesTax, new ArrayList<>(), contactPerson, null, businessPartner, false);
         invoiceDTO = new InvoiceDTO();
         invoiceDTO.setId(3456);
         invoiceDTO.setDescription("Rechnung 1");

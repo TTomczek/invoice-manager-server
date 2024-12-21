@@ -29,8 +29,10 @@ public class BusinessPartnerServiceImpl implements IBusinessPartnerService {
     private final IAddressService addressService;
 
     @Override
-    @Transactional
     public BusinessPartner createBusinessPartner(BusinessPartner businessPartner) {
+        if (businessPartner == null || businessPartner.getAddress() == null) {
+            return null;
+        }
         Address address = businessPartner.getAddress();
         Address savedAddress = addressService.createAddress(address);
         businessPartner.setAddress(savedAddress);

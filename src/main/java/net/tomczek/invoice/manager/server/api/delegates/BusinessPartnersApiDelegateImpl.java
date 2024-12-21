@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class BusinessPartnersApiDelegateImpl implements BusinessPartnersApiDelegate {
@@ -34,6 +35,10 @@ public class BusinessPartnersApiDelegateImpl implements BusinessPartnersApiDeleg
     @Override
     public ResponseEntity<BusinessPartnerDTO> createBusinessPartner(BusinessPartnerDTO businessPartnerDTO) {
         BusinessPartner businessPartner = BusinessPartnerConverter.toEntity(businessPartnerDTO, contactPersonService, invoiceService);
+
+        if (businessPartner == null) {
+            return ResponseEntity.internalServerError().build();
+        }
 
         BusinessPartner createdBusinessPartner = businessPartnerService.createBusinessPartner(businessPartner);
         BusinessPartnerDTO createdBusinessPartnerDTO = BusinessPartnerConverter.toDTO(createdBusinessPartner);
@@ -72,6 +77,12 @@ public class BusinessPartnersApiDelegateImpl implements BusinessPartnersApiDeleg
     @Override
     public ResponseEntity<BusinessPartnerDTO> updateBusinessPartnerById(Integer id, BusinessPartnerDTO businessPartnerDTO) {
         BusinessPartner businessPartner = BusinessPartnerConverter.toEntity(businessPartnerDTO, contactPersonService, invoiceService);
+        if (businessPartner == null || !Objects.equals(businessPartner.getId(), id)) {
+            return ResponseEntity.internalServerError().build();
+        }
+        if (businessPartner.getId() == null || id == null) {
+            return ResponseEntity.notFound().build();
+        }
         BusinessPartner updatedBusinessPartner = businessPartnerService.updateBusinessPartnerById(id, businessPartner);
         BusinessPartnerDTO updatedBusinessPartnerDTO = BusinessPartnerConverter.toDTO(updatedBusinessPartner);
         return ResponseEntity.ok().body(updatedBusinessPartnerDTO);

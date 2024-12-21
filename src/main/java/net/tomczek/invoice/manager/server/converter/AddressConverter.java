@@ -8,6 +8,9 @@ import java.util.List;
 public class AddressConverter {
 
     public static AddressDTO toDTO(Address address) {
+        if (address == null) {
+            return null;
+        }
         AddressDTO addressDTO = new AddressDTO();
         addressDTO.setId(address.getId());
         addressDTO.setStreet(address.getStreet());
@@ -19,10 +22,16 @@ public class AddressConverter {
     }
 
     public static List<AddressDTO> toDTO(List<Address> addresses) {
+        if (addresses == null) {
+            return null;
+        }
         return addresses.stream().map(AddressConverter::toDTO).toList();
     }
 
     public static Address toEntity(AddressDTO addressDTO) {
+        if (addressDTO == null) {
+            return null;
+        }
         Address address = new Address();
         address.setId(addressDTO.getId());
         address.setStreet(addressDTO.getStreet());
@@ -34,6 +43,9 @@ public class AddressConverter {
     }
 
     public static List<Address> toEntity(List<AddressDTO> addresses) {
+        if (addresses == null) {
+            return null;
+        }
         return addresses.stream().map(AddressConverter::toEntity).toList();
     }
 

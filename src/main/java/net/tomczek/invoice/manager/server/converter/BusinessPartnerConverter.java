@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 public class BusinessPartnerConverter {
 
     public static BusinessPartnerDTO toDTO(BusinessPartner businessPartner) {
+        if (businessPartner == null) {
+            return null;
+        }
         BusinessPartnerDTO businessPartnerDTO = new BusinessPartnerDTO();
         businessPartnerDTO.setId(businessPartner.getId());
         businessPartnerDTO.setName(businessPartner.getName());
@@ -24,10 +27,16 @@ public class BusinessPartnerConverter {
     }
 
     public static List<BusinessPartnerDTO> toDTO(List<BusinessPartner> businessPartners) {
+        if (businessPartners == null) {
+            return null;
+        }
         return businessPartners.stream().map(BusinessPartnerConverter::toDTO).collect(Collectors.toList());
     }
 
     public static BusinessPartner toEntity(BusinessPartnerDTO businessPartnerDTO, IContactPersonService cps, IInvoiceService is) {
+        if (businessPartnerDTO == null) {
+            return null;
+        }
         BusinessPartner businessPartner = new BusinessPartner();
         businessPartner.setId(businessPartnerDTO.getId());
         businessPartner.setName(businessPartnerDTO.getName());
@@ -39,6 +48,9 @@ public class BusinessPartnerConverter {
     }
 
     public static List<BusinessPartner> toEntity(List<BusinessPartnerDTO> businessPartnerDTOs, IContactPersonService cps, IInvoiceService is) {
+        if (businessPartnerDTOs == null) {
+            return null;
+        }
         return businessPartnerDTOs.stream().map((bp) -> toEntity(bp, cps, is)).collect(Collectors.toList());
     }
 }
