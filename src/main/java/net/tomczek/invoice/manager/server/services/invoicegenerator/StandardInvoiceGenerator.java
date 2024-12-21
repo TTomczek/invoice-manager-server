@@ -48,8 +48,6 @@ public class StandardInvoiceGenerator implements IInvoiceGenerator {
 
             tax = invoice.getSalesTax().getRate().multiply(totalBeforetax).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
         }
-        System.out.println("Total before tax: " + totalBeforetax);
-        System.out.println("Tax: " + tax);
 
         Context context = new Context();
         context.setVariable("invoice", invoice);

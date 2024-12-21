@@ -35,7 +35,6 @@ public class BusinessPartnersApiDelegateTest {
     void createBusinessPartnerTest() {
         when(businessPartnerService.createBusinessPartner(TestObjects.businessPartner)).thenReturn(TestObjects.businessPartner);
         BusinessPartnerDTO businessPartnerDTO = TestObjects.businessPartnerDTO;
-        System.out.println(businessPartnerDTO);
         ResponseEntity<BusinessPartnerDTO> result = cut.createBusinessPartner(businessPartnerDTO);
         assertThat(result).isEqualTo(ResponseEntity.status(HttpStatus.CREATED).body(businessPartnerDTO));
     }
