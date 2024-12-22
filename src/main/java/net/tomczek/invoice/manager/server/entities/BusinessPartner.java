@@ -79,7 +79,7 @@ public class BusinessPartner extends BaseEntity<Integer> {
 
     @Override
     public String toString() {
-        return "BusinessPartnerDAO{" +
+        return "BusinessPartner" +
             "name='" + name + '\'' +
             ", description='" + description + '\'' +
             ", address=" + address +

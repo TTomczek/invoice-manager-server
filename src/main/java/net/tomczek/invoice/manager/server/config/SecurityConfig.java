@@ -20,6 +20,12 @@ public class SecurityConfig {
         // Alle Requests mit GET müssen die VIEWER Rolle haben
         // Alle anderen Request die Manager rolle
         http.authorizeHttpRequests(request -> request
+                .requestMatchers("/index.html").permitAll()
+                .requestMatchers("/*.js").permitAll()
+                .requestMatchers("/#/**").permitAll()
+                .requestMatchers("/favicon.ico").permitAll()
+                .requestMatchers("/assets/**").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/**").hasRole("VIEWER")
                 .anyRequest().hasRole("MANAGER")
         ).oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));

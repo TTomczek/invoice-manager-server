@@ -85,7 +85,7 @@ public class InvoiceTemplate extends BaseEntity<Integer> {
 
     @Override
     public String toString() {
-        return "InvoiceTemplateDAO{" +
+        return "InvoiceTemplate" +
             "name='" + name + '\'' +
             ", marginTopFirstPage=" + marginTopFirstPage +
             ", marginBottomFirstPage=" + marginBottomFirstPage +

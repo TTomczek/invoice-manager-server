@@ -90,7 +90,7 @@ public class ContactPerson extends BaseEntity<Integer> {
 
     @Override
     public String toString() {
-        return "ContactPersonDAO{" +
+        return "ContactPerson" +
             "name='" + name + '\'' +
             ", firstName='" + firstName + '\'' +
             ", email='" + email + '\'' +

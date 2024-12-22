@@ -2,28 +2,20 @@
 
 This is the server for the Invoice Manager project. It is a Spring Boot application that provides a reactive REST API for managing invoices. The server uses the [invoice-manager-api](https://github.com/TTomczek/invoice-manager-api) library to communicate with the client. This is a project for the course "Java Enterprise Edition" at the [South Westphalia University of Applied Sciences](https://www.fh-swf.de/en/international_3/index.php)
 
+## Quickstart
+    1. Run invoice-manager-server-0.0.1-SNAPSHOT.jar with the following command: `java -jar invoice-manager-server-0.0.1-SNAPSHOT.jar`
+    2. The server will be available at `http://localhost:8080`
+
 ## Building the project
 
 ### Requirements
     1. Java 21
+    2. Maven 3.8.1
     3. [invoice-manager-api](https://github.com/TTomczek/invoice-manager-api)
-    4. Docker
-
-### Docker
-Used for the database and the authorization server (Keycloak).
-
-    docker compose up -d
-
-### Starting the server
-You need to set the environment variable `MARIADB_ROOT_PASSWORD`to the password of the database root user.
 
 Windows:
-    1. Run `./mvnw.cmd clean install` in the project directory
-    2. Run `./mvnw.cmd spring-boot:run` to start the server
-
-Linux:
-    1. Run `./mvnw clean install` in the project directory
-    2. Run `./mvnw spring-boot:run` to start the server
+    1. Run `mvn clean install` in the project directory
+    2. Run `mvnw spring-boot:run` to start the server
 
 ### Credentials
     Keycloak admin
@@ -46,4 +38,4 @@ Linux:
     standard: use the standard invoice/pdf generator
 
 ## API Documentation
-The API documentation is available at `http://localhost:8080/invoice-manager-server/swagger-ui.html`
+The API documentation is available at `http://localhost:8080/swagger-ui.html`

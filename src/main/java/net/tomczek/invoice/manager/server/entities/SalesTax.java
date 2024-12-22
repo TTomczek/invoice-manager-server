@@ -45,7 +45,7 @@ public class SalesTax extends BaseEntity<Integer> {
 
     @Override
     public String toString() {
-        return "SalesTaxDAO{" +
+        return "SalesTax" +
             "name='" + name + '\'' +
             ", rate=" + rate +
             ", id=" + id +

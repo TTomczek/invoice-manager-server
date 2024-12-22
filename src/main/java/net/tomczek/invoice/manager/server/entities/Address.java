@@ -76,7 +76,7 @@ public class Address extends BaseEntity<Integer> {
 
     @Override
     public String toString() {
-        return "AddressDAO{" +
+        return "Address" +
             "country='" + country + '\'' +
             ", id=" + id +
             ", city='" + city + '\'' +

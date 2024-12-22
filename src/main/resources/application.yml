@@ -1,4 +1,7 @@
 spring:
+    profiles:
+        # Keine Security, Lege Dateien lokal ab, integrierter PDF Generator, Nutze H2 Datenbank
+        active: develop,localfilestorage,standard,h2
     application:
         name: "invoice-manager-server"
     jpa:
@@ -16,9 +19,9 @@ management:
             exposure:
                 include: health,info,mappings
 
-server:
-    servlet:
-        context-path: /${spring.application.name}
+#server:
+#    servlet:
+#        context-path: /${spring.application.name}
 
 logging:
     file:

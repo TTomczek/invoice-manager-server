@@ -29,7 +29,7 @@ public class LocalFileStorageFile extends BaseEntity<Integer> {
 
     @Override
     public String toString() {
-        return "LocalFileStorageFileDAO{" +
+        return "LocalFileStorageFile" +
             "filename='" + filename + '\'' +
             ", id=" + id +
             '}';

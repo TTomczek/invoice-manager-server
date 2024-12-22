@@ -196,7 +196,7 @@ public class Invoice extends BaseEntity<Integer> {
 
     @Override
     public String toString() {
-        return "InvoiceDAO{" +
+        return "Invoice" +
             "description='" + description + '\'' +
             ", perMail=" + perMail +
             ", preText='" + preText + '\'' +

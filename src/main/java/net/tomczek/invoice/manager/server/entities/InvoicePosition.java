@@ -79,7 +79,7 @@ public class InvoicePosition extends BaseEntity<Integer> {
 
     @Override
     public String toString() {
-        return "InvoicePositionDAO{" +
+        return "InvoicePosition" +
             "description='" + description + '\'' +
             ", quantity=" + quantity +
             ", unitEt=" + unitEt +

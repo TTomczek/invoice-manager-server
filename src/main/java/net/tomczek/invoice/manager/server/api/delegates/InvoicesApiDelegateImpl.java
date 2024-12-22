@@ -86,7 +86,7 @@ public class InvoicesApiDelegateImpl implements InvoicesApiDelegate {
         if (invoice == null) {
             return ResponseEntity.notFound().build();
         } else {
-            List<InvoicePosition> invoicePositions = invoicePositionService.getAllInvoicePositions();
+            List<InvoicePosition> invoicePositions = invoice.getInvoicePositions();
             List<InvoicePositionDTO> invoicePositionDTOS = InvoicePositionConverter.toDTO(invoicePositions);
             return ResponseEntity.ok().body(invoicePositionDTOS);
         }
