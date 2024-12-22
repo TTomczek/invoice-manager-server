@@ -39,7 +39,7 @@ services:
             - "8081:8080"
             - "8443:8443"
         volumes:
-            - ./invoice-manager-realm.json:/opt/keycloak/data/import/invoice-manager-realm.json:ro
+            - ./keycloak/data/import/invoice-manager-realm.json:/opt/keycloak/data/import/invoice-manager-realm.json:ro
 
 volumes:
     mariadb_data:
