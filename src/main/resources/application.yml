@@ -19,9 +19,9 @@ management:
             exposure:
                 include: health,info,mappings
 
-#server:
-#    servlet:
-#        context-path: /${spring.application.name}
+server:
+    servlet:
+        context-path: /${spring.application.name}
 
 logging:
     file:
