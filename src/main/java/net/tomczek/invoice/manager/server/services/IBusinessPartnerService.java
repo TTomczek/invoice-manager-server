@@ -10,7 +10,7 @@ public interface IBusinessPartnerService {
 
     BusinessPartner deleteBusinessPartnerById(Integer id);
 
-    List<BusinessPartner> getAllBusinessPartners();
+    List<BusinessPartner> getAllBusinessPartners(String name);
 
     BusinessPartner getBusinessPartnerById(Integer id);
 

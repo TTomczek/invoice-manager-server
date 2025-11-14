@@ -57,8 +57,8 @@ public class BusinessPartnersApiDelegateImpl implements BusinessPartnersApiDeleg
     }
 
     @Override
-    public ResponseEntity<List<BusinessPartnerDTO>> getAllBusinessPartners() {
-        List<BusinessPartner> businessPartners = businessPartnerService.getAllBusinessPartners();
+    public ResponseEntity<List<BusinessPartnerDTO>> getAllBusinessPartners(String name) {
+        List<BusinessPartner> businessPartners = businessPartnerService.getAllBusinessPartners(name);
         List<BusinessPartnerDTO> businessPartnerDTOS = BusinessPartnerConverter.toDTO(businessPartners);
         return ResponseEntity.ok().body(businessPartnerDTOS);
     }

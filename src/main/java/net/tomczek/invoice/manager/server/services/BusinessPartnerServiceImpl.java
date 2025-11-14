@@ -1,11 +1,8 @@
 package net.tomczek.invoice.manager.server.services;
 
-import jakarta.transaction.Transactional;
-import net.tomczek.invoice.manager.server.converter.ContactPersonConverter;
-import net.tomczek.invoice.manager.server.converter.InvoiceConverter;
 import net.tomczek.invoice.manager.server.entities.Address;
 import net.tomczek.invoice.manager.server.entities.BusinessPartner;
-import net.tomczek.invoice.manager.server.converter.BusinessPartnerConverter;
+import net.tomczek.invoice.manager.server.jpa.specifications.BusinessPartnerSpecifications;
 import net.tomczek.invoice.manager.server.repositories.BusinessPartnersRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +51,8 @@ public class BusinessPartnerServiceImpl implements IBusinessPartnerService {
     }
 
     @Override
-    public List<BusinessPartner> getAllBusinessPartners() {
-        List<BusinessPartner> businessPartners = businessPartnersRepository.findAll();
+    public List<BusinessPartner> getAllBusinessPartners(String name) {
+        List<BusinessPartner> businessPartners = businessPartnersRepository.findAll(BusinessPartnerSpecifications.nameContains(name));
         logger.debug("Fetched business partners: {}", businessPartners.size());
         return businessPartners;
     }
