@@ -10,7 +10,7 @@ public interface IContactPersonService {
 
     ContactPerson deleteContactPersonById(Integer id);
 
-    List<ContactPerson> getAllContactPersons();
+    List<ContactPerson> getAllContactPersons(String name, String firstName, Integer businessPartner);
 
     ContactPerson getContactPersonById(Integer id);
 

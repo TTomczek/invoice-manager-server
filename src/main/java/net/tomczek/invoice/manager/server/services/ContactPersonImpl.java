@@ -3,10 +3,12 @@ package net.tomczek.invoice.manager.server.services;
 import net.tomczek.invoice.manager.server.entities.Address;
 import net.tomczek.invoice.manager.server.entities.BusinessPartner;
 import net.tomczek.invoice.manager.server.entities.ContactPerson;
+import net.tomczek.invoice.manager.server.jpa.specifications.ContactPersonSpecifications;
 import net.tomczek.invoice.manager.server.repositories.ContactPersonsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,9 +51,14 @@ public class ContactPersonImpl implements IContactPersonService {
     }
 
     @Override
-    public List<ContactPerson> getAllContactPersons() {
-        List<ContactPerson> contactPeople = contactPersonsRepository.findAll();
-        logger.debug("Fetched contactPersons: {}", contactPeople.size());
+    public List<ContactPerson> getAllContactPersons(String name, String firstName, Integer businessPartner) {
+        Specification<ContactPerson> specification = Specification
+            .where(ContactPersonSpecifications.byName(name))
+            .and(ContactPersonSpecifications.byFirstName(firstName))
+            .and(ContactPersonSpecifications.byBusinessPartnerId(businessPartner));
+        List<ContactPerson> contactPeople = contactPersonsRepository.findAll(specification);
+        logger.debug("Fetched contactPersons with filters - name: '{}', firstName: '{}', businessPartner: '{}', count: {}",
+                    name, firstName, businessPartner, contactPeople.size());
         return contactPeople;
     }
 

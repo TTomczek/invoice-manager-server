@@ -26,8 +26,8 @@ public class ContactPersonsApiDelegateImpl implements ContactPersonsApiDelegate 
     private final IBusinessPartnerService businessPartnerService;
 
     @Override
-    public ResponseEntity<List<ContactPersonDTO>> getAllContactPersons() {
-        List<ContactPerson> contactPersons = this.contactPersonService.getAllContactPersons();
+    public ResponseEntity<List<ContactPersonDTO>> getAllContactPersons(String name, String firstName, Integer businessPartner) {
+        List<ContactPerson> contactPersons = this.contactPersonService.getAllContactPersons(name, firstName, businessPartner);
         List<ContactPersonDTO> contactPersonDTOs = ContactPersonConverter.toDTO(contactPersons);
         return ResponseEntity.ok(contactPersonDTOs);
     }
