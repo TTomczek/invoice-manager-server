@@ -55,8 +55,8 @@ public class InvoicesApiDelegateImpl implements InvoicesApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<InvoiceDTO>> getAllInvoices() {
-        List<Invoice> invoices = invoiceService.getAllInvoices();
+    public ResponseEntity<List<InvoiceDTO>> getAllInvoices(Boolean paid, Integer customerNumber, Integer receiver, String orderNumber) {
+        List<Invoice> invoices = invoiceService.getAllInvoices(paid, customerNumber, receiver, orderNumber);
         List<InvoiceDTO> invoiceDTOS = InvoiceConverter.toDTO(invoices);
         return ResponseEntity.ok().body(invoiceDTOS);
     }

@@ -1,7 +1,6 @@
 package net.tomczek.invoice.manager.server.services;
 
 import net.tomczek.invoice.manager.server.entities.Invoice;
-import net.tomczek.invoice.manager.server.models.FileWithContent;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ public interface IInvoiceService {
 
     Invoice deleteInvoiceById(Integer id);
 
-    List<Invoice> getAllInvoices();
+    List<Invoice> getAllInvoices(Boolean paid, Integer customerNumber, Integer receiver, String orderNumber);
 
     Invoice getInvoiceById(Integer id);
 

@@ -1,6 +1,7 @@
 package net.tomczek.invoice.manager.server.services;
 
 import net.tomczek.invoice.manager.server.entities.Invoice;
+import net.tomczek.invoice.manager.server.jpa.specifications.InvoiceSpecifications;
 import net.tomczek.invoice.manager.server.models.FileWithContent;
 import net.tomczek.invoice.manager.server.repositories.InvoicesRepository;
 import net.tomczek.invoice.manager.server.services.filestorage.IFileStorageService;
@@ -8,6 +9,7 @@ import net.tomczek.invoice.manager.server.services.invoicegenerator.IInvoiceGene
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,9 +50,15 @@ public class InvoiceServiceImpl implements IInvoiceService {
     }
 
     @Override
-    public List<Invoice> getAllInvoices() {
-        List<Invoice> invoices = invoiceRepository.findAll();
-        logger.debug("Fetched invoices: {}", invoices.size());
+    public List<Invoice> getAllInvoices(Boolean paid, Integer customerNumber, Integer receiver, String orderNumber) {
+        Specification<Invoice> specification = Specification
+            .where(InvoiceSpecifications.byPaid(paid))
+            .and(InvoiceSpecifications.byCustomerNumber(customerNumber))
+            .and(InvoiceSpecifications.byReceiver(receiver))
+            .and(InvoiceSpecifications.byOrderNumber(orderNumber));
+        List<Invoice> invoices = invoiceRepository.findAll(specification);
+        logger.debug("Fetched invoices with filters - paid: '{}', customerNumber: '{}', receiver: '{}', orderNumber: '{}', count: {}",
+                    paid, customerNumber, receiver, orderNumber, invoices.size());
         return invoices;
     }
 
