@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
-	</parent>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.5</version>
+    </parent>
 
-	<groupId>net.tomczek</groupId>
-	<artifactId>invoice-manager-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>invoice-manager-server</name>
-	<description>invoice-manager-server</description>
+    <groupId>net.tomczek</groupId>
+    <artifactId>invoice-manager-server</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>invoice-manager-server</name>
+    <description>invoice-manager-server</description>
 
-	<properties>
-		<java.version>21</java.version>
-	</properties>
+    <properties>
+        <java.version>21</java.version>
+    </properties>
 
     <dependencies>
 
@@ -53,6 +53,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.20.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
@@ -76,7 +81,7 @@
             <groupId>net.tomczek</groupId>
             <artifactId>invoice-manager-api-spring-boot-server</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-<!--            Sollte nicht notwendig sein, da es in der API nicht mehr verwendet wird.-->
+            <!--            Sollte nicht notwendig sein, da es in der API nicht mehr verwendet wird.-->
             <exclusions>
                 <exclusion>
                     <groupId>org.springdoc</groupId>
@@ -99,13 +104,13 @@
 
     </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
